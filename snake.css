@@ -1,0 +1,40 @@
+body
+{
+    margin:0;
+}
+.snake_playground 
+{
+    position:fixed;display:inline;overflow:hidden;z-index:1000000;opacity:0.85;background:black;
+}
+.snake
+{
+    position:absolute;display:inline;
+}
+
+div.snake_point
+{
+    position:absolute;
+}
+.snake>span
+{
+    position:absolute;
+}
+.snake span:last-child span
+{
+    font-size:10px;
+    position:relative;
+    top:8px
+}
+.snake_playground svg
+{
+    height:20px;
+    width:20px;
+}
+.counter
+{
+    position:fixed;
+    right:10px;
+    top:10px;
+    font-size:50px;
+    color:green
+}
