@@ -1,0 +1,5 @@
+content bookmark-recycler chrome/content/
+skin      bookmark-recycler  classic/1.0    chrome/skin/
+overlay chrome://browser/content/browser.xul chrome://bookmark-recycler/content/bookmark-recycler.xul
+overlay chrome://browser/content/places/placesOverlay.xul chrome://bookmark-recycler/content/placesOverlay.xul
+locale  bookmark-recycler locale chrome/locale/en-US/

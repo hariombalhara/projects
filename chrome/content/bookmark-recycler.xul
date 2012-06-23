@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay SYSTEM "chrome://bookmark-recycler/locale/bookmark-recycler.dtd">
+<?xml-stylesheet type="text/css" href="chrome://bookmark-recycler/skin/recycle-bookmark.css"?>
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<stringbundleset id="stringbundleset">
+<stringbundle id="bookmark-recycler-strings" src="chrome://bookmark-recycler/locale/bookmark-recycler.properties" />
+</stringbundleset>
+<script type="application/x-javascript" src="chrome://bookmark-recycler/content/browserOverlay.js" />
+<script type="application/x-javascript" src="chrome://bookmark-recycler/content/bookmarkInitialization.js"/>
+<script type="application/x-javascript" src="chrome://bookmark-recycler/content/dragDrop.js"/>
+<script type="application/x-javascript" src="chrome://bookmark-recycler/content/bookmarkUtils.js"/>
+
+<window id="main-window"   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<popupset id="mainPopupSet">
+
+<menupopup id="bookmark-recycler-context">
+<menuitem id="bookmark-recycler-empty-trash" oncommand="bookmark_recyclerChrome.trashEmpty()"  class="menuitem-iconic" label="&bookmark-recycler-empty-trash.label;" accesskey="&bookmark-recycler-empty-trash.accesskey;"/>
+<menuitem id="bookmark-recycler-preferences" oncommand='bookmark_recyclerChrome.openPreferences()'  class="menuitem-iconic" label="&bookmark-recycler-preferences.label;" accesskey="&bookmark-recycler-preferences.accesskey;"/>
+</menupopup>
+
+<menupopup id="bookmark-recycler-menu-context">
+<menuitem id="bookmark-recycler-menu-3" oncommand="bookmark_recyclerChrome.goToUrl()"  class="menuitem-iconic openPage"  label="&bookmark-recycler-menu-3.label;"/>
+<menuitem id="bookmark-recycler-menu-1" oncommand="bookmark_recyclerChrome.popupnode.trashRestore()" class="menuitem-iconic restore"  label="&bookmark-recycler-menu-1.label;"/>
+<menuitem id="bookmark-recycler-menu-2" oncommand="bookmark_recyclerChrome.popupnode.trashDelete()"  class="menuitem-iconic delete"  label="&bookmark-recycler-menu-2.label;"/>
+</menupopup>
+
+<menupopup id="bookmark-recycler-search-panel">
+<vbox>
+</vbox>
+</menupopup>
+</popupset>
+
+<deck id="tab-view-deck">
+<vbox id="browser-panel">
+<!-- Should be present on only one of the bars at a time -->
+<!-- Addon Bar -->
+
+<vbox id="browser-bottombox">
+<toolbar id="addon-bar" mode="icon" >
+<toolbarbutton id="bookmark-recycler-bottom" ordinal="2000" popup="bookmark-recycler-search-panel" class="empty"  context="bookmark-recycler-context" tooltiptext="&bookmark-recycler.tooltiptext;" />
+</toolbar>
+</vbox>
+<!-- Addon Bar End -->
+
+<!-- Bookmark Bar -->
+
+<toolbox id="navigator-toolbox">
+<toolbar id="PersonalToolbar">
+<toolbaritem id="bookmark-recycler-item-top" title="Bookmark Recycler">
+<hbox id="PlacesToolbar">
+<toolbarbutton id="bookmark-recycler-top"  popup='bookmark-recycler-search-panel' class="empty"  context="bookmark-recycler-context" tooltiptext="&bookmark-recycler.tooltiptext;" />
+</hbox>
+</toolbaritem>
+</toolbar>
+</toolbox>
+
+<!-- Bookmark Bar End -->
+</vbox>
+</deck>
+</window>
+</overlay>

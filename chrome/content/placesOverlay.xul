@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay SYSTEM "chrome://bookmark-recycler/locale/bookmark-recycler.dtd">
+<overlay  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"> 
+<script type="application/x-javascript" src="chrome://bookmark-recycler/content/trashIt.js"/>
+<commandset id="placesCommands">
+    <command id="placesCmd_moveToBookmarkRecycler" oncommand="bookmark_recyclerChrome.trashit();"/>
+</commandset>
+
+<menupopup id="placesContext">
+<menuseparator id="placesContext_trashSeparator"/>
+	
+ <menuitem id="placesContext_moveToBookmarkRecycler" command="placesCmd_moveToBookmarkRecycler" label="&placesContext_moveToBookmarkRecycler.label;"  insertafter="placesContext_delete" accesskey="&placesContext_moveToBookmarkRecycler.accesskey;" />
+  </menupopup>
+</overlay>

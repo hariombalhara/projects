@@ -1,0 +1,1 @@
+pref("extensions.bookmark-recycler.position.top", true);

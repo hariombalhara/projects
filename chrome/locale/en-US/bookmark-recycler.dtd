@@ -1,0 +1,15 @@
+<!ENTITY  bookmark-recycler.tooltiptext  "Bookmark Trash">
+<!ENTITY  bookmark-recycler-menu-3.label  "Open">
+<!ENTITY  bookmark-recycler-menu-1.label  "Restore">
+<!ENTITY  bookmark-recycler-menu-2.label  "Delete">
+<!ENTITY  placesContext_moveToBookmarkRecycler.label  "Trash it">
+<!ENTITY  placesContext_moveToBookmarkRecycler.accesskey 'T'>
+<!ENTITY  bookmark-recycler-empty-trash.label  "Empty Trash">
+<!ENTITY  bookmark-recycler-empty-trash.accesskey  "E">
+<!ENTITY  bookmark-recycler-preferences.label  "Preferences">
+<!ENTITY  bookmark-recycler-preferences.accesskey  "P">
+<!ENTITY  bookmark_recyclerChrome.Delete  "Delete">
+<!ENTITY  bookmark_recyclerChrome.Restore  "Restore">
+<!ENTITY  bookmark-recycler-preferences-window.title "Preferences -Bookmark-Recycler">
+<!ENTITY  bookmark-recycler-preferences-window.cancelaccesskey "C">
+<!ENTITY  bookmark-recycler-preferences-window.acceptaccesskey "S">

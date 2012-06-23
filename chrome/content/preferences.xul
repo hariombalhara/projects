@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE prefwindow SYSTEM "chrome://bookmark-recycler/locale/bookmark-recycler.dtd">
+<?xml-stylesheet type="text/css" href="chrome://bookmark-recycler/skin/recycle-bookmark.css"?>
+<?xml-stylesheet href="chrome://browser/content/browser.css" type="text/css"?>
+<?xml-stylesheet href="chrome://browser/skin/" type="text/css"?>
+
+<prefwindow id="bookmark-recycler-preferences-window" 
+windowtype="bookmark-recycler:preferences"  buttons="accept,cancel,disclosure" 
+buttonaccesskeyaccept="&bookmark-recycler-preferences-window.acceptaccesskey;"  
+buttonaccesskeycancel="&bookmark-recycler-preferences-window.cancelaccesskey;" 
+ondialogaccept="bookmark_recyclerPref.doOK();"  
+ondialogcancel="return bookmark_recyclerPref.doCancel();" 
+ondialogdisclosure="return bookmark_recyclerPref.doDisclosure()" 
+title="&bookmark-recycler-preferences-window.title;" 
+xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<prefpane id="bookmark-recycler-position-prefpane">
+<script type="application/x-javascript" src="chrome://bookmark-recycler/content/preferences.js"/>
+<dialogheader title="Bookmark Trash -Preferences"/>
+<preferences label="Bookmark Trash Position">
+<preference id="pref-position"  name="extensions.bookmark-recycler.position.top"  type="bool"/>
+</preferences>
+
+
+<groupbox>
+<radiogroup preference="pref-position">
+<caption label="Set the position of Bookmark Trash"/>
+<radio label="Show On Bookmark Bar" value="true"/>
+<radio label="Show On Status Bar" value="false"/>
+</radiogroup>
+</groupbox>
+</prefpane>
+</prefwindow>
