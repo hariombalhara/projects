@@ -1,4 +1,4 @@
-(function()
+(function main()
 {
     "use strict";
     var LEFT_KEY_CODE=37;
@@ -16,64 +16,110 @@
     var BODY_PART_SIZE=20;
     var SPEED=70;
     var INCREASE_SIZE_BY=4;
-    var snake=window.snake={};
-    snake.point={};
-    snake.key_queue=[];
+    var GULP_COUNTER_DIV_ID='snake_gulp_counter';
+    var GULP_COUNTER_DIV_CLASS='counter';
+    var LAST_BODY_PART_SELECTOR='#snake span:nth-last-child(1)';
+    var SNAKE_FIGURE='<svg xmlns="http://www.w3.org/2000/svg" version="1.1"><rect width="'+BODY_PART_SIZE+'" height="'+BODY_PART_SIZE+'" style="fill:rgb(0,0,255);stroke-width:1;stroke:rgb(255, 255, 255)"/></svg>';
+    var SNAKE_BODY_PART_CLASS='snake_body_part';
+    var SNAKE_BODY_PART_ID='snake_body_part';
     var body=document.body;
     body.style.overflow="hidden";
-    snake.snake_figure='<svg xmlns="http://www.w3.org/2000/svg" version="1.1"><rect width="'+BODY_PART_SIZE+'" height="'+BODY_PART_SIZE+'" style="fill:rgb(0,0,255);stroke-width:1;stroke:rgb(255, 255, 255)"/></svg>';
-    snake.isDestroyed=false;
-    var height_of_snake_figure=-1;
+    
+    
+    var snake=window.snake={};//Snake Namespace    
+    var point=snake.point={};//Holds the position of the point.
+    var key_queue=snake.key_queue=[];//Holds the keys to be processed
+    var isDestroyed=snake.isDestroyed=false;
     
     var window_availWidth=/*Math.max(document.body.clientWidth,*/document.documentElement.clientWidth/*)*/;
     var window_availHeight=/*Math.max(document.body.clientHeight,*/document.documentElement.clientHeight/*)*/;
     
-    var snake_playground=document.createElement('div');
-    snake_playground.setAttribute('id','snake_playground');
-    snake_playground.setAttribute('class','snake_playground');
-    var div=document.createElement('div');
-    div.setAttribute('class','snake');
-    div.setAttribute('id','snake');
+    //Adjust the size of snake playground according to the available size of page and integral multiple of the movement made by snake
+    var width=snake.width=Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE));
+    var height=snake.height=Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE));
+
+    function getIntegerPartFromString(str)
+    {
+        return parseInt(str,10);
+    }
+    function createSnakeElement(props)
+    {
+        var el=document.createElement(props.tagname);
+        
+        if(props.className)
+        el.setAttribute('class',props.className);
+        
+        if(props.id)
+        el.setAttribute('id',props.id);
+        
+        if(props.innerHTML)
+        el.innerHTML=props.innerHTML;        
+        
+        if(props.style.left)
+        el.style.left=props.style.left+"px";
+        
+        if(props.style.top)
+        el.style.top=props.style.top+"px";
+        
+        if(props.style.height)
+        el.style.height=props.style.height+"px";
+        
+        if(props.style.width)
+        el.style.width=props.style.width+"px";
+        
+        el.appendChildWithInformation=appendChildWithInformation;
+                
+        
+        return el;
+    }
     
-    snake_playground.appendChild(div);
-    snake_playground.style.left=0;
-    snake_playground.style.top=0;
-    snake_playground.style.width=Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE))+"px"
-    snake_playground.style.height=Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE))+"px";
+    var snake_playground=createSnakeElement({
+        tagName:'div',
+        className:'snake_playground',
+        id:'snake_playground'
+        });//Its the root element for the snake game
     
+    
+    function appendChildWithInformation(child){
+    var el=createSnakeElement(child);
+    this.appendChild(el);
+    console.log('this inside appendChildWithInformation',this);
+    return el;
+    }
+    
+
+    var snake_body=snake_playground.appendChildWithInformation({
+        tagName:'div',
+        className:'snake',
+        id:'snake',
+        style:{
+                height:height,
+                width:width
+              }
+        });
+
+    
+    
+    var gulp_counter_el=snake_playground.appendChildWithInformation({tagName:'div',
+              className:GULP_COUNTER_DIV_CLASS,
+              id:GULP_COUNTER_DIV_ID,
+              innerHTML:'0'
+             });
+    
+    //Finally append the snake playground to the body.
     body.appendChild(snake_playground);
-    var gulp_count_div=document.createElement('div');
-    gulp_count_div.setAttribute('class','counter');
-    gulp_count_div.setAttribute('id','snake_gulp_counter');
-    gulp_count_div.innerHTML=0;
+
     
-    snake_playground.appendChild(gulp_count_div);
-    
-    var last_body_part_selector='#snake span:nth-last-child(1)';
     function restart_game()
     {
-        if(document.getElementById('snake_playground'))
-        {
-            document.body.removeChild(document.getElementById('snake_playground'))
-            kill_game();
-        }
-        var sscript=document.createElement('script');
-        sscript.src="http://c9.io/hariombalhara/test-project/workspace/snakes/snake.js";
-        sscript.type="text/javascript";
-         if(!document.getElementById('snake_script'))
-        document.getElementsByTagName('head')[0].appendChild(sscript);
-
-        var sstyle=document.createElement('link');
-        sstyle.href="http://c9.io/hariombalhara/test-project/workspace/snakes/snake.css";
-        sstyle.type="text/css";
-        sstyle.rel="stylesheet";
-        if(!document.querySelector('[src="'+sstyle.href+'"]'))
-        document.getElementsByTagName('head')[0].appendChild(sstyle);
+        kill_game();
+        main(); 
     }
+    
     function mark_point()
     {
-         var x=(Math.random())*(parseInt(snake_playground.style.width));
-         var y=(Math.random())*(parseInt(snake_playground.style.height));
+         var x=(Math.random())*(getIntegerPartFromString(snake_playground.style.width));
+         var y=(Math.random())*(getIntegerPartFromString(snake_playground.style.height));
          x=Math.ceil(x);
          y=Math.ceil(y);
          
@@ -83,30 +129,33 @@
          
          x=x-(x%BODY_PART_SIZE);
          y=y-(y%BODY_PART_SIZE);
-         var point=document.createElement('div');
-         point.setAttribute('id','snake_point')
-         point.setAttribute('class','snake_point');
+         point.el=snake_playground.appendChildWithInformation({
+             tagName:'div',
+             className:'snake_point',
+             id:'snake_point',
+             innerHTML:SNAKE_FIGURE,
+             style:{
+                    left:x,
+                    top:y
+                    }
+             });
          
-         point.innerHTML=snake.snake_figure;
+         //Store the position of the point in snake namespace for easy accessibilty
+         point.x=x;
+         point.y=y;
          
-         snake.point.x=x;
-         snake.point.y=y;
-         point.style.left=x+"px";
-         point.style.top=y+"px";
-         //console.log(point.style.left,x);
-         snake_playground.appendChild(point);
+         console.log('Point created at',x,y);
     }
     
     function add_to_queue(keyCode)
     {
-        var queue=snake.key_queue;
         //FOR NOW ONLY THE LAST ELEMENT of QUEUE IS CONSIDERED
-        if(queue.length==1)
+        if(key_queue.length==1)
         {
-         queue.shift();
+         key_queue.shift();
         }
         
-        queue.push(keyCode);
+        key_queue.push(keyCode);
     }
     function keypress_listener(e)
     {
@@ -114,12 +163,10 @@
         {
          e.preventDefault();
          e.stopPropagation();
-         if(!snake.isDestroyed)
-         {
-          //process_keypress(e);
+         if(!isDestroyed)
           add_to_queue(e.keyCode);
-          check_for_overlap();
-         }
+         else
+         alert('Game has already ended')
         }
         else 
         {
@@ -132,7 +179,7 @@
          else if(e.keyCode==SPACE_KEY_CODE)
          {
              e.preventDefault();
-                      e.stopPropagation();
+             e.stopPropagation();
 
              if(typeof snake.paused == "undefined")
               snake.paused=false;
@@ -159,141 +206,132 @@
      boolvar=true;
      return boolvar;
     }
-function kill_game()
-{
-    stop();
-    body.removeChild(snake_playground);
-    body.style.overflow="scroll";
-}
-function check_for_overlap()
+    
+    function kill_game() 
     {
-        //TODO:copy childnodes to an array cause domenodes processing is costly
-      var last=body.querySelector(last_body_part_selector);
+        stop();
+        body.removeChild(snake_playground);
+    
+        //body.style.overflow="scroll";
+        delete body.style.overflow;
+    }
+    
+    function check_for_overlap(el)
+    {
+      //TODO:copy childnodes to an array cause domenodes processing is costly
+      var last=body.querySelector(LAST_BODY_PART_SELECTOR);
       var last_style=last.style;
       var last_style_top=last_style.top;
       var last_style_left=last_style.left;
-      var len=div.childNodes.length;
+      var len=el.childNodes.length;
       for(var i=0;i<len-1;i++)
       {
-       var child=div.childNodes[i];
+       var child=el.childNodes[i];
        var child_style=child.style;
        var top=child_style.top;
        var left=child_style.left;
        if((top==last_style_top) && (left==last_style_left))
        snake_crashed_into_wall();
-      }
-        
+      }        
     }
+    
     function check_for_up_crash(last_style)
     {
-                    if((parseInt(last_style.top))<0)
-                snake_crashed_into_wall();
+        if((getIntegerPartFromString(last_style.top))<0)
+        snake_crashed_into_wall();
     }
     function check_for_left_crash(last_style)
     {
-                if((parseInt(last_style.left))<0)
-                snake_crashed_into_wall();
+        if((getIntegerPartFromString(last_style.left))<0)
+        snake_crashed_into_wall();
     }
-    function process_keypress(keyCode)
+    function check_for_right_crash(last_style,offset)
     {
-        var no_of_child_nodes=div.childNodes.length;
+       if((getIntegerPartFromString(last_style.left)+offset)>window_availWidth)
+                snake_crashed_into_wall();            
+    }
+   function check_for_down_crash(last_style,offset)
+   {
+          if((getIntegerPartFromString(last_style.top)+offset)>window_availHeight)
+            snake_crashed_into_wall();    
+   }
+
+    function process_keypress(el,keyCode)
+    {
+        var no_of_child_nodes=el.childNodes.length;
         var rotation={};
-        rotation.value=div.childNodes[(no_of_child_nodes-1)].rotation;
-        div.childNodes[no_of_child_nodes-1].rotation=rotation.value=(typeof rotation.value=="undefined")?ZERO_ROTATION:rotation.value;
+        rotation.value=el.childNodes[(no_of_child_nodes-1)].rotation;
+        el.childNodes[no_of_child_nodes-1].rotation=rotation.value=(typeof rotation.value=="undefined")?ZERO_ROTATION:rotation.value;
         rotation.isNeg90=(rotation.value==NEGATIVE_90_ROTATION );
         rotation.isPos90=(rotation.value==POSITIVE_90_ROTATION );
         rotation.isNeg180=(rotation.value==NEGATIVE_180_ROTATION );
         rotation.isZero=(rotation.value==ZERO_ROTATION );
         
         var move_distance=BODY_PART_SIZE;
-        var last=document.body.querySelector(last_body_part_selector);
+        var last=document.body.querySelector(LAST_BODY_PART_SELECTOR);
         var last_style=last.style;
-        var offset=BODY_PART_SIZE;
-        height_of_snake_figure=BODY_PART_SIZE;
-        
-        var isItTheExpectedKey=false;
+        var offset=BODY_PART_SIZE;        
+        var isItTheExpectedKey=true;
         switch(keyCode)
-        
         {
-        case LEFT_KEY_CODE:
-            isItTheExpectedKey=true;
+            case LEFT_KEY_CODE:
             if(rotation.isNeg90 || rotation.isPos90 || rotation.isNeg180)
             {
-                process_left_key(div,move_distance);
+                process_left_key(el,move_distance);
                 check_for_left_crash(last_style);
             }
-            
-            
             break;
             
-        case UP_KEY_CODE:
-            isItTheExpectedKey=true;
+            case UP_KEY_CODE:
             if(rotation.isNeg90 ||rotation.isZero || rotation.isNeg180)
             {
-                process_up_key(div,move_distance);
+                process_up_key(el,move_distance);
                 check_for_up_crash(last_style);            
             }
-            
             break;
             
-        case RIGHT_KEY_CODE:
-        isItTheExpectedKey=true;
+            case RIGHT_KEY_CODE:
             if(rotation.isPos90 || rotation.isZero || rotation.isNeg90)
             {
-                
-                process_right_key(div,move_distance);
-          check_for_right_crash(last_style,offset);      
-                
+                process_right_key(el,move_distance);
+                check_for_right_crash(last_style,offset);      
             }
-            
-            
             break;
 
-        case DOWN_KEY_CODE:
-            isItTheExpectedKey=true;
+            case DOWN_KEY_CODE:
             if(rotation.isPos90 || rotation.isZero || rotation.isNeg180)
             {
-                
-                process_down_key(div,move_distance)
-                
-              check_for_down_crash(last_style,offset);
+                process_down_key(el,move_distance)
+                check_for_down_crash(last_style,offset);
             }
-            
             break;
+            
+            default:
+            isItTheExpectedKey=false;
+            alert('Unexpected key');
        }
        if(isItTheExpectedKey)
        {
-           try_to_gulp();
+           try_to_gulp(el);
        }
    }
-   function check_for_right_crash(last_style,offset)
-   {
-       if((parseInt(last_style.left)+offset)>window_availWidth)
-                snake_crashed_into_wall();
-            
-   }
-   function check_for_down_crash(last_style,offset)
-   {
-          if((parseInt(last_style.top)+offset)>window_availHeight)
-            snake_crashed_into_wall();    
-   }
-
-    function try_to_gulp()
+   
+    function try_to_gulp(el)
     {
-      var last=body.querySelector(last_body_part_selector);
+      var last=body.querySelector(LAST_BODY_PART_SELECTOR);
       var last_style=last.style;
       var last_style_top=last_style.top;
       var last_style_left=last_style.left;
-      //console.log(snake.point.x,last_style_left,snake.point.y,last_style_top);
+      console.log('Trying to Gulp',snake.point.x,last_style_left,snake.point.y,last_style_top);
       if(((snake.point.x+"px")==last_style_left) && ((snake.point.y+"px")==last_style_top))
       {
-          snake_playground.removeChild(document.body.querySelector('.snake_playground div:last-child'));
-          gulp(div,true);
+          console.log('finally Gulped');
+          snake_playground.removeChild(point.el);
+          gulp(el,true);
           mark_point();
-      }
-      
+      }      
     }
-    function gulp(div,consume)
+    function gulp(el,consume)
     {
         if((typeof gulp.id) == "undefined")
         gulp.id=0;
@@ -301,21 +339,16 @@ function check_for_overlap()
         gulp.count=0;
         if(consume===true)
         {
-         
          for(var i=0;i<INCREASE_SIZE_BY;i++)
          {         
           gulp.id+=1;
-          var span=document.createElement('span');
-          span.setAttribute('class','snake_body_part');
-          span.setAttribute('id','snake_body_part'+gulp.id);
-          span.innerHTML=snake.snake_figure;
-          var span_style=span.style;
+          
           var offsetx=0;
           var offsety=0;
-          var firstChild=div.childNodes[0];
+          var firstChild=el.childNodes[0];
           var firstChild_style=firstChild.style;
-          var left=parseInt(firstChild_style.left);
-          var top=parseInt(firstChild_style.top);
+          var left=getIntegerPartFromString(firstChild_style.left);
+          var top=getIntegerPartFromString(firstChild_style.top);
           var rotation=firstChild.rotation;
           span.rotation=rotation;
           
@@ -333,54 +366,55 @@ function check_for_overlap()
           if((offsetx===0) && (offsety===0))
           console.log("RAISE EXCEPTION HERE");
          
-          span_style.left=left+offsetx+"px";
-          span_style.top=top+offsety+"px";     
-          
-         // alert("id="+gulp.id+",left="+span_style.left+",top="+span_style.top+","+span.rotation+","+firstChild.getAttribute('id')+","+firstChild_style.top)
-          div.insertBefore(span,div.childNodes[0]);
+          var span=createSnakeElement({
+                tagName:'span',
+                className:SNAKE_BODY_PART_CLASS,
+                id:SNAKE_BODY_PART_ID+gulp.id,
+                innerHTML:SNAKE_FIGURE,
+                style:{
+                       left:left+offsetx,
+                       top:top+offsety
+                      }
+                });
+          el.insertBefore(span,el.childNodes[0]);
          }
          gulp.count+=1;
-         document.getElementById('snake_gulp_counter').innerHTML=gulp.count;
+         gulp_counter_el.innerHTML=gulp.count;
         }
         else
         {
             gulp.id+=1;
-            var span=document.createElement('span');
-            span.setAttribute('class','snake_body_part');
-            span.setAttribute('id','snake_body_part'+gulp.id);
-            span.style.color="red";
-            span.innerHTML=snake.snake_figure;
-            var span_style=span.style;
-            span_style.left=0;
-            span_style.top=0;
-            div.appendChild(span);
+            el.appendChildWithInformation({
+                tagName:'span',
+                className:SNAKE_BODY_PART_CLASS,
+                id:SNAKE_BODY_PART_ID+gulp.id,
+                innerHTML:SNAKE_FIGURE,
+                style:{
+                       left:0,
+                       top:0
+                      }
+                });
         }
         
     }
     
-    function destroy_body_part()
-    {
-     div.removeChild(div.childNodes[0]);
-    }
     function snake_crashed_into_wall()
     {
-          if(snake.isDestroyed)
-          return;
-          snake.isDestroyed=true;
-          pause();
-          var response=confirm("Game Over.\nRestart the Game ?");
-          
+          if(isDestroyed)
+          {
+           alert('Already destroyed-snake_crashed_into_wall');
+           return;
+          }
+          isDestroyed=true;
+          kill_game();
+          var response=confirm("Game Over.\nRestart the Game ?");          
           if(response)
           restart_game();
-          else
-          kill_game();
-          
     }
     
-function process_general(element,distance,leave_last)
-{
-    
-    //TODO: make a copy of node list as traversing it is costly.
+    function process_general(element,distance,leave_last)
+    {    
+        //TODO: make a copy of node list as traversing it is costly.
         var len=element.childNodes.length;
         var up_to=len;
     
@@ -399,10 +433,9 @@ function process_general(element,distance,leave_last)
          if(child.rotation==POSITIVE_90_ROTATION || child.rotation==NEGATIVE_90_ROTATION)
          rotation_flag=true;
          var lookahead_rotation_flag=-1;
-         var left_coordinate=parseInt(child_style.left);
-         var top_coordinate=parseInt(child_style.top);
-       //  if(document.getElementById('snake_gulp_counter').innerHTML=="1")   
-    //     alert(child.getAttribute('id')+","+rotation+","+left_coordinate+":"+top_coordinate)
+         var left_coordinate=getIntegerPartFromString(child_style.left);
+         var top_coordinate=getIntegerPartFromString(child_style.top);
+
          if(i+1<len)
          {
               if(element.childNodes[i+1].rotation==POSITIVE_90_ROTATION || element.childNodes[i+1].rotation==NEGATIVE_90_ROTATION)
@@ -459,7 +492,7 @@ function process_general(element,distance,leave_last)
          }
          
         }
-}
+    }
 
     function process_down_key(element,distance)
     {
@@ -467,7 +500,7 @@ function process_general(element,distance,leave_last)
          var key=children.length-1;
          var rotation=children[key].rotation;
          var child_style=children[key].style;
-         var top_coordinate=parseInt(child_style.top);
+         var top_coordinate=getIntegerPartFromString(child_style.top);
          var leave_last=false;
          if((rotation==ZERO_ROTATION) || (rotation==NEGATIVE_180_ROTATION))
          {
@@ -484,7 +517,7 @@ function process_general(element,distance,leave_last)
          var key=children.length-1;
          var rotation=children[key].rotation;
          var child_style=children[key].style;
-         var top_coordinate=parseInt(child_style.top);
+         var top_coordinate=getIntegerPartFromString(child_style.top);
          var leave_last=false;
          
          if((rotation==ZERO_ROTATION) || (rotation==NEGATIVE_180_ROTATION))
@@ -502,7 +535,7 @@ function process_general(element,distance,leave_last)
          var key=children.length-1;
          var rotation=children[key].rotation;
          var child_style=children[key].style;
-         var left_coordinate=parseInt(child_style.left);
+         var left_coordinate=getIntegerPartFromString(child_style.left);
          var leave_last=false;
          
          if((rotation==POSITIVE_90_ROTATION) || (rotation==NEGATIVE_90_ROTATION))
@@ -519,7 +552,7 @@ function process_general(element,distance,leave_last)
         var key=children.length-1;
         var rotation=children[key].rotation;
         var child_style=children[key].style;
-        var left_coordinate=parseInt(child_style.left);
+        var left_coordinate=getIntegerPartFromString(child_style.left);
         var leave_last=false;
          
         if((rotation==POSITIVE_90_ROTATION) || (rotation==NEGATIVE_90_ROTATION))
@@ -531,17 +564,17 @@ function process_general(element,distance,leave_last)
          }
       
     }
-    function simulate_snake()
+    function simulate_snake(el)
     {
-      var queue=snake.key_queue;
+      var queue=key_queue;
       var len=queue.length;
       
       if(len===0)
       {
-        process_general(div,BODY_PART_SIZE);
+        process_general(el,BODY_PART_SIZE);
         
         //Not pressing any key means snake is moving in direction of last body_part
-        var last=body.querySelector(last_body_part_selector);
+        var last=body.querySelector(LAST_BODY_PART_SELECTOR);
         var rotation=last.rotation;
         var last_style=last.style;
        // console.log("STYLE",last_style)
@@ -562,9 +595,9 @@ function process_general(element,distance,leave_last)
          {
              check_for_up_crash(last_style);
          }
-         if(snake.isDestroyed)
+         if(isDestroyed)
          return;
-         check_for_overlap();
+         check_for_overlap(el);
          try_to_gulp();
       }
       else
@@ -572,19 +605,24 @@ function process_general(element,distance,leave_last)
        process_keypress(queue.pop());
       }
     }
-    for(var i=0;i<NO_OF_INITIAL_BODY_PARTS;i++)
+    
+    function make_initial_snake(el)
     {
-        gulp(div);
+     for(var i=0;i<NO_OF_INITIAL_BODY_PARTS;i++)
+     {
+        gulp(el);
         if(i>=1 && (i< NO_OF_INITIAL_BODY_PARTS))
         {
-         div.childNodes[i].style.left=(parseInt(div.childNodes[i].style.left)+(i*BODY_PART_SIZE))+"px";
+         el.childNodes[i].style.left=(getIntegerPartFromString(el.childNodes[i].style.left)+(i*BODY_PART_SIZE))+"px";
         }
-        
+     }
     }
-    function start()
+    
+    function start(el)
     {
-     snake.interval=setInterval(simulate_snake,SPEED);    
+     snake.interval=setInterval(function(){simulate_snake(el);},SPEED);    
      addKeyListener();
+     make_initial_snake(el);
     }
     function stop()
     {
@@ -597,7 +635,7 @@ function process_general(element,distance,leave_last)
     }
     function resume()
     {
-        snake.interval=setInterval(simulate_snake,SPEED)
+        snake.interval=setInterval(function(){simulate_snake(snake_body);},SPEED);
     }
     mark_point();    
     function addKeyListener()
@@ -608,6 +646,6 @@ function process_general(element,distance,leave_last)
     {
      document.removeEventListener("keydown",keypress_listener);
     }
-    start();
+    start(snake_body);
     
 })();
