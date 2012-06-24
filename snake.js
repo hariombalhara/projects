@@ -44,7 +44,7 @@
     }
     function createSnakeElement(props)
     {
-        var el=document.createElement(props.tagname);
+        var el=document.createElement(props.tagName);
         
         if(props.className)
         el.setAttribute('class',props.className);
