@@ -55,16 +55,19 @@
         if(document.getElementById('snake_playground'))
         {
             document.body.removeChild(document.getElementById('snake_playground'))
+            kill_game();
         }
         var sscript=document.createElement('script');
         sscript.src="http://c9.io/hariombalhara/test-project/workspace/snakes/snake.js";
         sscript.type="text/javascript";
+         if(!document.getElementById('snake_script'))
         document.getElementsByTagName('head')[0].appendChild(sscript);
 
         var sstyle=document.createElement('link');
         sstyle.href="http://c9.io/hariombalhara/test-project/workspace/snakes/snake.css";
         sstyle.type="text/css";
         sstyle.rel="stylesheet";
+        if(!document.querySelector('[src="'+sstyle.href+'"]'))
         document.getElementsByTagName('head')[0].appendChild(sstyle);
     }
     function mark_point()

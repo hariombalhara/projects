@@ -1,18 +1,32 @@
 (function()
 {
-if(document.getElementById('snake_playground'))
+var  snake_playground=document.getElementById('snake_playground');
+if(snake_playground)
 {
- document.body.removeChild(document.getElementById('snake_playground'))
+ if(snake_playground.confirmation_pending)
+ return;
+ snake_playground.confirmation_pending=true;
+ var response=confirm('Game is already running.Restart the game?');
+ snake_playground.confirmation_pending=false;
+ if(response)
+ {
+  document.body.removeChild(snake_playground);    
+ }
+ else
+ return;
 }
+ 
  var sscript=document.createElement('script');
- sscript.src="http://c9.io/hariombalhara/test-project/workspace/snakes/snake.js";
  sscript.type="text/javascript";
- document.getElementsByTagName('head')[0].appendChild(sscript);
-
+ sscript.id="snake_script";
+ sscript.src="http://c9.io/hariombalhara/test-project/workspace/snakes/snake.js";
+  document.getElementsByTagName('head')[0].appendChild(sscript);
+ 
  var sstyle=document.createElement('link');
  sstyle.href="http://c9.io/hariombalhara/test-project/workspace/snakes/snake.css";
  sstyle.type="text/css";
  sstyle.rel="stylesheet";
+ if(!document.querySelector('[src="'+sstyle.href+'"]'))
  document.getElementsByTagName('head')[0].appendChild(sstyle);
 
 })();
