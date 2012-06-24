@@ -19,11 +19,11 @@ if(snake_playground)
  var sscript=document.createElement('script');
  sscript.type="text/javascript";
  sscript.id="snake_script";
- sscript.src="https://raw.github.com/hariombalhara/snake/master/snake.js";
+ sscript.src="http://c9.io/hariombalhara_1/snake/workspace/snake.js";
   document.getElementsByTagName('head')[0].appendChild(sscript);
  
  var sstyle=document.createElement('link');
- sstyle.href="https://raw.github.com/hariombalhara/snake/master/snake.css";
+ sstyle.href="http://c9.io/hariombalhara_1/snake/workspace/snake.css";
  sstyle.type="text/css";
  sstyle.rel="stylesheet";
  if(!document.querySelector('[src="'+sstyle.href+'"]'))
