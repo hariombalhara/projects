@@ -40,7 +40,8 @@
 
     function getIntegerPartFromString(str)
     {
-        return parseInt(str,10);
+        console.log(str)
+        return parseInt(str;
     }
     function createSnakeElement(props)
     {
@@ -121,7 +122,11 @@
     function mark_point()
     {
          var x=(Math.random())*(getIntegerPartFromString(snake_playground.style.width));
+         
          var y=(Math.random())*(getIntegerPartFromString(snake_playground.style.height));
+         console.log(x);
+         console.log(y);
+         
          x=Math.ceil(x);
          y=Math.ceil(y);
          
