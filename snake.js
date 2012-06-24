@@ -29,7 +29,7 @@
     var snake=window.snake={};//Snake Namespace    
     var point=snake.point={};//Holds the position of the point.
     var key_queue=snake.key_queue=[];//Holds the keys to be processed
-    var isDestroyed=snake.isDestroyed=false;
+    var isDestroyed=window.isDestroyed=false;
     
     var window_availWidth=/*Math.max(document.body.clientWidth,*/document.documentElement.clientWidth/*)*/;
     var window_availHeight=/*Math.max(document.body.clientHeight,*/document.documentElement.clientHeight/*)*/;
@@ -40,8 +40,7 @@
 
     function getIntegerPartFromString(str)
     {
-        console.log(str)
-        return parseInt(str;
+        return parseInt(str,10);
     }
     function createSnakeElement(props)
     {
@@ -55,18 +54,19 @@
         
         if(props.innerHTML)
         el.innerHTML=props.innerHTML;        
+        
         if(props.style)
         {
-        if(props.style.left)
+        if(!(typeof props.style.left == "undefined"))
         el.style.left=props.style.left+"px";
         
-        if(props.style.top)
+        if(!(typeof props.style.top == "undefined"))
         el.style.top=props.style.top+"px";
         
-        if(props.style.height)
+        if(!(typeof props.style.height == "undefined"))
         el.style.height=props.style.height+"px";
         
-        if(props.style.width)
+        if(!(typeof props.style.width == "undefined"))
         el.style.width=props.style.width+"px";
         }
         el.appendChildWithInformation=appendChildWithInformation;
@@ -79,14 +79,16 @@
         tagName:'div',
         className:'snake_playground',
         id:'snake_playground',
-        style:{}
+        style:{
+            height:height,
+            width:width
+                }
         });//Its the root element for the snake game
     
     
     function appendChildWithInformation(child){
     var el=createSnakeElement(child);
     this.appendChild(el);
-    console.log('this inside appendChildWithInformation',this);
     return el;
     }
     
@@ -122,14 +124,10 @@
     function mark_point()
     {
          var x=(Math.random())*(getIntegerPartFromString(snake_playground.style.width));
-         
          var y=(Math.random())*(getIntegerPartFromString(snake_playground.style.height));
-         console.log(x);
-         console.log(y);
-         
          x=Math.ceil(x);
          y=Math.ceil(y);
-         
+
          //Hnandle the case when random no is 1
          x-=BODY_PART_SIZE;
          y-=BODY_PART_SIZE;
@@ -150,9 +148,7 @@
          //Store the position of the point in snake namespace for easy accessibilty
          point.x=x;
          point.y=y;
-         
-         console.log('Point created at',x,y);
-    }
+        }
     
     function add_to_queue(keyCode)
     {
@@ -170,7 +166,7 @@
         {
          e.preventDefault();
          e.stopPropagation();
-         if(!isDestroyed)
+         if(!window.isDestroyed)
           add_to_queue(e.keyCode);
          else
          alert('Game has already ended')
@@ -217,6 +213,7 @@
     function kill_game() 
     {
         stop();
+        if(snake_playground)
         body.removeChild(snake_playground);
     
         //body.style.overflow="scroll";
@@ -329,10 +326,8 @@
       var last_style=last.style;
       var last_style_top=last_style.top;
       var last_style_left=last_style.left;
-      console.log('Trying to Gulp',snake.point.x,last_style_left,snake.point.y,last_style_top);
       if(((snake.point.x+"px")==last_style_left) && ((snake.point.y+"px")==last_style_top))
       {
-          console.log('finally Gulped');
           snake_playground.removeChild(point.el);
           gulp(el,true);
           mark_point();
@@ -357,7 +352,6 @@
           var left=getIntegerPartFromString(firstChild_style.left);
           var top=getIntegerPartFromString(firstChild_style.top);
           var rotation=firstChild.rotation;
-          span.rotation=rotation;
           
           
           //The insertion philosophy is opposite to usual
@@ -383,6 +377,8 @@
                        top:top+offsety
                       }
                 });
+          span.rotation=rotation;
+
           el.insertBefore(span,el.childNodes[0]);
          }
          gulp.count+=1;
@@ -407,16 +403,18 @@
     
     function snake_crashed_into_wall()
     {
-          if(isDestroyed)
+          if(window.isDestroyed)
           {
            alert('Already destroyed-snake_crashed_into_wall');
            return;
           }
-          isDestroyed=true;
-          kill_game();
+          window.isDestroyed=true;
+          //kill_game();
           var response=confirm("Game Over.\nRestart the Game ?");          
           if(response)
           restart_game();
+          else
+          kill_game();
     }
     
     function process_general(element,distance,leave_last)
@@ -602,14 +600,14 @@
          {
              check_for_up_crash(last_style);
          }
-         if(isDestroyed)
+         if(window.isDestroyed)
          return;
          check_for_overlap(el);
-         try_to_gulp();
+         try_to_gulp(el);
       }
       else
       {
-       process_keypress(queue.pop());
+       process_keypress(el,queue.pop());
       }
     }
     
