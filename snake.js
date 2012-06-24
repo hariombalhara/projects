@@ -54,7 +54,8 @@
         
         if(props.innerHTML)
         el.innerHTML=props.innerHTML;        
-        
+        if(props.style)
+        {
         if(props.style.left)
         el.style.left=props.style.left+"px";
         
@@ -66,7 +67,7 @@
         
         if(props.style.width)
         el.style.width=props.style.width+"px";
-        
+        }
         el.appendChildWithInformation=appendChildWithInformation;
                 
         
@@ -76,7 +77,8 @@
     var snake_playground=createSnakeElement({
         tagName:'div',
         className:'snake_playground',
-        id:'snake_playground'
+        id:'snake_playground',
+        style:{}
         });//Its the root element for the snake game
     
     
