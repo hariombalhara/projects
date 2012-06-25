@@ -2,6 +2,11 @@ body
 {
     margin:0;
 }
+.snake_figure#snake_figure
+{
+    fill:white;stroke-width:1;stroke:#c98d1e;opacity:0.8
+}
+    
 .snake_playground 
 {
     position:fixed;display:inline;overflow:hidden;z-index:1000000;opacity:0.85;background:black;left:0;top:0;
@@ -30,11 +35,18 @@ div.snake_point
     height:20px;
     width:20px;
 }
+.snake_state#snake_state
+{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    color:white
+}
 .counter
 {
     position:fixed;
     right:10px;
     top:10px;
     font-size:50px;
-    color:green
+    color:white
 }

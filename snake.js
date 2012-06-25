@@ -19,7 +19,7 @@
     var GULP_COUNTER_DIV_ID='snake_gulp_counter';
     var GULP_COUNTER_DIV_CLASS='counter';
     var LAST_BODY_PART_SELECTOR='#snake span:nth-last-child(1)';
-    var SNAKE_FIGURE='<svg xmlns="http://www.w3.org/2000/svg" version="1.1"><rect width="'+BODY_PART_SIZE+'" height="'+BODY_PART_SIZE+'" style="fill:rgb(0,0,255);stroke-width:1;stroke:rgb(255, 255, 255)"/></svg>';
+    var SNAKE_FIGURE='<svg xmlns="http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure" width="'+BODY_PART_SIZE+'" height="'+BODY_PART_SIZE+'"/></svg>';
     var SNAKE_BODY_PART_CLASS='snake_body_part';
     var SNAKE_BODY_PART_ID='snake_body_part';
     var body=document.body;
@@ -30,7 +30,7 @@
     var point=snake.point={};//Holds the position of the point.
     var key_queue=snake.key_queue=[];//Holds the keys to be processed
     var isDestroyed=window.isDestroyed=false;
-    
+    snake.paused=true;
     var window_availWidth=/*Math.max(document.body.clientWidth,*/document.documentElement.clientWidth/*)*/;
     var window_availHeight=/*Math.max(document.body.clientHeight,*/document.documentElement.clientHeight/*)*/;
     
@@ -110,6 +110,12 @@
               id:GULP_COUNTER_DIV_ID,
               innerHTML:'0'
              });
+             
+    var state_of_game_el=snake_playground.appendChildWithInformation({tagName:'div',
+             className:'snake_state',
+             id:'snake_state',
+             innerHTML:'PAUSED'
+    });
     
     //Finally append the snake playground to the body.
     body.appendChild(snake_playground);
@@ -182,11 +188,7 @@
          else if(e.keyCode==SPACE_KEY_CODE)
          {
              e.preventDefault();
-             e.stopPropagation();
-
-             if(typeof snake.paused == "undefined")
-              snake.paused=false;
-              
+             e.stopPropagation();              
               if(snake.paused===true)
               resume();
               else
@@ -625,9 +627,9 @@
     
     function start(el)
     {
-     snake.interval=setInterval(function(){simulate_snake(el);},SPEED);    
      addKeyListener();
      make_initial_snake(el);
+     mark_point();
     }
     function stop()
     {
@@ -636,13 +638,14 @@
     }
     function pause()
     {
+     state_of_game_el.innerHTML="PAUSED";    
      clearInterval(snake.interval);   
     }
     function resume()
     {
+        state_of_game_el.innerHTML="";
         snake.interval=setInterval(function(){simulate_snake(snake_body);},SPEED);
     }
-    mark_point();    
     function addKeyListener()
     {
      document.addEventListener("keydown",keypress_listener,true);
@@ -651,6 +654,5 @@
     {
      document.removeEventListener("keydown",keypress_listener);
     }
-    start(snake_body);
-    
+    start(snake_body);    
 })();
