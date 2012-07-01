@@ -1,6 +1,6 @@
 (function main()
 {
-    "use strict";
+    //"use strict";
     var LEFT_KEY_CODE=37;
     var UP_KEY_CODE=38;
     var RIGHT_KEY_CODE=39;
@@ -17,26 +17,86 @@
     var SPEED=70;
     var INCREASE_SIZE_BY=4;
     var GULP_COUNTER_DIV_ID='snake_gulp_counter';
-    var GULP_COUNTER_DIV_CLASS='counter';
+    var GULP_COUNTER_DIV_CLASS='snake_gulp_counter';
     var LAST_BODY_PART_SELECTOR='#snake span:nth-last-child(1)';
     var SNAKE_FIGURE='<svg xmlns="http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure" width="'+BODY_PART_SIZE+'" height="'+BODY_PART_SIZE+'"/></svg>';
     var SNAKE_BODY_PART_CLASS='snake_body_part';
     var SNAKE_BODY_PART_ID='snake_body_part';
     var body=document.body;
-    body.style.overflow="hidden";
-    
-    
+ /*    var LIST_OF_ELEMENTS=[
+     'body'   
+    ]//A list of those elements whose style will be saved and restored;We will be modifyin only the internal style.
+ */  
     var snake=window.snake={};//Snake Namespace    
     var point=snake.point={};//Holds the position of the point.
+    var orig_layout=snake.orig_layout={}//It will hold the original style information for the page
     var key_queue=snake.key_queue=[];//Holds the keys to be processed
-    var isDestroyed=window.isDestroyed=false;
-    snake.paused=true;
-    var window_availWidth=/*Math.max(document.body.clientWidth,*/document.documentElement.clientWidth/*)*/;
-    var window_availHeight=/*Math.max(document.body.clientHeight,*/document.documentElement.clientHeight/*)*/;
+    var isDestroyed=snake.isDestroyed=false;
+    
+    var window_availWidth=-1,window_availHeight=-1,width=-1,height=-1,snake_playground={},snake_body={},state_of_game_el={},gulp_counter_el={},overlay={};
+    
+    function setupPlayground(){
+    var screen_height=screen.height;
+    var screen_width=screen.width;
+    var body_height=document.body.clientHeight;
+    var body_width=document.body.clientWidth;
+    var docel_height=document.documentElement.clientHeight;
+    var docel_width=document.documentElement.clientWidth;
+    var maxh=Math.max(body_height,docel_height);
+    var maxw=Math.max(body_width,docel_width);
+    var minh=Math.min(body_height,docel_height);
+    var minw=Math.min(body_width,docel_width);
+    if(maxh>screen_height)
+    window_availHeight=minh;
+    else
+    window_availHeight=maxh;
+    
+    if(maxw>screen_width)
+    window_availWidth=minw;
+    else
+    window_availWidth=maxw;
+    
     
     //Adjust the size of snake playground according to the available size of page and integral multiple of the movement made by snake
-    var width=snake.width=Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE));
-    var height=snake.height=Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE));
+    width=snake.width=Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE));
+    height=snake.height=Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE));
+
+    snake_playground=createSnakeElement({
+        tagName:'div',
+        className:'snake_playground',
+        id:'snake_playground',
+        style:{
+            height:height,
+            width:width
+                }
+        });//Its the root element for the snake game
+        
+    snake_body=snake_playground.appendChildWithInformation({
+        tagName:'div',
+        className:'snake',
+        id:'snake',
+        style:{
+                height:height,
+                width:width
+              }
+        });
+    
+    gulp_counter_el=snake_playground.appendChildWithInformation({tagName:'div',
+              className:GULP_COUNTER_DIV_CLASS,
+              id:GULP_COUNTER_DIV_ID,
+              innerHTML:'0'
+             });
+             
+    state_of_game_el=snake_playground.appendChildWithInformation({tagName:'div',
+             className:'snake_state',
+             id:'snake_state',
+             innerHTML:'PAUSED'
+    });
+    
+    //Finally append the snake playground to the body.
+    body.appendChild(snake_playground);
+
+    }
 
     function getIntegerPartFromString(str)
     {
@@ -75,15 +135,6 @@
         return el;
     }
     
-    var snake_playground=createSnakeElement({
-        tagName:'div',
-        className:'snake_playground',
-        id:'snake_playground',
-        style:{
-            height:height,
-            width:width
-                }
-        });//Its the root element for the snake game
     
     
     function appendChildWithInformation(child){
@@ -93,33 +144,7 @@
     }
     
 
-    var snake_body=snake_playground.appendChildWithInformation({
-        tagName:'div',
-        className:'snake',
-        id:'snake',
-        style:{
-                height:height,
-                width:width
-              }
-        });
-
     
-    
-    var gulp_counter_el=snake_playground.appendChildWithInformation({tagName:'div',
-              className:GULP_COUNTER_DIV_CLASS,
-              id:GULP_COUNTER_DIV_ID,
-              innerHTML:'0'
-             });
-             
-    var state_of_game_el=snake_playground.appendChildWithInformation({tagName:'div',
-             className:'snake_state',
-             id:'snake_state',
-             innerHTML:'PAUSED'
-    });
-    
-    //Finally append the snake playground to the body.
-    body.appendChild(snake_playground);
-
     
     function restart_game()
     {
@@ -172,7 +197,7 @@
         {
          e.preventDefault();
          e.stopPropagation();
-         if(!window.isDestroyed)
+         if(!isDestroyed)
           add_to_queue(e.keyCode);
          else
          alert('Game has already ended')
@@ -181,6 +206,8 @@
         {
          if(e.keyCode==ESCAPE_KEY_CODE)
          {
+            if(isDestroyed)
+            return;
             e.preventDefault();
             e.stopPropagation();
             kill_game();
@@ -215,11 +242,18 @@
     function kill_game() 
     {
         stop();
-        if(snake_playground)
-        body.removeChild(snake_playground);
-    
-        //body.style.overflow="scroll";
-        delete body.style.overflow;
+        try
+        {
+         if(snake_playground)
+         {
+          body.removeChild(snake_playground);
+         }
+        }
+        catch(e)
+        {
+          console.log('Exception:',"Caller is ="+kill_game.caller,"ParentNode="+snake_playground.parentNode,"Node="+snake_playground);
+        }
+        RestoreLayout();
     }
     
     function check_for_overlap(el)
@@ -253,12 +287,12 @@
     }
     function check_for_right_crash(last_style,offset)
     {
-       if((getIntegerPartFromString(last_style.left)+offset)>window_availWidth)
+       if((getIntegerPartFromString(last_style.left)+offset)>width)
                 snake_crashed_into_wall();            
     }
    function check_for_down_crash(last_style,offset)
    {
-          if((getIntegerPartFromString(last_style.top)+offset)>window_availHeight)
+          if((getIntegerPartFromString(last_style.top)+offset)>height)
             snake_crashed_into_wall();    
    }
 
@@ -405,12 +439,12 @@
     
     function snake_crashed_into_wall()
     {
-          if(window.isDestroyed)
+          if(isDestroyed)
           {
-           alert('Already destroyed-snake_crashed_into_wall');
+           alert('Already destroyed-snake_crashed_into_wall.Caller is'+snake_crashed_into_wall.caller);
            return;
           }
-          window.isDestroyed=true;
+          isDestroyed=true;
           //kill_game();
           var response=confirm("Game Over.\nRestart the Game ?");          
           if(response)
@@ -602,7 +636,7 @@
          {
              check_for_up_crash(last_style);
          }
-         if(window.isDestroyed)
+         if(isDestroyed)
          return;
          check_for_overlap(el);
          try_to_gulp(el);
@@ -623,13 +657,56 @@
          el.childNodes[i].style.left=(getIntegerPartFromString(el.childNodes[i].style.left)+(i*BODY_PART_SIZE))+"px";
         }
      }
+     snake.paused=true;
+    }
+    function copy_style(el,save_obj)
+    {
+        var style=el.style;
+        var obj_style={};
+        
+        if(!save_obj.style)
+        obj_style=save_obj.style={};
+        else
+        obj_style=save_obj.style;
+        
+        for(var i in style)
+        {
+            obj_style[i]=style[i];
+        }
+    }
+    //Save the current style info in case something wrong happens or fore restoration
+    function SaveCurrentLayoutInfo()
+    {
+      var b=orig_layout.body={};
+      b.style={};
+      b.style.overflow=body.style.overflow;
+      b.style.margin=body.style.margin;
+      //copy_style(body,snake.orig_layout.body);
+    }
+    
+    function ModifyCurrentLayout()
+    {
+        body.style.overflow="hidden";
+        body.style.margin="0";
+    }
+    
+    function RestoreLayout()
+    {
+      var b=orig_layout.body;
+      body.style.overflow=b.style.overflow;
+      body.style.margin=b.style.margin;
+        //copy_style(snake.orig_layout.body,body.style);
+        
     }
     
     function start(el)
     {
-     addKeyListener();
-     make_initial_snake(el);
+     SaveCurrentLayoutInfo();    
+     ModifyCurrentLayout();
+     setupPlayground();
+     make_initial_snake(snake_body);
      mark_point();
+     addKeyListener();
     }
     function stop()
     {
@@ -652,7 +729,7 @@
     }
     function removeKeyListener()
     {
-     document.removeEventListener("keydown",keypress_listener);
+     document.removeEventListener("keydown",keypress_listener,true);
     }
-    start(snake_body);    
+    start();    
 })();
