@@ -8,14 +8,14 @@
     var ESCAPE_KEY_CODE=27;
     var SPACE_KEY_CODE=32;//TO PAUSE THE GAME
 
-    var NO_OF_INITIAL_BODY_PARTS=20;
+    var NO_OF_INITIAL_BODY_PARTS=3;
     var POSITIVE_90_ROTATION="rotate(90deg)";
     var NEGATIVE_90_ROTATION="rotate(-90deg)";
     var NEGATIVE_180_ROTATION="rotate(-180deg)";
     var ZERO_ROTATION="";
     var BODY_PART_SIZE=20;
-    var SPEED=70;
-    var INCREASE_SIZE_BY=4;
+    var SPEED=50;
+    var INCREASE_SIZE_BY=1;
     var GULP_COUNTER_DIV_ID='snake_gulp_counter';
     var GULP_COUNTER_DIV_CLASS='snake_gulp_counter';
     var LAST_BODY_PART_SELECTOR='#snake span:nth-last-child(1)';
@@ -70,13 +70,6 @@
     //Finally append the snake playground to the body.
     body.appendChild(snake_playground);
     //Adjust the size of snake playground according to the available size of page and integral multiple of the movement made by snake
-
-    window_availWidth=snake_playground.offsetWidth;
-    window_availHeight=snake_playground.offsetHeight;
-    
-    width=snake.width=Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE));
-    height=snake.height=Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE));
-
     }
 
     function getIntegerPartFromString(str)
@@ -140,15 +133,18 @@
          while(1)
          {
           var startover=false;
-          
-          x=(Math.random())*(getIntegerPartFromString(width));
-          y=(Math.random())*(getIntegerPartFromString(height));
+          var rand=Math.random();
+          x=(rand)*(getIntegerPartFromString(width));
+          y=(rand)*(getIntegerPartFromString(height));
           x=Math.ceil(x);
           y=Math.ceil(y);
 
           //Handle the case when random no is 1
-          x-=BODY_PART_SIZE;
-          y-=BODY_PART_SIZE;
+          if(rand===1)
+          {
+           x-=BODY_PART_SIZE;
+           y-=BODY_PART_SIZE;
+          }
          
           x=x-(x%BODY_PART_SIZE);
           y=y-(y%BODY_PART_SIZE);
@@ -715,6 +711,7 @@
      SaveCurrentLayoutInfo();    
      ModifyCurrentLayout();
      setupPlayground();
+     getDimensions();
      make_initial_snake(snake_body);
      mark_point(snake_body);
      addKeyListener();
@@ -728,6 +725,14 @@
     {
      state_of_game_el.innerHTML="PAUSED";    
      clearInterval(snake.interval);   
+    }
+    function getDimensions()
+    {
+      window_availWidth=snake_playground.offsetWidth;
+      window_availHeight=snake_playground.offsetHeight;
+    
+      width=snake.width=Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE));
+      height=snake.height=Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE));
     }
     function resume()
     {
