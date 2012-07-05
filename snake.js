@@ -119,7 +119,7 @@
             clearInterval(snake.interval);
         } else if (state == STATES.RUNNING) {
             state_of_game_el.innerHTML = "";
-            snake.interval = setInterval(function() {simulate_snake(snake_body);}, SPEED);
+            snake.interval = setInterval(function() {simulateSnake(snake_body);}, SPEED);
         }
     }
     function getDimensions() {
@@ -280,6 +280,7 @@
             y = -1,
             count = 0,
             len = el.childNodes.length;
+            getDimensions(); //Need to get the latest dimensions
         while(true) {
             var startover = false,
                 rand = Math.random(),
@@ -346,6 +347,7 @@
         removeKeyListener();
     }
     function killGame() {
+        var script = document.getElementById('snake_script');
         freeze();
         try {
             if(snake_playground) {
@@ -356,6 +358,8 @@
             console.log('Exception:', "Caller is ="+killGame.caller, "ParentNode="+snake_playground.parentNode, "Node="+snake_playground);
         }
         restoreLayout();
+        if(script)
+        document.getElementsByTagName('head')[0].removeChild(script);
     }
     function restartGame() {
         killGame();
@@ -597,9 +601,10 @@
             tryGulp(el);
         }
     }
-    function simulate_snake(el) {
+    function simulateSnake(el) {
         var queue = key_queue;
         var len = queue.length;
+        getDimensions(); //Get updated dimensions alwasy
         if(len === 0) {
             processGeneral(el, BODY_PART_SIZE);
             //Not pressing any key means snake is moving in direction of last body_part
@@ -658,12 +663,13 @@
                 }
                 snake.paused = toggle(snake.paused);
             } else if(e.keyCode === R_KEY_CODE) {
+                e.preventDefault();
+                e.stopPropagation();
                 restartGame();
             }
         }
     }
     function start() {
-        snake.state = STATES.INITIALISING,
         saveCurrentLayout();
         modifyLayout();
         setupPlayground();
