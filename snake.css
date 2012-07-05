@@ -47,3 +47,12 @@ div.snake_gulp_counter#snake_gulp_counter
     font-size:50px;
     color:white
 }
+div.crash_options#crash_options
+{
+    position: fixed;
+    left: 40%;
+    top:50%;
+    display:none;
+    font-size: 2em;
+    font-weight:bolder
+}
