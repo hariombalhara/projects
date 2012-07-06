@@ -280,17 +280,19 @@
             y = -1,
             count = 0,
             len = el.childNodes.length;
-            getDimensions(); //Need to get the latest dimensions
         while(true) {
             var startover = false,
-                rand = Math.random(),
+                randx = Math.random(),
+                randy = Math.random(),
                 i;
-            x = (rand)*(getIntPartFromStr(width));
-            y = (rand)*(getIntPartFromStr(height));
+            x = (randx)*(getIntPartFromStr(width));
+            y = (randy)*(getIntPartFromStr(height));
             x = Math.ceil(x);
             y = Math.ceil(y);
-            if(rand === 1) {
+            if(randx === 1) {
                 x -= BODY_PART_SIZE;
+            }
+            if(randy == 1) {
                 y -= BODY_PART_SIZE;
             }
             x = x-(x%BODY_PART_SIZE);
