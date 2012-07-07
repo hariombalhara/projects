@@ -1,0 +1,58 @@
+/**Here provide style for ony those elements which will be removed later on when snake game ends.For all other elements internal style will be added and removed through javascript **/
+rect.snake_figure#snake_figure
+{
+    fill:white;stroke-width:1;stroke:#c98d1e;opacity:0.8 
+}
+    
+div.snake_playground#snake_playground
+{
+    position:fixed;display:inline;overflow:hidden;z-index:1000000;opacity:0.85;background:black;left:0;top:0;border:1px dashed white 
+}
+div.snake#snake
+{
+    position:fixed;display:inline;left:0px;top:0px;
+}
+
+div.snake_point#snake_point
+{
+    position:fixed;
+}
+div.snake#snake>span
+{
+    position:fixed;
+}
+div.snake#snake span:last-child span
+{
+    font-size:10px;
+    position:relative;
+    top:8px
+}
+div.snake_playground#snake_playground svg
+{
+    height:20px;
+    width:20px;
+}
+div.snake_state#snake_state
+{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    color:white
+}
+div.snake_gulp_counter#snake_gulp_counter
+{
+    position:fixed;
+    right:10px;
+    top:10px;
+    font-size:50px;
+    color:white
+}
+div.crash_options#crash_options
+{
+    position: fixed;
+    left: 40%;
+    top:50%;
+    display:none;
+    font-size: 2em;
+    font-weight:bolder
+}
