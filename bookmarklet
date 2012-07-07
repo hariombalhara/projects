@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 javascript:(function()%20{%20%20%20var%20sscript=document.createElement('script');%20%20sscript.src="https://raw.github.com/hariombalhara/snake/master/create_snake_playground.js";%20%20%20sscript.type="text/javascript";%20%20document.getElementsByTagName('head')[0].appendChild(sscript);%20})();
+=======
+javascript:(function()%20{%20%20%20var%20sscript=document.createElement('script');%20%20sscript.src="http://c9.io/hariombalhara_1/snake/workspace/create_snake_playground.js";%20%20%20sscript.type="text/javascript";%20%20document.getElementsByTagName('head')[0].appendChild(sscript);%20})();
+>>>>>>> bb93d68f286f53420b09f0ecaf81b7419f4357ff
