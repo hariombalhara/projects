@@ -119,11 +119,7 @@
             clearInterval(snake.interval);
         } else if (state == STATES.RUNNING) {
             state_of_game_el.innerHTML = "";
-<<<<<<< HEAD
-            snake.interval = setInterval(function() {simulate_snake(snake_body);}, SPEED);
-=======
             snake.interval = setInterval(function() {simulateSnake(snake_body);}, SPEED);
->>>>>>> bb93d68f286f53420b09f0ecaf81b7419f4357ff
         }
     }
     function getDimensions() {
@@ -353,10 +349,7 @@
         removeKeyListener();
     }
     function killGame() {
-<<<<<<< HEAD
-=======
         var script = document.getElementById('snake_script');
->>>>>>> bb93d68f286f53420b09f0ecaf81b7419f4357ff
         freeze();
         try {
             if(snake_playground) {
@@ -367,11 +360,8 @@
             console.log('Exception:', "Caller is ="+killGame.caller, "ParentNode="+snake_playground.parentNode, "Node="+snake_playground);
         }
         restoreLayout();
-<<<<<<< HEAD
-=======
         if(script)
         document.getElementsByTagName('head')[0].removeChild(script);
->>>>>>> bb93d68f286f53420b09f0ecaf81b7419f4357ff
     }
     function restartGame() {
         killGame();
@@ -613,16 +603,10 @@
             tryGulp(el);
         }
     }
-<<<<<<< HEAD
-    function simulate_snake(el) {
-        var queue = key_queue;
-        var len = queue.length;
-=======
     function simulateSnake(el) {
         var queue = key_queue;
         var len = queue.length;
         getDimensions(); //Get updated dimensions alwasy
->>>>>>> bb93d68f286f53420b09f0ecaf81b7419f4357ff
         if(len === 0) {
             processGeneral(el, BODY_PART_SIZE);
             //Not pressing any key means snake is moving in direction of last body_part
@@ -681,20 +665,14 @@
                 }
                 snake.paused = toggle(snake.paused);
             } else if(e.keyCode === R_KEY_CODE) {
-<<<<<<< HEAD
-=======
                 e.preventDefault();
                 e.stopPropagation();
->>>>>>> bb93d68f286f53420b09f0ecaf81b7419f4357ff
                 restartGame();
             }
         }
     }
     function start() {
-<<<<<<< HEAD
         snake.state = STATES.INITIALISING,
-=======
->>>>>>> bb93d68f286f53420b09f0ecaf81b7419f4357ff
         saveCurrentLayout();
         modifyLayout();
         setupPlayground();
