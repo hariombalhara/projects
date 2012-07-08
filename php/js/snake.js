@@ -692,6 +692,7 @@
          window.onmessage = function(e) {
             //TODO: Put restrictions somehow on which origin is accepted
             console.log("ONMESSAGE EVENT");
+            if(e.data.score !== -1)
             gulp_counter_el.innerHTML = e.data.score
             document.title ="Hi "+e.data.email;
         }

@@ -20,7 +20,7 @@ mysql_select_db('php',$conn);
 if(isset($uuid)) {
     if(!isset($score)) {
         $query = 'Select * from `snake` where `sessionId` = "'.$uuid.'"';
-        echo $query;
+      //  echo $query;
         $res = mysql_query($query) or die(mysql_error());
         $row = mysql_fetch_array($res,MYSQL_BOTH);
         echo "{
