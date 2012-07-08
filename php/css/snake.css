@@ -1,5 +1,5 @@
 /**Here provide style for ony those elements which will be removed later on when snake game ends.For all other elements internal style will be added and removed through javascript **/
-rect.snake_figure#snake_figure
+rect.snake_figure#snake_figure  
 {
     fill:white;stroke-width:1;stroke:#c98d1e;opacity:0.8 
 }

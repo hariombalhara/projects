@@ -2,7 +2,7 @@
     var  snake_playground=document.getElementById('snake_playground');
     if(snake_playground) {
         return;
-    }
+    } 
     
     var script_type = "text/javascript",
         script_id = "snake_script",
