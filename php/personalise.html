@@ -30,7 +30,7 @@ if(!identifier) {
     identifier = "GUEST"
     document.cookie = "identifier="+identifier+";";
 }
-window.parentWindow.postMessage(identifier, '*');
+window.parent.postMessage(identifier, '*');
 </script>
 </head>
 </html>
