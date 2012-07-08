@@ -30,7 +30,7 @@ xmlhttp.onreadystatechange = function() {
         if(!identifier)
         data=email;
         else
-        data = xmlhttp.resposeText;
+        data = xmlhttp.responseText;
         window.parent.postMessage(data, '*');
     }
 }
