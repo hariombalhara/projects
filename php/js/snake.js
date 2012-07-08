@@ -169,7 +169,7 @@
         iframe = document.createElement('iframe');
         iframe.id = IFRAME_ID;
         iframe.src = IFRAME_SRC;
-        body.appendChild(iframe);
+        snake_playground.appendChild(iframe);
     }
     function setupPlayground() {
         snake_playground = createSnakeElement({
@@ -639,6 +639,24 @@
             processKeyEvent(el, queue.pop());
         }
     }
+    function receiverFromHostingSite() {
+        window.onmessage = function(e) {
+            //TODO: Put restrictions somehow on which origin is accepted
+            console.log("ONMESSAGE EVENT");
+            return (e.data);
+        }
+    }
+    function postToHostingSite(container) {
+        //TODO:Put Restriction here for target ORigin
+        console.log('POSTING MESSAGE to Game Host');
+        iframe.contentWindow.postMessage(container,'*');
+    }
+    function saveScore() {
+        var container = {
+            score:gulp_counter_el.innerHTML
+        }
+        postToHostingSite(container);
+    }
     function keyEventListener(e) {
         if(e.keyCode === LEFT_KEY_CODE ||e.keyCode === DOWN_KEY_CODE ||e.keyCode === UP_KEY_CODE ||e.keyCode === RIGHT_KEY_CODE ) {
             e.preventDefault();
@@ -653,6 +671,7 @@
                 }
                 e.preventDefault();
                 e.stopPropagation();
+                saveScore();
                 killGame();
             } else if(e.keyCode === SPACE_KEY_CODE) {
                 e.preventDefault();
@@ -676,12 +695,9 @@
     
     
     function personaliseGame() {
-        window.onmessage = function(e) {
-            var email = e.data;
-            console.log("ONMESSAGE");
-            //TODO: Put restrictions somehow on which origin is accepted
-            document.title ="Hi "+email;
-        }
+        var data=receiverFromHostingSite();
+        gulp_counter_el.innerHTML = data.score
+        document.title ="Hi "+data.email;
     }
     function start() {
         snake.state = STATES.INITIALISING,

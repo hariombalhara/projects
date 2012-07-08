@@ -1,9 +1,21 @@
 <html>
 <head>
 <script type="text/javascript">
+
 var identifier,
     name,
-    email;
+    email,
+    score;
+    xmlhttp = new XMLHttpRequest();
+    data;
+window.onmessage = function(e) {
+    console.log('Receive Score from site');
+    score = e.data.score;
+    xmlhttp.onreadystatechange = function(){};
+    xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?score='+score,true);
+    xmlhttp.send(null);
+    }
+}
 console.log('personalising');
 function getCookie(c_name) {
     var i,x,y,ARRcookies=document.cookie.split(";");
@@ -21,16 +33,18 @@ if(!identifier) {
   email = prompt('New Comer !!\nPls provide your email');
   name = "DEFAULT"
 }
-var xmlhttp = new XMLHttpRequest();
-var data;
 xmlhttp.onreadystatechange = function() {
     console.log("Trying");
     if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
         console.log('Sent the Request and geot hre response');
         if(!identifier)
-        data=email;
+        data = { 
+                 email:email,
+                 score:-1
+                }
         else
-        data = xmlhttp.responseText;
+        data = eval((xmlhttp.responseText));
+        alert(data);
         window.parent.postMessage(data, '*');
     }
 }

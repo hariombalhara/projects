@@ -10,6 +10,7 @@ $port = $_ENV['OPENSHIFT_DB_PORT'];
 $conn = mysql_connect($host.":".$port,$username,$pass);
 $name = $_GET['name']; //TODO CHANGE TO POST
 $email = $_GET['email'];
+$score = $_GET['score'];
 if(!$conn)
 {
     die('Error Connecting:'.mysql_error());
@@ -17,12 +18,23 @@ if(!$conn)
 mysql_select_db('php',$conn);
 //echo $conn;
 if(isset($uuid)) {
-  $query = 'Select * from `snake` where `sessionId` = "'.$uuid.'"';
-  //echo $query;
-  $res = mysql_query($query) or die(mysql_error());
-  $row = mysql_fetch_array($res,MYSQL_BOTH);
-  //print_r($row);
-  echo $row['email'];
+    if(!isset($score) {
+        $query = 'Select * from `snake` where `sessionId` = "'.$uuid.'"';
+        //echo $query;
+        $res = mysql_query($query) or die(mysql_error());
+        $row = mysql_fetch_array($res,MYSQL_BOTH);
+        echo "{
+                'email':'".$row['email']."',
+                'score':'".$row['highestScore']."'
+              }"
+        //print_r($row);
+    } else {
+        $query = 'Update `snake` set `highestScore` = '.score.' where `sessionId` = "'.$uuid.'"';
+        //echo $query;
+        $res = mysql_query($query) or die(mysql_error());
+        //$row = mysql_fetch_array($res,MYSQL_BOTH);
+    }
+  
 } else {
    global $uuid;
    global $name;
