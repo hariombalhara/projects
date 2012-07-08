@@ -19,7 +19,7 @@ echo $conn;
 if(isset($uuid)) {
   $query = 'Select * from `snake` where `sessionId` = "'.$uuid.'"';
   echo $query;
-  $res = mysql_query($query);
+  $res = mysql_query($query) or die(mysql_error());
   $row = mysql_fetch_array($res,MYSQL_BOTH);
   print_r($row);
   echo 'Email Id is'.$row['email'];
@@ -28,9 +28,9 @@ if(isset($uuid)) {
    global $name;
    global $email;
    $uuid = uniqid();
-   $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid.",'".$name."')";
+   $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid."','".$name."')";
    echo $query;
-   $res = mysql_query($query);
+   $res = mysql_query($query) or die(mysql_error());
    echo "Insert ".$res;
 }
 ?>

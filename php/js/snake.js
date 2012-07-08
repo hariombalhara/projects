@@ -677,10 +677,10 @@
     
     function personaliseGame() {
         window.onmessage = function(e) {
-            var identifier = e.data;
+            var email = e.data;
             console.log("ONMESSAGE");
             //TODO: Put restrictions somehow on which origin is accepted
-            document.title = identifier;
+            document.title ="Hello"+email;
         }
     }
     function start() {

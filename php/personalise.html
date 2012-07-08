@@ -1,7 +1,9 @@
 <html>
 <head>
 <script type="text/javascript">
-var identifier;
+var identifier,
+    name,
+    email;
 console.log('personalising');
 function getCookie(c_name) {
     var i,x,y,ARRcookies=document.cookie.split(";");
@@ -14,23 +16,12 @@ function getCookie(c_name) {
         }
     }
 }
-function getFakeUniqueIdentifier() {
-    function S4() {
-        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-    }
-    function guid() {
-        return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
-    }
-    return guid();
-}
 identifier = getCookie('identifier');
 if(!identifier) {
- // prompt('New Comer !!\nPls provide your name');
-    //identifier = getFakeUniqueIdentifier();
-    identifier = "GUEST"
-    document.cookie = "identifier="+identifier+";";
+  email = prompt('New Comer !!\nPls provide your email');
+  name = "DEFAULT"
 }
-window.parent.postMessage(identifier, '*');
+//window.parent.postMessage(identifier, '*');
 </script>
 </head>
 </html>
