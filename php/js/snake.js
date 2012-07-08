@@ -674,48 +674,15 @@
         }
     }
     
-    function getFakeUniqueIdentifier() {
-        function S4() {
-            return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-        }
-        function guid() {
-            return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
-        }
-        return guid();
-    }
+    
     function personaliseGame() {
-        var identifier,
-            xmlhttp;
-        function getCookie(c_name) {
-            var i,x,y,ARRcookies=document.cookie.split(";");
-            for (i=0;i<ARRcookies.length;i++) {
-                x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-                y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-                x=x.replace(/^\s+|\s+$/g,"");
-                if (x==c_name) {
-                    return unescape(y);
-                }
-            }
+        window.onmessage = function(e) {
+            var identifier = e.data;
+            console.log("ONMESSAGE");
+            //TODO: Put restrictions somehow on which origin is accepted
+            document.title = identifier;
         }
-        identifier = getCookie('identifier');
-        if(!identifier) {
-           // prompt('New Comer !!\nPls provide your name');
-            identifier = getFakeUniqueIdentifier();
-            iframe.onload = function() {
-                iframe.contentWindow.postMessage(identifier, '*');
-            }
-        }
-        xmlhttp = new XMLHttpRequest();
-        if(xmlhttp) {
-            xmlhttp.onreadystatechange = function() {
-                if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
-                    console.log(xmlhttp.responseText);
-                    document.title = xmlhttp.responseText;
-                }
-            }
-            xmlhttp.open('GET', 'http://php-hariombalhara.rhcloud.com/process.php', true);
-            xmlhttp.send(null);
-        }   
+
     }
     function start() {
         snake.state = STATES.INITIALISING,
