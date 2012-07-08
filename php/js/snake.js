@@ -1,4 +1,4 @@
-(function main() {
+ (function main() {
     "use strict";
     var LEFT_KEY_CODE = 37,
         UP_KEY_CODE = 38,
