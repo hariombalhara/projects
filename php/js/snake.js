@@ -12,7 +12,7 @@
         NEGATIVE_90_ROTATION = "rotate(-90deg)",
         NEGATIVE_180_ROTATION = "rotate(-180deg)",
         ZERO_ROTATION = "",
-        BODY_PART_SIZE = 20,
+        BODY_PART_SIZE = 20, 
         SPEED = 60,
         INCREASE_SIZE_BY = 1,
         GULP_COUNTER_DIV_ID = 'snake_gulp_counter',
