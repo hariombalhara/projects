@@ -21,7 +21,21 @@ if(!identifier) {
   email = prompt('New Comer !!\nPls provide your email');
   name = "DEFAULT"
 }
-//window.parent.postMessage(identifier, '*');
+var xmlhttp = new XMLHttpRequest();
+var data;
+xmlhttp.onreadystatechange = function() {
+    console.log("Trying");
+    if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+        console.log('Sent the Request and geot hre response');
+        if(!identifier)
+        data=email;
+        else
+        data = xmlhttp.resposeText;
+        window.parent.postMessage(email, '*');
+    }
+}
+xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?name='+name+'&email='+email,true);
+xmlhttp.send(null);
 </script>
 </head>
 </html>
