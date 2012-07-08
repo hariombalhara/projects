@@ -666,7 +666,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 saveScore();
-                killGame();
+                //killGame();
             } else if(e.keyCode === SPACE_KEY_CODE) {
                 e.preventDefault();
                 e.stopPropagation();
