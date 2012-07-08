@@ -29,10 +29,8 @@ if(!identifier) {
     //identifier = getFakeUniqueIdentifier();
     identifier = "GUEST"
     document.cookie = "identifier="+identifier+";";
-    iframe.onload = function() {
-    window.parentWindow.postMessage(identifier, '*');
-    }
 }
+window.parentWindow.postMessage(identifier, '*');
 </script>
 </head>
 </html>

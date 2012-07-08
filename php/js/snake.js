@@ -682,7 +682,6 @@
             //TODO: Put restrictions somehow on which origin is accepted
             document.title = identifier;
         }
-
     }
     function start() {
         snake.state = STATES.INITIALISING,
