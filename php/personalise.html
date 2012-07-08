@@ -1,0 +1,22 @@
+<html>
+<head>
+<script type="text/javascript">
+window.onmessage = function(e) {
+    //TODO: Put restrictions somehow on which origin is accepted
+    var identifier = e.data,
+        xmlhttp;
+    document.cookie = "identifier="+identifier+";";
+ /*   xmlhttp = new XMLHttpRequest();
+    if(xmlhttp) {
+        xmlhttp.onreadystatechange = function() {
+            if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+                console.log("Succesfully Sent");
+            }
+        }
+        xmlhttp.open('GET', 'http://php-hariombalhara.rhcloud.com/process.php', true);
+        xmlhttp.send(null);
+    }*/
+}
+</script>
+</head>
+</html>
