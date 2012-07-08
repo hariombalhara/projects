@@ -6,7 +6,7 @@ $host = $_ENV['OPENSHIFT_DB_HOST'];
 $pass = $_ENV['OPENSHIFT_DB_PASSWORD'];
 $username = $_ENV['OPENSHIFT_DB_USERNAME'];
 $port = $_ENV['OPENSHIFT_DB_PORT'];
-$conn = mysql_connect($host.":"$port,$username,$pass);
+$conn = mysql_connect($host.":".$port,$username,$pass);
 echo $conn;
 if(!$conn)
 {
