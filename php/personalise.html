@@ -30,7 +30,13 @@ function getCookie(c_name) {
 identifier = getCookie('identifier');
 if(!identifier) {
   email = prompt('New Comer !!\nPls provide your email');
-  name = "DEFAULT"
+  name = "DEFAULT";
+  xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?name='+name+'&email='+email,true);
+  xmlhttp.send(null);
+}
+else {
+    xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php,true);
+    xmlhttp.send(null);
 }
 xmlhttp.onreadystatechange = function() {
     console.log("Trying");
@@ -47,8 +53,7 @@ xmlhttp.onreadystatechange = function() {
         window.parent.postMessage(data, '*');
     }
 }
-xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?name='+name+'&email='+email,true);
-xmlhttp.send(null);
+
 </script>
 </head>
 </html>
