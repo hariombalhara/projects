@@ -9,7 +9,7 @@
         script_src = "http://php-hariombalhara.rhcloud.com/js/snake.js",
         style_href = "http://php-hariombalhara.rhcloud.com/css/snake.css",
         style_type = "text/css",
-        style_rel = "stylesheet";
+        style_rel = "stylesheet"; 
     if(!document.querySelector('[src="'+script_src+'"]')) {
         var sscript = document.createElement('script');
         sscript.src = script_src;
