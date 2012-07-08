@@ -29,8 +29,8 @@ if(isset($uuid)) {
               }";
         //print_r($row);
     } else {
-        $query = 'Update `snake` set `highestScore` = '.score.' where `sessionId` = "'.$uuid.'"';
-        echo $query;
+        $query = 'Update `snake` set `highestScore` = '.$score.' where `sessionId` = "'.$uuid.'"';
+        //echo $query;
         $res = mysql_query($query) or die(mysql_error());
         //$row = mysql_fetch_array($res,MYSQL_BOTH);
     }

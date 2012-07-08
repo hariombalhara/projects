@@ -642,7 +642,7 @@
 
     function postToHostingSite(container) {
         //TODO:Put Restriction here for target ORigin
-        console.log('POSTING MESSAGE to Game Host');
+        console.log('POSTING MESSAGE to Game Host'+iframe);
         iframe.contentWindow.postMessage(container,'*');
     }
     function saveScore() {

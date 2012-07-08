@@ -56,7 +56,8 @@ div.crash_options#crash_options
     top:50%;
     display:none;
     font-size: 2em;
-    font-weight:bolder
+    font-weight:bolder;
+    color:white
 }
 #snake_iframe
 {
