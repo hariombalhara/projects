@@ -8,6 +8,21 @@ var identifier,
     score,
     xmlhttp = new XMLHttpRequest(),
     data;
+xmlhttp.onreadystatechange = function() {
+    console.log("Trying");
+    if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+        console.log('Sent the Request and geot hre response');
+        if(!identifier)
+        data = { 
+                 email:email,
+                 score:-1
+                }
+        else
+        data = eval((xmlhttp.responseText));
+        alert(data);
+        window.parent.postMessage(data, '*');
+    }
+}    
 window.onmessage = function(e) {
     console.log('Receive Score from site');
     score = e.data.score;
@@ -38,21 +53,7 @@ else {
     xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php,true);
     xmlhttp.send(null);
 }
-xmlhttp.onreadystatechange = function() {
-    console.log("Trying");
-    if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
-        console.log('Sent the Request and geot hre response');
-        if(!identifier)
-        data = { 
-                 email:email,
-                 score:-1
-                }
-        else
-        data = eval((xmlhttp.responseText));
-        alert(data);
-        window.parent.postMessage(data, '*');
-    }
-}
+
 
 </script>
 </head>
