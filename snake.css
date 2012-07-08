@@ -37,7 +37,8 @@ div.snake_state#snake_state
     position:fixed;
     bottom:30px;
     right:30px;
-    color:white
+    color:white;
+    text-align:right;
 }
 div.snake_gulp_counter#snake_gulp_counter
 {
@@ -45,7 +46,8 @@ div.snake_gulp_counter#snake_gulp_counter
     right:10px;
     top:10px;
     font-size:50px;
-    color:white
+    color:white;
+    text-align:right;
 }
 div.crash_options#crash_options
 {
@@ -55,4 +57,8 @@ div.crash_options#crash_options
     display:none;
     font-size: 2em;
     font-weight:bolder
+}
+#snake_iframe
+{
+    display:none;
 }

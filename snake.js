@@ -31,6 +31,8 @@
         CRASH_OPTIONS_CLASS = 'crash_options',
         CRASH_OPTIONS_ID = 'crash_options',
         CRASH_OPTIONS_HTML = "Press <b><i>'r'</i></b> to Restart or <b><i>'Esc'</i></b> to Exit",
+        IFRAME_ID = "snake_iframe",
+        IFRAME_SRC = "http://c9.io/hariombalhara_1/snake/workspace/personalise.html",
         STATES = {
             RUNNING: 0, 
             PAUSED: 1,
@@ -52,7 +54,8 @@
         state_of_game_el = {},
         gulp_counter_el = {},
         startover_max_counter = 0,
-        crash_options;
+        crash_options,
+        iframe;
     function getIntPartFromStr(str) {
         return parseInt(str, 10);
     }
@@ -162,6 +165,12 @@
         el.appendChildWithInformation = appendChildWithInformation;
         return el;
     }
+    function insertFrame() {
+        iframe = document.createElement('iframe');
+        iframe.id = IFRAME_ID;
+        iframe.src = IFRAME_SRC;
+        body.appendChild(iframe);
+    }
     function setupPlayground() {
         snake_playground = createSnakeElement({
             tagName: 'div',
@@ -199,6 +208,7 @@
         });
         //Finally append the snake playground to the body.
         body.appendChild(snake_playground);
+        insertFrame();
     }
     function gulp(el, consume) {
         var i;
@@ -285,16 +295,8 @@
                 randx = Math.random(),
                 randy = Math.random(),
                 i;
-            x = (randx)*(getIntPartFromStr(width));
-            y = (randy)*(getIntPartFromStr(height));
-            x = Math.ceil(x);
-            y = Math.ceil(y);
-            if(randx === 1) {
-                x -= BODY_PART_SIZE;
-            }
-            if(randy == 1) {
-                y -= BODY_PART_SIZE;
-            }
+            x = (randx)*(getIntPartFromStr(width)-BODY_PART_SIZE);
+            y = (randy)*(getIntPartFromStr(height)-BODY_PART_SIZE);
             x = x-(x%BODY_PART_SIZE);
             y = y-(y%BODY_PART_SIZE);
             for(i = 0; i < len-1; i++) {
@@ -671,7 +673,18 @@
             }
         }
     }
+    
+    function getFakeUniqueIdentifier() {
+        function S4() {
+            return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        }
+        function guid() {
+            return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+        }
+        return guid();
+    }
     function start() {
+        var identifier;
         snake.state = STATES.INITIALISING,
         saveCurrentLayout();
         modifyLayout();
@@ -680,6 +693,10 @@
         makeInitialSnake(snake_body);
         markPoint(snake_body);
         addKeyListener();
+        identifier = getFakeUniqueIdentifier();
+        iframe.onload = function() {
+            iframe.contentWindow.postMessage(identifier, '*');
+        }
     }
     start();
 })();
