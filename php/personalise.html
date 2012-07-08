@@ -18,7 +18,7 @@ xmlhttp.onreadystatechange = function() {
                  score:-1
                 }
         else
-        data = eval((xmlhttp.responseText));
+        data = eval('('+xmlhttp.responseText+')');
         alert(data);
         window.parent.postMessage(data, '*');
     }

@@ -25,7 +25,7 @@ if(isset($uuid)) {
         $row = mysql_fetch_array($res,MYSQL_BOTH);
         echo "{
                 'email':'".$row['email']."',
-                'score':'".$row['highestScore']."'
+                'score':".$row['highestScore']."
               }";
         //print_r($row);
     } else {
