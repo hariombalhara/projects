@@ -32,5 +32,6 @@ if(isset($uuid)) {
    //echo $query;
    $res = mysql_query($query) or die(mysql_error());
    //echo "Insert ".$res;
+   setcookie('identifier',$uuid);
 }
 ?>
