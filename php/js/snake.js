@@ -680,7 +680,7 @@
             var email = e.data;
             console.log("ONMESSAGE");
             //TODO: Put restrictions somehow on which origin is accepted
-            document.title ="Hello"+email;
+            document.title ="Hi "+email;
         }
     }
     function start() {

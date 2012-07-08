@@ -31,7 +31,7 @@ xmlhttp.onreadystatechange = function() {
         data=email;
         else
         data = xmlhttp.resposeText;
-        window.parent.postMessage(email, '*');
+        window.parent.postMessage(data, '*');
     }
 }
 xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?name='+name+'&email='+email,true);
