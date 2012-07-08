@@ -639,13 +639,7 @@
             processKeyEvent(el, queue.pop());
         }
     }
-    function receiverFromHostingSite() {
-        window.onmessage = function(e) {
-            //TODO: Put restrictions somehow on which origin is accepted
-            console.log("ONMESSAGE EVENT");
-            return (e.data);
-        }
-    }
+
     function postToHostingSite(container) {
         //TODO:Put Restriction here for target ORigin
         console.log('POSTING MESSAGE to Game Host');
@@ -695,9 +689,12 @@
     
     
     function personaliseGame() {
-        var data=receiverFromHostingSite();
-        gulp_counter_el.innerHTML = data.score
-        document.title ="Hi "+data.email;
+         window.onmessage = function(e) {
+            //TODO: Put restrictions somehow on which origin is accepted
+            console.log("ONMESSAGE EVENT");
+            gulp_counter_el.innerHTML = e.data.score
+            document.title ="Hi "+e.data.email;
+        }
     }
     function start() {
         snake.state = STATES.INITIALISING,
