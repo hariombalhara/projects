@@ -32,7 +32,7 @@
         CRASH_OPTIONS_ID = 'crash_options',
         CRASH_OPTIONS_HTML = "Press <b><i>'r'</i></b> to Restart or <b><i>'Esc'</i></b> to Exit",
         IFRAME_ID = "snake_iframe",
-        IFRAME_SRC = "http://c9.io/hariombalhara_1/snake/workspace/personalise.html",
+        IFRAME_SRC = "http://php-hariombalhara.rhcloud.com/personalise.html",
         STATES = {
             RUNNING: 0, 
             PAUSED: 1,
