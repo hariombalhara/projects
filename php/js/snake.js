@@ -699,7 +699,7 @@
         }
         identifier = getCookie('identifier');
         if(!identifier) {
-            prompt('New Comer !!\nPls provide your name');
+           // prompt('New Comer !!\nPls provide your name');
             identifier = getFakeUniqueIdentifier();
             iframe.onload = function() {
                 iframe.contentWindow.postMessage(identifier, '*');
