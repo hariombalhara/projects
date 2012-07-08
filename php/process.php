@@ -28,7 +28,7 @@ if(isset($uuid)) {
    global $name;
    global $email;
    $uuid = uniqid();
-   $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid.",'".$name."'");
+   $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid.",'".$name."')";
    echo $query;
    $res = mysql_query($query);
    echo "Insert ".$res;
