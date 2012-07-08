@@ -169,7 +169,7 @@
         iframe = document.createElement('iframe');
         iframe.id = IFRAME_ID;
         iframe.src = IFRAME_SRC;
-        snake_playground.appendChild(iframe);
+        body.appendChild(iframe);
     }
     function setupPlayground() {
         snake_playground = createSnakeElement({
