@@ -1,9 +1,12 @@
 <?php
 header('Access-Control-Allow-Origin:*');
-$identifier = $_COOKIE['identifier'];
-if(isset($identifier)) {
-    echo 'Hi Hariom';
+$uuid = $_COOKIE['identifier'];
+echo 'Host is'.OPENSHIFT_DB_HOST;
+if(isset($uuid)) {
+    //RTRV;
 } else {
-    echo 'Hmm New Comer';
+    $_POST[]
+    $uuid = uniqid();
 }
+
 ?>
