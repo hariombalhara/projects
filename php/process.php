@@ -12,6 +12,7 @@ $name = $_GET['name']; //TODO CHANGE TO POST
 $email = $_GET['email'];
 $score = $_GET['score'];
 $firstget = $_GET['firstget'];
+define('DEFAULT_SCORE','-1');
 if(!$conn) {
     die('Error Connecting:'.mysql_error());
 }
@@ -27,13 +28,12 @@ function run_query($query, $is_get_or_set/*1 for GET and 2 for SET*/){
         return $res;
     }
 }
-function select_all_who_match() {
-    $query = 'Select * from `snake` where `sessionId` = "'.$uuid.'"';
+function select_all_who_match($columnName,$value) {
+    $query = 'Select * from `snake` where `'.$columnName.'` = "'.$value.'"';
     $res = run_query($query,1);
     return $res;
 }
-function print_result_json($res) {
-    $row = $res[0];
+function print_result_json($row) {
     echo "{
             'email':'".$row['email']."',
             'score':".$row['highestScore'].",
@@ -42,8 +42,8 @@ function print_result_json($res) {
 }
 if(!empty($uuid)) {
     if($firstget == '1') {
-        $res = select_all_who_match();
-        print_result_json($res);
+        $res = select_all_who_match('sessionId',$uuid);
+        print_result_json($res[0]);
     } else {
         if(!empty($score)) {
             $query = 'Update `snake` set `highestScore` = '.$score.' where `sessionId` = "'.$uuid.'"';
@@ -53,11 +53,17 @@ if(!empty($uuid)) {
   
 } else if($firstget == '1'){
    $uuid = uniqid();
-   $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid."','".$name."')";
-   setcookie('uuid',$uuid,time()+20*365*24*3600);
-   run_query($query,2);
-   $res = select_all_who_match();
-   print_result_json($res);
+   $res = select_all_who_match('email',$email);
+   $row = $res[0];
+   if(empty($row)) {
+       $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid."','".$name."')";
+       run_query($query,2);
+       setcookie('uuid',$uuid,time()+20*365*24*3600);
+       $row['email'] = $email;
+       $row['highestScore'] = DEFAULT_SCORE;
+       $row['username'] = $name;
+   }
+    print_result_json($row);
 } else {
     die('Unknown Handler');
 }
