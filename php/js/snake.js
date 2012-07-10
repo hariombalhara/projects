@@ -40,6 +40,11 @@
             INITIALISING: 3,
             DESTROYED: 4 //Games has ended and complete playground has been destroyed
             },
+        MSG_TYPE = { //It has a duplicate in personalise.js
+            UPLOAD_DATA: 'UPLOAD_DATA', //Right Now its just the score
+            DATABASE_UPDATED: 'DATABASE_UPDATED',
+            UPDATE_PAGE: 'UPDATE_PAGE'
+        },
         body = document.body,
         snake = window.snake = {},//Snake Namespace
         point = snake.point = {},//Holds the position of the point.
@@ -375,7 +380,7 @@
             return;
         }
         crash_options.style.display = "block";
-        moveStateTo(STATES.ENDED)
+        moveStateTo(STATES.ENDED);
     }
     function checkUpCrash(last_style) {
         if((getIntPartFromStr(last_style.top)) < 0) {
@@ -647,8 +652,10 @@
     }
     function saveScore() {
         var container = {
-            score:gulp_counter_el.innerHTML
-        }
+            msgType: MSG_TYPE.UPLOAD_DATA,
+            score: gulp_counter_el.innerHTML
+        };
+        snake_playground.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
         postToHostingSite(container);
     }
     function keyEventListener(e) {
@@ -666,7 +673,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 saveScore();
-                //killGame();
+                //killGame();Game will be killed when a message is received that score is updated to database
             } else if(e.keyCode === SPACE_KEY_CODE) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -690,12 +697,22 @@
     
     function personaliseGame() {
          window.onmessage = function(e) {
+            var container = e.data,
+                data;
             //TODO: Put restrictions somehow on which origin is accepted
-            console.log("ONMESSAGE EVENT");
-            if(e.data.score !== -1)
-            gulp_counter_el.innerHTML = e.data.score
-            document.title ="Hi "+e.data.email;
-        }
+            console.log("ONMESSAGE EVENT received on Parent");
+            if(container.msgType == MSG_TYPE.DATABASE_UPDATED) {
+                console.log('Received DATABASE_UDPATED.Killing Now');
+                killGame();
+            }
+            else if(container.msgType == MSG_TYPE.UPDATE_PAGE) {
+                data = container.data;
+                if(data.score !== -1) {
+                    gulp_counter_el.innerHTML = e.data.score;
+                }
+                document.title ="Hi "+data.email+"("+data.username+")";
+            }
+         };
     }
     function start() {
         snake.state = STATES.INITIALISING,

@@ -1,60 +1,6 @@
 <html>
 <head>
-<script type="text/javascript">
-
-var identifier,
-    name,
-    email,
-    score,
-    xmlhttp = new XMLHttpRequest(),
-    data;
-xmlhttp.onreadystatechange = function() {
-    console.log("Trying");
-    if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
-        console.log('Sent the Request and geot hre response');
-        if(!identifier)
-        data = { 
-                 email:email,
-                 score:-1
-                }
-        else
-        data = eval('('+xmlhttp.responseText+')');
-        alert(data);
-        window.parent.postMessage(data, '*');
-    }
-}    
-window.onmessage = function(e) {
-    console.log('Receive Score from site');
-    score = e.data.score;
-    xmlhttp.onreadystatechange = function(){};
-    xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?score='+score,true);
-    xmlhttp.send(null);
-    }
-console.log('personalising');
-function getCookie(c_name) {
-    var i,x,y,ARRcookies=document.cookie.split(";");
-    for (i=0;i<ARRcookies.length;i++) {
-        x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-        y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-        x=x.replace(/^\s+|\s+$/g,"");
-        if (x==c_name) {
-            return unescape(y);
-        }
-    }
-}
-identifier = getCookie('identifier');
-if(!identifier) {
-  email = prompt('New Comer !!\nPls provide your email');
-  name = "DEFAULT";
-  xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?name='+name+'&email='+email,true);
-  xmlhttp.send(null);
-}
-else {
-    xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php',true);
-    xmlhttp.send(null);
-}
-
-
+<script type="text/javascript" src="js/personalise.js">
 </script>
 </head>
 </html>
