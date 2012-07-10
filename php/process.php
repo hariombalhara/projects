@@ -22,7 +22,7 @@ function run_query($query, $is_get_or_set/*1 for GET and 2 for SET*/){
     $i = 0;
     if($is_get_or_set == 1) {
         while($row = mysql_fetch_array($res,MYSQL_BOTH)) {
-            $res[$i++]=$row;
+            $res[$i++] = $row;
         }
         return $res;
     }
