@@ -22,7 +22,7 @@ function getCookie(c_name) {
 xmlhttp = new XMLHttpRequest();
 (function() {
     var first_get = 1;//Means its the first time we are contacting database
-    uid = getCookie('uid');
+    uid = getCookie('uuid');
     if(!uid) {
         email = prompt('New Comer !!\nPls provide your email');
         username = "DEFAULT";

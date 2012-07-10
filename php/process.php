@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin:*');
 header('Content-Type:text/html');
-$uuid = $_COOKIE['identifier'];
+$uuid = $_COOKIE['uuid'];
 //echo $uuid;
 $host = $_ENV['OPENSHIFT_DB_HOST'];
 $pass = $_ENV['OPENSHIFT_DB_PASSWORD'];
@@ -51,7 +51,7 @@ if(!empty($uuid)) {
    $uuid = uniqid();
    $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid."','".$name."')";
    run_query($query,2)
-   setcookie('identifier',$uuid,time()+20*365*24*3600);
+   setcookie('uuid',$uuid,time()+20*365*24*3600);
 } else {
     die('Unknown Handler');
 }
