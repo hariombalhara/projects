@@ -52,15 +52,17 @@ if(!empty($uuid)) {
     }
   
 } else if($firstget == '1'){
-   $uuid = uniqid();
    $result = select_all_who_match('email',$email);
    $row = $result[0];
    if(empty($row)) {
+       $uuid = uniqid();
        $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid."','".$name."')";
        run_query($query,2);
        $row['email'] = $email;
        $row['highestScore'] = DEFAULT_SCORE;
        $row['username'] = $name;
+   } else {
+       $uuid = $row['sessionId'];
    }
    //user identified set cookie.
     setcookie('uuid',$uuid,time()+20*365*24*3600);
