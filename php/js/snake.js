@@ -48,7 +48,7 @@
         body = document.body,
         snake = window.snake = {},//Snake Namespace
         point = snake.point = {},//Holds the position of the point.
-        orig_layout = snake.orig_layout = {},//It will hold the original style information for the page
+        original_cfg = snake.original_cfg = {},//It will hold the original style information for the page
         key_queue = snake.key_queue = [],//Holds the keys to be processed
         window_availWidth = -1,
         window_availHeight = -1,
@@ -105,12 +105,13 @@
         return boolvar;
     }
     //Save the current style info in case something wrong happens or fore restoration
-    function saveCurrentLayout() {
-        var b = orig_layout.body = {};
+    function saveCurrentCfg() {
+        var b = original_cfg.body = {};
         b.style = {};
         b.style.overflow = body.style.overflow;
         b.style.margin = body.style.margin;
-        //copy_style(body, snake.orig_layout.body);
+        original_cfg.document={title:document.title};
+        //copy_style(body, snake.original_cfg.body);
     }
     function modifyLayout() {
         body.style.overflow = "hidden";
@@ -285,10 +286,11 @@
         }
         snake.paused = true;
     }
-    function restoreLayout() {
-        var b = orig_layout.body;
+    function restoreCfg() {
+        var b = original_cfg.body;
         body.style.overflow = b.style.overflow;
         body.style.margin = b.style.margin;
+        document.title = original_cfg.document.title;
     }
     function markPoint(el) {
         var x = -1,
@@ -366,7 +368,7 @@
         catch(e) {
             console.log('Exception:', "Caller is ="+killGame.caller, "ParentNode="+snake_playground.parentNode, "Node="+snake_playground);
         }
-        restoreLayout();
+        restoreCfg();
         if(script)
         document.getElementsByTagName('head')[0].removeChild(script);
     }
@@ -716,7 +718,7 @@
     }
     function start() {
         snake.state = STATES.INITIALISING,
-        saveCurrentLayout();
+        saveCurrentCfg();
         modifyLayout();
         setupPlayground();
         getDimensions();
