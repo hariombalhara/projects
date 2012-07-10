@@ -710,7 +710,7 @@
                 if(data.score !== -1) {
                     gulp_counter_el.innerHTML = data.highestScore;
                 }
-                document.title ="Hi "+data.email+"("+data.username+")";
+                document.title ="Hi "+data.email+"("+data.name+")";
             }
          };
     }
