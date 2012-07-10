@@ -51,7 +51,7 @@ if(!empty($uuid)) {
    $uuid = uniqid();
    $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid."','".$name."')";
    run_query($query,2)
-   setcookie('uuid',$uuid,time()+20*365*24*3600);
+   setcookie('uuid',$uuid,time()+3600);
 } else {
     die('Unknown Handler');
 }
