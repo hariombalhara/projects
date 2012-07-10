@@ -19,19 +19,19 @@ if(!$conn) {
 mysql_select_db('php',$conn);
 function run_query($query, $is_get_or_set/*1 for GET and 2 for SET*/){
     $res = mysql_query($query) or die(mysql_error());
-    $res = array();
     $i = 0;
+    $arr = array();
     if($is_get_or_set == 1) {
         while($row = mysql_fetch_array($res,MYSQL_BOTH)) {
-            $res[$i++] = $row;
+            $arr[$i++] = $row;
         }
-        return $res;
+        return $arr;
     }
 }
 function select_all_who_match($columnName,$value) {
     $query = 'Select * from `snake` where `'.$columnName.'` = "'.$value.'"';
-    $res = run_query($query,1);
-    return $res;
+    $result = run_query($query,1);
+    return $result;
 }
 function print_result_json($row) {
     echo "{
@@ -42,8 +42,8 @@ function print_result_json($row) {
 }
 if(!empty($uuid)) {
     if($firstget == '1') {
-        $res = select_all_who_match('sessionId',$uuid);
-        print_result_json($res[0]);
+        $result = select_all_who_match('sessionId',$uuid);
+        print_result_json($result[0]);
     } else {
         if(!empty($score)) {
             $query = 'Update `snake` set `highestScore` = '.$score.' where `sessionId` = "'.$uuid.'"';
@@ -53,8 +53,8 @@ if(!empty($uuid)) {
   
 } else if($firstget == '1'){
    $uuid = uniqid();
-   $res = select_all_who_match('email',$email);
-   $row = $res[0];
+   $result = select_all_who_match('email',$email);
+   $row = $result[0];
    if(empty($row)) {
        $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid."','".$name."')";
        run_query($query,2);
