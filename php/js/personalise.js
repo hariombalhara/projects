@@ -3,7 +3,7 @@ var MSG_TYPE = { //It has a duplicate in snake.js
         UPLOAD_DATA: 'UPLOAD_DATA',
         UPDATE_PAGE: 'UPDATE_PAGE'
     },
-    xmlhttp,
+    xmlhttp = new XMLHttpRequest(),
     data,
     username,
     email,
@@ -19,7 +19,6 @@ function getCookie(c_name) {
         }
     }
 }
-xmlhttp = new XMLHttpRequest();
 (function() {
     var first_get = 1;//Means its the first time we are contacting database
     uid = getCookie('uuid');
