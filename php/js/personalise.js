@@ -36,12 +36,12 @@ xmlhttp = new XMLHttpRequest();
         var container = {};
         if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
             console.log('Fetching Data from database');
-                data = eval('('+xmlhttp.responseText+')');
-                console.log('Received Data:',JSON.stringify(data));
-            }
+            data = eval('('+xmlhttp.responseText+')');
+            console.log('Received Data:',JSON.stringify(data));
             container.data = data;
             container.msgType = MSG_TYPE.UPDATE_PAGE;
             window.parent.postMessage(container, '*');
+        }
     };
 })();
 window.onmessage = function(e) {
