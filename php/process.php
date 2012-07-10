@@ -36,7 +36,7 @@ function select_all_who_match($columnName,$value) {
 function print_result_json($row) {
     echo "{
             'email':'".$row['email']."',
-            'score':".$row['highestScore'].",
+            'highestScore':'".$row['highestScore']."',
             'name':'".$row['username']."',
           }";
 }
