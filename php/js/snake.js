@@ -366,7 +366,7 @@
             }
         }
         catch(e) {
-            console.log('Exception:', "Caller is ="+killGame.caller, "ParentNode="+snake_playground.parentNode, "Node="+snake_playground);
+            console.log('Exception:', "ParentNode="+snake_playground.parentNode, "Node="+snake_playground);
         }
         restoreCfg();
         if(script)
