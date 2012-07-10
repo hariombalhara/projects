@@ -32,14 +32,18 @@ function select_all_who_match() {
     $res = run_query($query,1);
     return $res;
 }
+function print_result_json($res) {
+    $row = $res[0];
+    echo "{
+            'email':'".$row['email']."',
+            'score':".$row['highestScore'].",
+            'name':'".$row['username']."',
+          }";
+}
 if(!empty($uuid)) {
     if($firstget == '1') {
-        select_all_who_match();
-        echo "{
-                'email':'".$row['email']."',
-                'score':".$row['highestScore'].",
-                'name':'".$row['username']."',
-              }";
+        $res = select_all_who_match();
+        print_result_json($res);
     } else {
         if(!empty($score)) {
             $query = 'Update `snake` set `highestScore` = '.$score.' where `sessionId` = "'.$uuid.'"';
@@ -50,8 +54,10 @@ if(!empty($uuid)) {
 } else if($firstget == '1'){
    $uuid = uniqid();
    $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid."','".$name."')";
-   run_query($query,2);
    setcookie('uuid',$uuid,time()+20*365*24*3600);
+   run_query($query,2);
+   $res = select_all_who_match();
+   print_result_json($res);
 } else {
     die('Unknown Handler');
 }
