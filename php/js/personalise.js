@@ -52,8 +52,10 @@ window.onmessage = function(e) {
         score = container.score;
     }    
     xmlhttp.onreadystatechange = function(){
-        container.msgType = MSG_TYPE.DATABASE_UPDATED;
-        window.parent.postMessage(container,'*');    
+        if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+            container.msgType = MSG_TYPE.DATABASE_UPDATED;
+            window.parent.postMessage(container,'*');    
+        }
     };
     xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?score='+score,true);
     xmlhttp.send(null);
