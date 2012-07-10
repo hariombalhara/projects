@@ -58,11 +58,12 @@ if(!empty($uuid)) {
    if(empty($row)) {
        $query = "Insert into `snake` (`email`,`sessionId`,`username`) values ('".$email."','".$uuid."','".$name."')";
        run_query($query,2);
-       setcookie('uuid',$uuid,time()+20*365*24*3600);
        $row['email'] = $email;
        $row['highestScore'] = DEFAULT_SCORE;
        $row['username'] = $name;
    }
+   //user identified set cookie.
+    setcookie('uuid',$uuid,time()+20*365*24*3600);
     print_result_json($row);
 } else {
     die('Unknown Handler');
