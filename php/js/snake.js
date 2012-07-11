@@ -725,6 +725,7 @@
                 if(container.mode === MODE.SAVE_KILL) {
                     killGame();
                 } else if(container.mode === MODE.SAVE_KILL_RESTART) {
+                    killGame();
                     main();
                 }
             }
