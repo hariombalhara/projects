@@ -55,7 +55,7 @@ if(!empty($uuid)) {
             //}
         }
     }
-  
+   
 } else if($firstget == '1'){
    $result = select_all_who_match('email',$email);
    $row = $result[0];
