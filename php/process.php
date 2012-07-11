@@ -50,8 +50,8 @@ if(!empty($uuid)) {
             print_r($result);
            // $row = $result[0];
             //if($row['highestScore'] < $score) {
-                $query = 'Update `snake` set `highestScore` = '.$score.' where `sessionId` = "'.$uuid.'"';
-                run_query($query,2);
+               // $query = 'Update `snake` set `highestScore` = '.$score.' where `sessionId` = "'.$uuid.'"';
+               // run_query($query,2);
             //}
         }
     }
