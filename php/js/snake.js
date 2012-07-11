@@ -297,6 +297,7 @@
         body.style.overflow = b.style.overflow;
         body.style.margin = b.style.margin;
         document.title = original_cfg.document.title;
+        body.onbeforeunload = b.onbeforeunload;
     }
     function markPoint(el) {
         var x = -1,
@@ -664,6 +665,7 @@
             score: gulp_counter_el.innerHTML,
             killgame:killgame
         };
+        if(killgame)
         snake_playground.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
         postToHostingSite(container);
     }
@@ -716,8 +718,9 @@
             console.log("ONMESSAGE EVENT received on Parent");
             if(container.msgType == MSG_TYPE.DATABASE_UPDATED) {
                 console.log('Received DATABASE_UDPATED.Killing Now');
-                if(container.killgame)
-                killGame();
+                if(container.killgame) {
+                    killGame();
+                }
             }
             else if(container.msgType == MSG_TYPE.UPDATE_PAGE) {
                 data = container.data;
