@@ -6,7 +6,8 @@
         DOWN_KEY_CODE = 40,
         ESCAPE_KEY_CODE = 27,
         SPACE_KEY_CODE = 32,//TO PAUSE THE GAME
-        R_KEY_CODE = 82,//Restart
+        RESTART_KEY_CODE = 82,//R KEY
+        SAVE_KEY_CODE = 113,//F2 KEY
         NO_OF_INITIAL_BODY_PARTS = 3,
         POSITIVE_90_ROTATION = "rotate(90deg)",
         NEGATIVE_90_ROTATION = "rotate(-90deg)",
@@ -111,11 +112,16 @@
         b.style.overflow = body.style.overflow;
         b.style.margin = body.style.margin;
         original_cfg.document={title:document.title};
+        b.onbeforeunload = body.onbeforeunload; //TODO:Test it by attaching an onbeforeunload function to body on original site.
         //copy_style(body, snake.original_cfg.body);
     }
-    function modifyLayout() {
+    function actonbeforeunload() {
+      return 'Unsaved Changes';//Not shown
+    }
+    function modifyCfg() {
         body.style.overflow = "hidden";
         body.style.margin = "0";
+        body.onbeforeunload = actonbeforeunload;
     }    
     function moveStateTo(state) {
         if (state === STATES.PAUSED) {
@@ -373,7 +379,7 @@
         document.getElementsByTagName('head')[0].removeChild(script);
     }
     function restartGame() {
-        killGame();
+        saveScore(true);
         main();
     }
     function crashSnake() {
@@ -652,10 +658,11 @@
         console.log('POSTING MESSAGE to Game Host'+iframe);
         iframe.contentWindow.postMessage(container,'*');
     }
-    function saveScore() {
+    function saveScore(killgame) {
         var container = {
             msgType: MSG_TYPE.UPLOAD_DATA,
-            score: gulp_counter_el.innerHTML
+            score: gulp_counter_el.innerHTML,
+            killgame:killgame
         };
         snake_playground.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
         postToHostingSite(container);
@@ -674,7 +681,7 @@
                 }
                 e.preventDefault();
                 e.stopPropagation();
-                saveScore();
+                saveScore(true);
                 //killGame();Game will be killed when a message is received that score is updated to database
             } else if(e.keyCode === SPACE_KEY_CODE) {
                 e.preventDefault();
@@ -688,10 +695,14 @@
                     moveStateTo(STATES.PAUSED);
                 }
                 snake.paused = toggle(snake.paused);
-            } else if(e.keyCode === R_KEY_CODE) {
+            } else if(e.keyCode === RESTART_KEY_CODE) {
                 e.preventDefault();
                 e.stopPropagation();
                 restartGame();
+            } else if(e.keyCode === SAVE_KEY_CODE) {
+                e.preventDefault();
+                e.stopPropagation();
+                saveScore(false/*Kill Game*/);
             }
         }
     }
@@ -705,6 +716,7 @@
             console.log("ONMESSAGE EVENT received on Parent");
             if(container.msgType == MSG_TYPE.DATABASE_UPDATED) {
                 console.log('Received DATABASE_UDPATED.Killing Now');
+                if(container.killgame)
                 killGame();
             }
             else if(container.msgType == MSG_TYPE.UPDATE_PAGE) {
@@ -719,7 +731,7 @@
     function start() {
         snake.state = STATES.INITIALISING,
         saveCurrentCfg();
-        modifyLayout();
+        modifyCfg();
         setupPlayground();
         getDimensions();
         makeInitialSnake(snake_body);

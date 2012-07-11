@@ -45,12 +45,17 @@ function getCookie(c_name) {
 })();
 window.onmessage = function(e) {
     var container = e.data,
-        score;
+        score,
+        killgame;
+    killgame = container.killgame;
     console.log('Updating Score');
     if(container.msgType === MSG_TYPE.UPLOAD_DATA) {
         score = container.score;
     }    
     xmlhttp.onreadystatechange = function(){
+        container = {
+            killgame:killgame    
+        };
         if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
             container.msgType = MSG_TYPE.DATABASE_UPDATED;
             window.parent.postMessage(container,'*');    
