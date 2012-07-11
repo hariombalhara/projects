@@ -709,7 +709,7 @@
             }
             else if(container.msgType == MSG_TYPE.UPDATE_PAGE) {
                 data = container.data;
-                if(data.score !== '-1') {
+                if(data.highestScore !== '-1') {
                     gulp_counter_el.innerHTML = data.highestScore;
                 }
                 document.title ="Hi "+data.email+"("+data.name+")";

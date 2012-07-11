@@ -46,8 +46,12 @@ if(!empty($uuid)) {
         print_result_json($result[0]);
     } else {
         if(!empty($score)) {
-            $query = 'Update `snake` set `highestScore` = '.$score.' where `sessionId` = "'.$uuid.'"';
-            run_query($query,2);
+            $result = select_all_who_match('sessionId',$uuid)
+            $row = $result[0];
+            if($row['highestScore'] < $score) {
+                $query = 'Update `snake` set `highestScore` = '.$score.' where `sessionId` = "'.$uuid.'"';
+                run_query($query,2);
+            }
         }
     }
   
