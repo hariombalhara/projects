@@ -46,6 +46,11 @@
             DATABASE_UPDATED: 'DATABASE_UPDATED',
             UPDATE_PAGE: 'UPDATE_PAGE'
         },
+        MODE = { //It has duplicate in personalise.js
+            SAVE_KILL: 0,
+            SAVE: 1,
+            SAVE_KILL_RESTART:2
+        },
         body = document.body,
         snake = window.snake = {},//Snake Namespace
         point = snake.point = {},//Holds the position of the point.
@@ -380,8 +385,7 @@
         document.getElementsByTagName('head')[0].removeChild(script);
     }
     function restartGame() {
-        saveScore(true);
-        main();
+        saveScore(MODE.SAVE_KILL_RESTART);
     }
     function crashSnake() {
         if(isDestroyed() || (snake.state === STATES.ENDED)) {
@@ -659,13 +663,13 @@
         console.log('POSTING MESSAGE to Game Host'+iframe);
         iframe.contentWindow.postMessage(container,'*');
     }
-    function saveScore(killgame) {
+    function saveScore(mode) {
         var container = {
             msgType: MSG_TYPE.UPLOAD_DATA,
             score: gulp_counter_el.innerHTML,
-            killgame:killgame
+            mode:mode
         };
-        if(killgame)
+        if(mode != MODE.SAVE)
         snake_playground.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
         postToHostingSite(container);
     }
@@ -683,7 +687,7 @@
                 }
                 e.preventDefault();
                 e.stopPropagation();
-                saveScore(true);
+                saveScore(MODE.SAVE_KILL);
                 //killGame();Game will be killed when a message is received that score is updated to database
             } else if(e.keyCode === SPACE_KEY_CODE) {
                 e.preventDefault();
@@ -704,7 +708,7 @@
             } else if(e.keyCode === SAVE_KEY_CODE) {
                 e.preventDefault();
                 e.stopPropagation();
-                saveScore(false/*Kill Game*/);
+                saveScore(MODE.SAVE);
             }
         }
     }
@@ -718,8 +722,10 @@
             console.log("ONMESSAGE EVENT received on Parent");
             if(container.msgType == MSG_TYPE.DATABASE_UPDATED) {
                 console.log('Received DATABASE_UDPATED.Killing Now');
-                if(container.killgame) {
+                if(container.mode === MODE.SAVE_KILL) {
                     killGame();
+                } else if(container.mode === MODE.SAVE_KILL_RESTART) {
+                    main();
                 }
             }
             else if(container.msgType == MSG_TYPE.UPDATE_PAGE) {

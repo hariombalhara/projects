@@ -3,6 +3,11 @@ var MSG_TYPE = { //It has a duplicate in snake.js
         UPLOAD_DATA: 'UPLOAD_DATA',
         UPDATE_PAGE: 'UPDATE_PAGE'
     },
+    MODE = { //It has duplicate in snake.js
+            SAVE_KILL: 0,
+            SAVE: 1,
+            SAVE_KILL_RESTART:2
+        },
     xmlhttp = new XMLHttpRequest(),
     data,
     username,
@@ -46,15 +51,15 @@ function getCookie(c_name) {
 window.onmessage = function(e) {
     var container = e.data,
         score,
-        killgame;
-    killgame = container.killgame;
+        mode;
+    mode = container.mode;
     console.log('Updating Score');
     if(container.msgType === MSG_TYPE.UPLOAD_DATA) {
         score = container.score;
     }    
     xmlhttp.onreadystatechange = function(){
         container = {
-            killgame:killgame    
+            mode:mode    
         };
         if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
             container.msgType = MSG_TYPE.DATABASE_UPDATED;
