@@ -1,3 +1,4 @@
+<?php
 $url = 'https://browserid.org/verify';
 $data = http_build_query(array('assertion' => $_POST['assertion'], 'audience' => urlencode('php-hariombalhara.rhcloud.com')));
 
@@ -30,5 +31,4 @@ else {
   // log in failed.
   echo "{'status':'fail'}"
 }
-
-echo $result;
+?>
