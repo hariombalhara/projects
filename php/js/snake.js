@@ -190,7 +190,8 @@
         snake_playground.appendChild(iframe);
     }
 
-    function init_persona_login() {
+    function init_persona_login(e) {
+        e.preventDefault();
         var container = {
             msgType:MSG_TYPE.INITIATE_LOGIN
         }
@@ -201,6 +202,7 @@
         login_el.id = "login_snake_game";
         login_el.setAttribute('class',"login_snake_game");
         login_el.onclick = init_persona_login;
+        login_el.href = "javascript:void(null)";
         body.appendChild(login_el);
     }
     function setupPlayground() {

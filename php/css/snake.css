@@ -1,3 +1,4 @@
+
 /**Here provide style for ony those elements which will be removed later on when snake game ends.For all other elements internal style will be added and removed through javascript **/
 rect.snake_figure#snake_figure
 {
@@ -62,4 +63,13 @@ div.crash_options#crash_options
 #snake_iframe
 {
     display:none;
+}
+#login_snake_game
+{
+    background: url("https://browserid.org/i/sign_in_orange.png") no-repeat scroll 0 0 transparent;
+    height: 20px;
+    left: 50%;
+    position: fixed;
+    top: 50%;
+    width: 80px;
 }
