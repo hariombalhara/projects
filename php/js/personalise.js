@@ -42,7 +42,7 @@ function gotAssertion(assertion) {
                 return;
             }
             email = verified_obj.email;
-            xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php,true');
+            xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xmlhttp.send('name='+username+'&email='+email+'&firstget='+first_get);
             }
