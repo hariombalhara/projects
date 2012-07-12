@@ -41,6 +41,7 @@ function gotAssertion(assertion) {
                 console.log('LOGIN FAILURE for '+verified_obj.email);
                 return;
             }
+            console.log('browserId verified it');
             email = verified_obj.email;
             xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
