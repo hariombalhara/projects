@@ -203,7 +203,7 @@
         login_el.setAttribute('class',"login_snake_game");
         login_el.onclick = init_persona_login;
         login_el.href = "javascript:void(null)";
-        body.appendChild(login_el);
+        snake_playground.appendChild(login_el);
     }
     function setupPlayground() {
         snake_playground = createSnakeElement({
