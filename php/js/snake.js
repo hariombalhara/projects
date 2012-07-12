@@ -776,6 +776,7 @@
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 console.log('KNOWN USER');
                 uuid = container.data.uuid;
+                console.log('KNOWN USER'+JSON.stringify(container.data));
             }
          };
     }

@@ -69,12 +69,14 @@ div.crash_options#crash_options
     left: 45%;
     position: fixed;
     top: 50%;
+    width:20%;
 }
 #login_snake_game > a:nth-child(1)
 {
     background: url("https://browserid.org/i/sign_in_orange.png") no-repeat scroll 0 0 transparent;
     height: 20px;
     width: 80px;
+    position: absolute;
 }
 #login_snake_game > a:nth-child(2)
 {
