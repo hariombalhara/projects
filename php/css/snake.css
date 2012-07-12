@@ -66,10 +66,22 @@ div.crash_options#crash_options
 }
 #login_snake_game
 {
-    background: url("https://browserid.org/i/sign_in_orange.png") no-repeat scroll 0 0 transparent;
-    height: 20px;
-    left: 50%;
+    left: 45%;
     position: fixed;
     top: 50%;
+}
+#login_snake_game > a:nth-child(1)
+{
+    background: url("https://browserid.org/i/sign_in_orange.png") no-repeat scroll 0 0 transparent;
+    height: 20px;
     width: 80px;
+}
+#login_snake_game > a:nth-child(2)
+{
+    color: orange;
+    font-size: 1.4em;
+    font-weight: bolder;
+    left: 100px;
+    position: absolute;
+    text-decoration: none;
 }

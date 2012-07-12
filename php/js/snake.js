@@ -773,6 +773,7 @@
                 login_el.style.display = "none";
                 document.title = "Hi "+data.email+"("+data.name+")";
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
+                console.log('KNOWN USER');
                 uuid = container.data.uuid;
             }
          };
