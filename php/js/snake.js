@@ -772,7 +772,7 @@
                 console.log('KNOWN USER');
                 uuid = container.data.uuid;
                 if(uuid) {
-                    login_el.start.display = "none";
+                    login_el.style.display = "none";
                 }
             }
          };
