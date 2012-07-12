@@ -71,7 +71,7 @@
         crash_options,
         iframe,
         login_el,
-        uuid;
+        loggedIn;
     function getIntPartFromStr(str) {
         return parseInt(str, 10);
     }
@@ -712,7 +712,7 @@
         postToHostingSite(container);
     }
     function keyEventListener(e) {
-        if((noSignIn || uuid)&&(e.keyCode === LEFT_KEY_CODE ||e.keyCode === DOWN_KEY_CODE ||e.keyCode === UP_KEY_CODE ||e.keyCode === RIGHT_KEY_CODE )) {
+        if((noSignIn || loggedIn)&&(e.keyCode === LEFT_KEY_CODE ||e.keyCode === DOWN_KEY_CODE ||e.keyCode === UP_KEY_CODE ||e.keyCode === RIGHT_KEY_CODE )) {
             e.preventDefault();
             e.stopPropagation();
             if(!isDestroyed() && !isEnded()) {
@@ -727,7 +727,7 @@
                 e.stopPropagation();
                 saveScore(MODE.SAVE_KILL);
                 //killGame();Game will be killed when a message is received that score is updated to database
-            } else if((noSignIn || uuid)&&(e.keyCode === SPACE_KEY_CODE)) {
+            } else if((noSignIn || loggedIn)&&(e.keyCode === SPACE_KEY_CODE)) {
                 e.preventDefault();
                 e.stopPropagation();
                 if(isDestroyed() || isEnded()) {
@@ -739,11 +739,11 @@
                     moveStateTo(STATES.PAUSED);
                 }
                 snake.paused = toggle(snake.paused);
-            } else if((noSignIn || uuid)&&(e.keyCode === RESTART_KEY_CODE)) {
+            } else if((noSignIn || loggedIn)&&(e.keyCode === RESTART_KEY_CODE)) {
                 e.preventDefault();
                 e.stopPropagation();
                 restartGame();
-            } else if((noSignIn || uuid)&&(e.keyCode === SAVE_KEY_CODE)) {
+            } else if((noSignIn || loggedIn)&&(e.keyCode === SAVE_KEY_CODE)) {
                 e.preventDefault();
                 e.stopPropagation();
                 saveScore(MODE.SAVE);
@@ -774,8 +774,8 @@
                 document.title = "Hi "+data.email+"("+data.name+")";
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 console.log('KNOWN USER');
-                uuid = container.data.uuid;
-                if(uuid) {
+                loggedIn = container.data.loggedIn;
+                if(loggedIn) {
                     login_el.style.display = "none";
                 } else {
                     updateLoginButton();

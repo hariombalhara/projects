@@ -16,11 +16,15 @@ var MSG_TYPE = { //It has a duplicate in snake.js
     email,
     uuid;
 (function() {
-    var container = {};
+    var container = {},
+        loggedIn = false;
     uuid = getCookie('uuid');
     container.msgType = MSG_TYPE.INITIALIZE_HOST_PAGE;
+    if(uuid) {
+        loggedIn = true;
+    }
     container.data = {
-    uuid:uuid
+    loggedIn:loggedIn
     };
     window.parent.postMessage(container,'*');
     if(uuid) {
