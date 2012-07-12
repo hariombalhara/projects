@@ -29,6 +29,6 @@ if ($json->status == 'okay') {
 }
 else {
   // log in failed.
-  echo "{'status':'fail'}"
+  echo "{'status':'fail'}";
 }
 ?>
