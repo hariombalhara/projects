@@ -213,7 +213,7 @@
         nologin_anchor.href = "javascript:void(null)";
         nologin_anchor.innerHTML = "OR &nbsp;&nbsp;GuestIn";
         nologin_anchor.onclick = continueAsGuest;
-        login_el.innerHTML = "";
+        login_el.setAttribute('class','login_snake_game');
         login_el.appendChild(login_anchor);
         login_el.appendChild(nologin_anchor);
     }
@@ -221,7 +221,7 @@
         login_el=document.createElement('div');
         login_el.id = "login_snake_game";
         login_el.setAttribute('class',"login_snake_game");
-        login_el.style.backgroundImage = "url('https://www.google.com/images/loading.gif')";
+        login_el.setAttribute('class',login_el.getAttribute('class')+" waiting");
         snake_playground.appendChild(login_el);
     }
     function setupPlayground() {

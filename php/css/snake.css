@@ -71,6 +71,10 @@ div.crash_options#crash_options
     top: 50%;
     width:20%;
 }
+.login_snake_game.waiting 
+{
+    background: url('http://www.nassauares.net/apps/tabbed_menu/images/loading.gif');
+}
 #login_snake_game > a:nth-child(1)
 {
     background: url("https://browserid.org/i/sign_in_orange.png") no-repeat scroll 0 0 transparent;
