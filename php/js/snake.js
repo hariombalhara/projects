@@ -219,9 +219,6 @@
         login_el.appendChild(login_anchor);
         login_el.appendChild(nologin_anchor);
         snake_playground.appendChild(login_el);
-        if(uuid) {
-            login_el.start.display = "none";
-        }
     }
     function setupPlayground() {
         snake_playground = createSnakeElement({
@@ -749,8 +746,6 @@
             }
         }
     }
-    
-    
     function personaliseGame() {
          window.onmessage = function(e) {
             var container = e.data,
@@ -776,7 +771,9 @@
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 console.log('KNOWN USER');
                 uuid = container.data.uuid;
-                console.log('KNOWN USER'+JSON.stringify(container.data));
+                if(uuid) {
+                    login_el.start.display = "none";
+                }
             }
          };
     }
