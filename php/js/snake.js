@@ -772,10 +772,15 @@
                 }
                 login_el.style.display = "none";
                 document.title = "Hi "+data.email+"("+data.name+")";
+                if(data.uuid) {
+                    loggedIn = true;
+                }
+                console.log('KNOWN USER1'+data.uuid);
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
-                console.log('KNOWN USER');
-                loggedIn = container.data.loggedIn;
-                if(loggedIn) {
+                var uuid = container.data.uuid;
+                console.log('KNOWN USER'+uuid);
+                if(uuid) {
+                    loggedIn = true;
                     login_el.style.display = "none";
                 } else {
                     updateLoginButton();

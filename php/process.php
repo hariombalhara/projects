@@ -38,6 +38,7 @@ function print_result_json($row) {
             'email':'".$row['email']."',
             'highestScore':'".$row['highestScore']."',
             'name':'".$row['username']."',
+            'uuid': '".$row['sessionId']."'
           }";
 }
 if(!empty($uuid)) {
@@ -65,6 +66,7 @@ if(!empty($uuid)) {
        $row['email'] = $email;
        $row['highestScore'] = DEFAULT_SCORE;
        $row['username'] = $name;
+       $row['sessionId'] = $uuid;
    } else {
        $uuid = $row['sessionId'];
    }
