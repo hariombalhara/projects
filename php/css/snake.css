@@ -77,6 +77,7 @@ div.crash_options#crash_options
     height: 20px;
     width: 80px;
     position: absolute;
+    display:block
 }
 #login_snake_game > a:nth-child(2)
 {
@@ -86,4 +87,5 @@ div.crash_options#crash_options
     left: 100px;
     position: absolute;
     text-decoration: none;
+    display:block
 }
