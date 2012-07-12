@@ -70,10 +70,11 @@ div.crash_options#crash_options
     position: fixed;
     top: 50%;
     width:20%;
+    height:20%
 }
 .login_snake_game.waiting 
 {
-    background: url('http://www.nassauares.net/apps/tabbed_menu/images/loading.gif');
+    background: url('http://www.nassauares.net/apps/tabbed_menu/images/loading.gif') no-repeat scroll 0 0 transparent;
 }
 #login_snake_game > a:nth-child(1)
 {
