@@ -31,8 +31,7 @@ function gotAssertion(assertion) {
     username = 'DEFAULT';
     if(!uid) {
         xmlhttp.open('POST','https://browserid.org/verify',true);
-        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlhttp.setRequestHeader("Cache-Control","max-age=0");
+        xmlhttp.setRequestHeader("Content-Type", "text/plain");
         xmlhttp.send('assertion='+assertion+'&audience=php-hariombalhara.rhcloud.com');//location.host should be changed to hardcoded string.Its not safe.
         xmlhttp.onreadystatechange = function() {
         if(xmlhttp.status === 200 && xmlhttp.readyState === 4) {
