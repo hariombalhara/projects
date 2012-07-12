@@ -205,20 +205,23 @@
         login_el.style.display = "none";
         noSignIn = true;
     }
-    function insertLoginButton() {
+    function updateLoginButton() {
         var login_anchor=document.createElement('a');
         var nologin_anchor=document.createElement('a');
-        login_el=document.createElement('div');
-        login_el.id = "login_snake_game";
-        login_el.setAttribute('class',"login_snake_game");
         login_anchor.onclick = init_persona_login;
         login_anchor.href = "javascript:void(null)";
         nologin_anchor.href = "javascript:void(null)";
         nologin_anchor.innerHTML = "OR &nbsp;&nbsp;GuestIn";
-        login_anchor.onclick = continueAsGuest;
+        nologin_anchor.onclick = continueAsGuest;
+        login_el.innerHTML = "";
         login_el.appendChild(login_anchor);
         login_el.appendChild(nologin_anchor);
-        login_el.style.display = "none"
+    }
+    function insertLoginButton() {
+        login_el=document.createElement('div');
+        login_el.id = "login_snake_game";
+        login_el.setAttribute('class',"login_snake_game");
+        login_el.style.backgroundImage = "url('https://www.google.com/images/loading.gif')";
         snake_playground.appendChild(login_el);
     }
     function setupPlayground() {
@@ -772,8 +775,10 @@
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 console.log('KNOWN USER');
                 uuid = container.data.uuid;
-                if(!uuid) {
-                    login_el.style.display = "block";
+                if(uuid) {
+                    login_el.style.display = "none";
+                } else {
+                    updateLoginButton();
                 }
             }
          };
