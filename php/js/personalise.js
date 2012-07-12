@@ -42,11 +42,11 @@ function gotAssertion(assertion) {
                 return;
             }
             email = verified_obj.email;
+            xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php,true');
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send('name='+username+'&email='+email+'&firstget='+first_get);
             }
         };
-        xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php,true');
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send('name='+username+'&email='+email+'&firstget='+first_get);
     } else {
         xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -73,23 +73,24 @@ window.onmessage = function(e) {
         mode;
     if(container.msgType === MSG_TYPE.INITIATE_LOGIN) {
         initiateLogin();
+        return;
     } else {
         mode = container.mode;
         console.log('Updating Score');
         if(container.msgType === MSG_TYPE.UPLOAD_DATA) {
-            score = container.score;
-        }    
-        xmlhttp.onreadystatechange = function(){
-            container = {
+            score = container.score;    
+            xmlhttp.onreadystatechange = function(){
+                container = {
                 mode:mode    
+                };
+                if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+                    container.msgType = MSG_TYPE.DATABASE_UPDATED;
+                    window.parent.postMessage(container,'*');    
+                }
             };
-            if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
-                container.msgType = MSG_TYPE.DATABASE_UPDATED;
-                window.parent.postMessage(container,'*');    
-            }
-        };
-        xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send('score='+score);
+            xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send('score='+score);
+        }
     }
 };

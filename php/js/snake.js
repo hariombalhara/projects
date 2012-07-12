@@ -67,7 +67,8 @@
         gulp_counter_el = {},
         startover_max_counter = 0,
         crash_options,
-        iframe;
+        iframe,
+        login_el;
     function getIntPartFromStr(str) {
         return parseInt(str, 10);
     }
@@ -198,7 +199,7 @@
        postToHostingSite(container);
     }
     function insertLoginButton() {
-        var login_el=document.createElement('a');
+        login_el=document.createElement('a');
         login_el.id = "login_snake_game";
         login_el.setAttribute('class',"login_snake_game");
         login_el.onclick = init_persona_login;
@@ -753,7 +754,8 @@
                 if(data.highestScore !== '-1') {
                     gulp_counter_el.innerHTML = data.highestScore;
                 }
-                document.title ="Hi "+data.email+"("+data.name+")";
+                login_el.display = "none";
+                document.title = "Hi "+data.email+"("+data.name+")";
             }
          };
     }
