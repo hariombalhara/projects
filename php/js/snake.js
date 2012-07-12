@@ -214,7 +214,7 @@
         login_anchor.onclick = init_persona_login;
         login_anchor.href = "javascript:void(null)";
         nologin_anchor.href = "javascript:void(null)";
-        nologin_anchor.innerHTML = "OR &nbsp;&nbsp;Guest";
+        nologin_anchor.innerHTML = "OR &nbsp;&nbsp;GuestIn";
         login_anchor.onclick = continueAsGuest;
         login_el.appendChild(login_anchor);
         login_el.appendChild(nologin_anchor);
