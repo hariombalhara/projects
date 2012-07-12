@@ -1,7 +1,8 @@
 var MSG_TYPE = { //It has a duplicate in snake.js
         DATABASE_UPDATED: 'DATABASE_UPDATED',
         UPLOAD_DATA: 'UPLOAD_DATA',
-        UPDATE_PAGE: 'UPDATE_PAGE'
+        UPDATE_PAGE: 'UPDATE_PAGE',
+        INITIATE_LOGIN: 'INITIATE_LOGIN'
     },
     MODE = { //It has duplicate in snake.js
             SAVE_KILL: 0,
@@ -24,17 +25,32 @@ function getCookie(c_name) {
         }
     }
 }
-(function() {
+function gotAssertion(assertion) {
     var first_get = 1;//Means its the first time we are contacting database
     uid = getCookie('uuid');
+    username = 'DEFAULT';
     if(!uid) {
-        email = prompt('New Comer !!\nPls provide your email');
-        username = "DEFAULT";
-        xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?name='+username+'&email='+email+'&firstget='+first_get,true);
-        xmlhttp.send(null);
+        xmlhttp.open('POST','https://browserid.org/verify',true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send('assertion='+assertion+'&audience='+location.href);//TODO:Move this request to snake  hosting site
+        xmlhttp.onreadystatechange = function() {
+        if(xmlhttp.status === 200 && xmlhttp.readyState === 4) {
+            var verified_obj = JSON.parse(xmlhttp.responseText);
+            console.log('verified_obj',verified_obj);      
+            if(verified_obj.status !== 'okay') {
+                console.log('LOGIN FAILURE for '+verified_obj.email);
+                return;
+            }
+            email = verified_obj.email;
+            }
+        };
+        xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php,true');
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send('name='+username+'&email='+email+'&firstget='+first_get);
     } else {
-        xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?firstget='+first_get,true);
-        xmlhttp.send(null);
+        xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send('firstget='+first_get);
     }
     xmlhttp.onreadystatechange = function() {
         var container = {};
@@ -47,25 +63,33 @@ function getCookie(c_name) {
             window.parent.postMessage(container, '*');
         }
     };
-})();
+}
+function initiateLogin() {
+    navigator.id.get(gotAssertion);
+}
 window.onmessage = function(e) {
     var container = e.data,
         score,
         mode;
-    mode = container.mode;
-    console.log('Updating Score');
-    if(container.msgType === MSG_TYPE.UPLOAD_DATA) {
-        score = container.score;
-    }    
-    xmlhttp.onreadystatechange = function(){
-        container = {
-            mode:mode    
+    if(container.msgType === MSG_TYPE.INITIATE_LOGIN) {
+        initiateLogin();
+    } else {
+        mode = container.mode;
+        console.log('Updating Score');
+        if(container.msgType === MSG_TYPE.UPLOAD_DATA) {
+            score = container.score;
+        }    
+        xmlhttp.onreadystatechange = function(){
+            container = {
+                mode:mode    
+            };
+            if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+                container.msgType = MSG_TYPE.DATABASE_UPDATED;
+                window.parent.postMessage(container,'*');    
+            }
         };
-        if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
-            container.msgType = MSG_TYPE.DATABASE_UPDATED;
-            window.parent.postMessage(container,'*');    
-        }
-    };
-    xmlhttp.open('GET','http://php-hariombalhara.rhcloud.com/process.php?score='+score,true);
-    xmlhttp.send(null);
+        xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send('score='+score);
+    }
 };

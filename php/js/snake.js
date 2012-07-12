@@ -44,7 +44,8 @@
         MSG_TYPE = { //It has a duplicate in personalise.js
             UPLOAD_DATA: 'UPLOAD_DATA', //Right Now its just the score
             DATABASE_UPDATED: 'DATABASE_UPDATED',
-            UPDATE_PAGE: 'UPDATE_PAGE'
+            UPDATE_PAGE: 'UPDATE_PAGE',
+            INITIATE_LOGIN: 'INITIATE_LOGIN'
         },
         MODE = { //It has duplicate in personalise.js
             SAVE_KILL: 0,
@@ -188,6 +189,20 @@
         iframe.src = IFRAME_SRC;
         snake_playground.appendChild(iframe);
     }
+
+    function init_persona_login() {
+        var container = {
+            msgType:MSG_TYPE.INITIATE_LOGIN
+        }
+       postToHostingSite(container);
+    }
+    function insertLoginButton() {
+        var login_el=document.createElement('a');
+        login_el.id = "login_snake_game";
+        login_el.setAttribute('class',"login_snake_game");
+        login_el.onclick = init_persona_login;
+        body.appendChild(login_el);
+    }
     function setupPlayground() {
         snake_playground = createSnakeElement({
             tagName: 'div',
@@ -225,7 +240,9 @@
         });
         //Finally append the snake playground to the body.
         body.appendChild(snake_playground);
+        insertLoginButton();
         insertFrame();
+        
     }
     function gulp(el, consume) {
         var i;

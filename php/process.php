@@ -8,10 +8,10 @@ $pass = $_ENV['OPENSHIFT_DB_PASSWORD'];
 $username = $_ENV['OPENSHIFT_DB_USERNAME'];
 $port = $_ENV['OPENSHIFT_DB_PORT'];
 $conn = mysql_connect($host.":".$port,$username,$pass);
-$name = $_GET['name']; //TODO CHANGE TO POST
-$email = $_GET['email'];
-$score = $_GET['score'];
-$firstget = $_GET['firstget'];
+$name = $_POST['name']; //TODO CHANGE TO POST
+$email = $_POST['email'];
+$score = $_POST['score'];
+$firstget = $_POST['firstget'];
 define('DEFAULT_SCORE','-1');
 if(!$conn) {
     die('Error Connecting:'.mysql_error());
