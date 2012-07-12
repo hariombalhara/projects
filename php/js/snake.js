@@ -202,7 +202,7 @@
        postToHostingSite(container);
     }
     function continueAsGuest() {
-        login_el.childNodes[0].style.display = "none";
+        login_el.style.display = "none";
         noSignIn = true;
     }
     function insertLoginButton() {
@@ -218,6 +218,7 @@
         login_anchor.onclick = continueAsGuest;
         login_el.appendChild(login_anchor);
         login_el.appendChild(nologin_anchor);
+        login_el.style.display = "none"
         snake_playground.appendChild(login_el);
     }
     function setupPlayground() {
@@ -771,8 +772,8 @@
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 console.log('KNOWN USER');
                 uuid = container.data.uuid;
-                if(uuid) {
-                    login_el.style.display = "none";
+                if(!uuid) {
+                    login_el.style.display = "block";
                 }
             }
          };

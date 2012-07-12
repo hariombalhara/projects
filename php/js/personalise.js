@@ -23,6 +23,9 @@ var MSG_TYPE = { //It has a duplicate in snake.js
     uuid:uuid
     };
     window.parent.postMessage(container,'*');
+    if(uuid) {
+        cookiedRequest();
+    }
 })();
 function getCookie(c_name) {
     var i,x,y,ARRcookies=document.cookie.split(";");
@@ -35,8 +38,25 @@ function getCookie(c_name) {
         }
     }
 }
+function requestForCookie() {
+    var xmlhttp1 =new XMLHttpRequest(),
+        first_get = 1;
+    xmlhttp1.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
+    xmlhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp1.send('name='+username+'&email='+email+'&firstget='+first_get);
+    xmlhttp1.onreadystatechange = function() {
+        var container = {};
+        if(xmlhttp1.status == 200 && xmlhttp1.readyState == 4) {
+            console.log('Fetching Data from database');
+            data = eval('('+xmlhttp1.responseText+')');
+            console.log('Received Data:',JSON.stringify(data));
+            container.data = data;
+            container.msgType = MSG_TYPE.UPDATE_PAGE;
+            window.parent.postMessage(container, '*');
+        }
+    };
+}
 function gotAssertion(assertion) {
-    var first_get = 1;//Means its the first time we are contacting database
     username = 'DEFAULT';
     if(!uuid) {
         xmlhttp.open('POST','../verify.php',true);
@@ -52,29 +72,20 @@ function gotAssertion(assertion) {
                 }
                 console.log('browserId verified it');
                 email = verified_obj.email;
-                var xmlhttp1 =new XMLHttpRequest();
-                xmlhttp1.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
-                xmlhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlhttp1.send('name='+username+'&email='+email+'&firstget='+first_get);
-                xmlhttp1.onreadystatechange = function() {
-                    var container = {};
-                    if(xmlhttp1.status == 200 && xmlhttp1.readyState == 4) {
-                        console.log('Fetching Data from database');
-                        data = eval('('+xmlhttp1.responseText+')');
-                        console.log('Received Data:',JSON.stringify(data));
-                        container.data = data;
-                        container.msgType = MSG_TYPE.UPDATE_PAGE;
-                        window.parent.postMessage(container, '*');
-                    }
-                };
+                requestForCookie();
             }
         };
     } else {
-        xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send('firstget='+first_get);
-       
-        xmlhttp.onreadystatechange = function() {
+        cookiedRequest();
+    }
+}
+function cookiedRequest() {
+    var xmlhttp = new XMLHttpRequest(),
+        first_get = 1;
+    xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send('firstget='+first_get);
+    xmlhttp.onreadystatechange = function() {
         var container = {};
         if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
             console.log('Fetching Data from database');
@@ -84,9 +95,7 @@ function gotAssertion(assertion) {
             container.msgType = MSG_TYPE.UPDATE_PAGE;
             window.parent.postMessage(container, '*');
         }
-    };
     }
-
 }
 function initiateLogin() {
     navigator.id.get(gotAssertion);
