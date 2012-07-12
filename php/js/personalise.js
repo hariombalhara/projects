@@ -34,26 +34,38 @@ function gotAssertion(assertion) {
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xmlhttp.send('assertion='+assertion);//location.host should be changed to hardcoded string.Its not safe.
         xmlhttp.onreadystatechange = function() {
-        if(xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-            var verified_obj = JSON.parse(xmlhttp.responseText);
-            console.log('verified_obj',verified_obj);      
-            if(verified_obj.status !== 'okay') {
-                console.log('LOGIN FAILURE for '+verified_obj.email);
-                return;
-            }
-            console.log('browserId verified it');
-            email = verified_obj.email;
-            xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send('name='+username+'&email='+email+'&firstget='+first_get);
+            if(xmlhttp.status === 200 && xmlhttp.readyState === 4) {
+                var verified_obj = JSON.parse(xmlhttp.responseText);
+                console.log('verified_obj',verified_obj);      
+                if(verified_obj.status !== 'okay') {
+                    console.log('LOGIN FAILURE for '+verified_obj.email);
+                    return;
+                }
+                console.log('browserId verified it');
+                email = verified_obj.email;
+                var xmlhttp1 =new XMLHttpRequest();
+                xmlhttp1.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
+                xmlhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttp1.send('name='+username+'&email='+email+'&firstget='+first_get);
+                xmlhttp1.onreadystatechange = function() {
+                    var container = {};
+                    if(xmlhttp1.status == 200 && xmlhttp1.readyState == 4) {
+                        console.log('Fetching Data from database');
+                        data = eval('('+xmlhttp1.responseText+')');
+                        console.log('Received Data:',JSON.stringify(data));
+                        container.data = data;
+                        container.msgType = MSG_TYPE.UPDATE_PAGE;
+                        window.parent.postMessage(container, '*');
+                    }
+                };
             }
         };
     } else {
         xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send('firstget='+first_get);
-    }
-    xmlhttp.onreadystatechange = function() {
+       
+        xmlhttp.onreadystatechange = function() {
         var container = {};
         if(xmlhttp.status == 200 && xmlhttp.readyState == 4) {
             console.log('Fetching Data from database');
@@ -64,6 +76,8 @@ function gotAssertion(assertion) {
             window.parent.postMessage(container, '*');
         }
     };
+    }
+
 }
 function initiateLogin() {
     navigator.id.get(gotAssertion);
