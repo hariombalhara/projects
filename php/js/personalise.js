@@ -2,7 +2,8 @@ var MSG_TYPE = { //It has a duplicate in snake.js
         DATABASE_UPDATED: 'DATABASE_UPDATED',
         UPLOAD_DATA: 'UPLOAD_DATA',
         UPDATE_PAGE: 'UPDATE_PAGE',
-        INITIATE_LOGIN: 'INITIATE_LOGIN'
+        INITIATE_LOGIN: 'INITIATE_LOGIN',
+        INITIALIZE_HOST_PAGE: 'INITIALIZE_HOST_PAGE'
     },
     MODE = { //It has duplicate in snake.js
             SAVE_KILL: 0,
@@ -13,7 +14,16 @@ var MSG_TYPE = { //It has a duplicate in snake.js
     data,
     username,
     email,
-    uid;
+    uuid;
+(function() {
+    var container = {};
+    uuid = getCookie('uuid');
+    container.msgType = MSG_TYPE.INITIALIZE_HOST_PAGE;
+    container.data = {
+    uuid:uuid
+    };
+    window.parent.postMessage(container,'*');
+})();
 function getCookie(c_name) {
     var i,x,y,ARRcookies=document.cookie.split(";");
     for (i=0;i<ARRcookies.length;i++) {
@@ -27,9 +37,8 @@ function getCookie(c_name) {
 }
 function gotAssertion(assertion) {
     var first_get = 1;//Means its the first time we are contacting database
-    uid = getCookie('uuid');
     username = 'DEFAULT';
-    if(!uid) {
+    if(!uuid) {
         xmlhttp.open('POST','../verify.php',true);
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xmlhttp.send('assertion='+assertion);//location.host should be changed to hardcoded string.Its not safe.

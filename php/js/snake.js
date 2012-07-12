@@ -45,7 +45,8 @@
             UPLOAD_DATA: 'UPLOAD_DATA', //Right Now its just the score
             DATABASE_UPDATED: 'DATABASE_UPDATED',
             UPDATE_PAGE: 'UPDATE_PAGE',
-            INITIATE_LOGIN: 'INITIATE_LOGIN'
+            INITIATE_LOGIN: 'INITIATE_LOGIN',
+            INITIALIZE_HOST_PAGE: 'INITIALIZE_HOST_PAGE'
         },
         MODE = { //It has duplicate in personalise.js
             SAVE_KILL: 0,
@@ -66,9 +67,11 @@
         state_of_game_el = {},
         gulp_counter_el = {},
         startover_max_counter = 0,
+        noSignIn = false,
         crash_options,
         iframe,
-        login_el;
+        login_el,
+        uuid;
     function getIntPartFromStr(str) {
         return parseInt(str, 10);
     }
@@ -195,16 +198,29 @@
         e.preventDefault();
         var container = {
             msgType:MSG_TYPE.INITIATE_LOGIN
-        }
+        };
        postToHostingSite(container);
     }
+    function continueAsGuest() {
+        login_el.childNodes[0].style.display = "none";
+        noSignIn = true;
+    }
     function insertLoginButton() {
-        login_el=document.createElement('a');
+        var login_anchor=document.createElement('a');
+        var nologin_anchor=document.createElement('a');
+        login_el=document.createElement('div');
         login_el.id = "login_snake_game";
         login_el.setAttribute('class',"login_snake_game");
-        login_el.onclick = init_persona_login;
-        login_el.href = "javascript:void(null)";
+        login_anchor.onclick = init_persona_login;
+        login_anchor.href = "javascript:void(null)";
+        nologin_anchor.href = "javascript:void(null)";
+        login_anchor.onclick = continueAsGuest;
+        login_el.appendChild(login_anchor);
+        login_el.appendChild(nologin_anchor);
         snake_playground.appendChild(login_el);
+        if(uuid) {
+            login_el.start.display = "none";
+        }
     }
     function setupPlayground() {
         snake_playground = createSnakeElement({
@@ -694,7 +710,7 @@
         postToHostingSite(container);
     }
     function keyEventListener(e) {
-        if(e.keyCode === LEFT_KEY_CODE ||e.keyCode === DOWN_KEY_CODE ||e.keyCode === UP_KEY_CODE ||e.keyCode === RIGHT_KEY_CODE ) {
+        if((noSignIn || uuid)&&(e.keyCode === LEFT_KEY_CODE ||e.keyCode === DOWN_KEY_CODE ||e.keyCode === UP_KEY_CODE ||e.keyCode === RIGHT_KEY_CODE )) {
             e.preventDefault();
             e.stopPropagation();
             if(!isDestroyed() && !isEnded()) {
@@ -709,7 +725,7 @@
                 e.stopPropagation();
                 saveScore(MODE.SAVE_KILL);
                 //killGame();Game will be killed when a message is received that score is updated to database
-            } else if(e.keyCode === SPACE_KEY_CODE) {
+            } else if((noSignIn || uuid)&&(e.keyCode === SPACE_KEY_CODE)) {
                 e.preventDefault();
                 e.stopPropagation();
                 if(isDestroyed() || isEnded()) {
@@ -721,11 +737,11 @@
                     moveStateTo(STATES.PAUSED);
                 }
                 snake.paused = toggle(snake.paused);
-            } else if(e.keyCode === RESTART_KEY_CODE) {
+            } else if((noSignIn || uuid)&&(e.keyCode === RESTART_KEY_CODE)) {
                 e.preventDefault();
                 e.stopPropagation();
                 restartGame();
-            } else if(e.keyCode === SAVE_KEY_CODE) {
+            } else if((noSignIn || uuid)&&(e.keyCode === SAVE_KEY_CODE)) {
                 e.preventDefault();
                 e.stopPropagation();
                 saveScore(MODE.SAVE);
@@ -740,7 +756,7 @@
                 data;
             //TODO: Put restrictions somehow on which origin is accepted
             console.log("ONMESSAGE EVENT received on Parent");
-            if(container.msgType == MSG_TYPE.DATABASE_UPDATED) {
+            if(container.msgType === MSG_TYPE.DATABASE_UPDATED) {
                 console.log('Received DATABASE_UDPATED.Killing Now');
                 if(container.mode === MODE.SAVE_KILL) {
                     killGame();
@@ -749,13 +765,15 @@
                     main();
                 }
             }
-            else if(container.msgType == MSG_TYPE.UPDATE_PAGE) {
+            else if(container.msgType === MSG_TYPE.UPDATE_PAGE) {
                 data = container.data;
                 if(data.highestScore !== '-1') {
                     gulp_counter_el.innerHTML = data.highestScore;
                 }
-                login_el.display = "none";
+                login_el.style.display = "none";
                 document.title = "Hi "+data.email+"("+data.name+")";
+            } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
+                uuid = container.data.uuid;
             }
          };
     }
