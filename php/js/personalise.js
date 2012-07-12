@@ -32,7 +32,7 @@ function gotAssertion(assertion) {
     if(!uid) {
         xmlhttp.open('POST','https://browserid.org/verify',true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send('assertion='+assertion+'&audience='+location.host);//location.host should be changed to hardcoded string.Its not safe.
+        xmlhttp.send('assertion='+assertion+'&audience=php-hariombalhara.rhcloud.com');//location.host should be changed to hardcoded string.Its not safe.
         xmlhttp.onreadystatechange = function() {
         if(xmlhttp.status === 200 && xmlhttp.readyState === 4) {
             var verified_obj = JSON.parse(xmlhttp.responseText);
