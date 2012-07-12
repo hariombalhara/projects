@@ -25,7 +25,9 @@ $json = json_decode($result);
 
 if ($json->status == 'okay') {
   // the user logged in successfully.
-  echo "{'status':'okay'}";
+  echo "{'status':'okay',
+         'email': '".$json->email."'
+        }";
 }
 else {
   // log in failed.

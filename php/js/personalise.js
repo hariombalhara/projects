@@ -35,7 +35,7 @@ function gotAssertion(assertion) {
         xmlhttp.send('assertion='+assertion);//location.host should be changed to hardcoded string.Its not safe.
         xmlhttp.onreadystatechange = function() {
             if(xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-                console.log('verified_obj',verified_obj);      
+                console.log('verified_obj',xmlhttp.responseText);      
                 var verified_obj = eval('('+xmlhttp.responseText+')');
                 if(verified_obj.status !== 'okay') {
                     console.log('LOGIN FAILURE for '+verified_obj.email);
