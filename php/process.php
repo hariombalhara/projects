@@ -69,7 +69,7 @@ if(!empty($uuid)) {
        $uuid = $row['sessionId'];
    }
    //user identified set cookie.
-    setcookie('uuid',$uuid,time()+20*365*24*3600);
+   // setcookie('uuid',$uuid,time()+20*365*24*3600);
     print_result_json($row);
 } else {
     die('Unknown Handler');

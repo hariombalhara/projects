@@ -30,10 +30,9 @@ function gotAssertion(assertion) {
     uid = getCookie('uuid');
     username = 'DEFAULT';
     if(!uid) {
-        xmlhttp.open('POST','https://browserid.org/verify',true);
+        xmlhttp.open('POST','../verify.php',true);
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlhttp.setRequestHeader("Content-Length","1889");
-        xmlhttp.send('assertion='+assertion+'&audience=http://php-hariombalhara.rhcloud.com');//location.host should be changed to hardcoded string.Its not safe.
+        xmlhttp.send('assertion='+assertion);//location.host should be changed to hardcoded string.Its not safe.
         xmlhttp.onreadystatechange = function() {
         if(xmlhttp.status === 200 && xmlhttp.readyState === 4) {
             var verified_obj = JSON.parse(xmlhttp.responseText);
