@@ -13,8 +13,9 @@ $email = $_POST['email'];
 $score = $_POST['score'];
 $firstget = $_POST['firstget'];
 $bodyMap = json_decode($_POST['body_map'],true); //Make associative array
-print_r($body_map);
-exit();
+if($bodyMap) {
+print_r($bodyMap);
+}
 define('DEFAULT_SCORE','-1');
 if(!$conn) {
     die('Error Connecting:'.mysql_error());
