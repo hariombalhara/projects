@@ -713,6 +713,7 @@
                 len = childNodes.length,
                 node,i,xy = {};
             for(i = 0; i < len; i++) {
+                xy = {};
                 node = childNodes[i];
                 xy.left = node.style.left;
                 xy.top = node.style.top;
