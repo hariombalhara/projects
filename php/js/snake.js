@@ -42,7 +42,7 @@
             DESTROYED: 4 //Games has ended and complete playground has been destroyed
             },
         MSG_TYPE = { //It has a duplicate in personalise.js
-            UPLOAD_DATA: 'UPLOAD_DATA', //Right Now its just the score
+            UPLOAD_DATA: 'UPLOAD_DATA',
             DATABASE_UPDATED: 'DATABASE_UPDATED',
             UPDATE_PAGE: 'UPDATE_PAGE',
             INITIATE_LOGIN: 'INITIATE_LOGIN',
@@ -71,7 +71,8 @@
         crash_options,
         iframe,
         login_el,
-        loggedIn;
+        loggedIn,
+        body_map = [];
     function getIntPartFromStr(str) {
         return parseInt(str, 10);
     }
@@ -423,7 +424,7 @@
         document.getElementsByTagName('head')[0].removeChild(script);
     }
     function restartGame() {
-        saveScore(MODE.SAVE_KILL_RESTART);
+        saveGame(MODE.SAVE_KILL_RESTART);
     }
     function crashSnake() {
         if(isDestroyed() || (snake.state === STATES.ENDED)) {
@@ -701,14 +702,27 @@
         console.log('POSTING MESSAGE to Game Host'+iframe);
         iframe.contentWindow.postMessage(container,'*');
     }
-    function saveScore(mode) {
+    function saveGame(mode) {
         var container = {
             msgType: MSG_TYPE.UPLOAD_DATA,
             score: gulp_counter_el.innerHTML,
             mode:mode
         };
-        if(mode != MODE.SAVE)
-        snake_playground.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
+        if(mode === MODE.SAVE) {
+            var childNodes = snake_body.childNodes,
+                len = childNodes.length,
+                node,i,xy = {};
+            for(i = 0; i < len; i++) {
+                node = childNodes[i];
+                xy.left = node.style.left;
+                xy.top = node.style.top;
+                body_map[i] = xy;
+            }
+            container.body_map = JSON.stringify(body_map);
+            console.log('Uploading FULL '+container.body_map);
+        } else {
+            snake_playground.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
+        }
         postToHostingSite(container);
     }
     function keyEventListener(e) {
@@ -725,7 +739,7 @@
                 }
                 e.preventDefault();
                 e.stopPropagation();
-                saveScore(MODE.SAVE_KILL);
+                saveGame(MODE.SAVE_KILL);
                 //killGame();Game will be killed when a message is received that score is updated to database
             } else if((noSignIn || loggedIn)&&(e.keyCode === SPACE_KEY_CODE)) {
                 e.preventDefault();
@@ -746,7 +760,7 @@
             } else if((noSignIn || loggedIn)&&(e.keyCode === SAVE_KEY_CODE)) {
                 e.preventDefault();
                 e.stopPropagation();
-                saveScore(MODE.SAVE);
+                saveGame(MODE.SAVE);
             }
         }
     }

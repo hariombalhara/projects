@@ -109,7 +109,6 @@ window.onmessage = function(e) {
         return;
     } else {
         mode = container.mode;
-        console.log('Updating Score');
         if(container.msgType === MSG_TYPE.UPLOAD_DATA) {
             score = container.score;    
             xmlhttp.onreadystatechange = function(){
@@ -123,7 +122,7 @@ window.onmessage = function(e) {
             };
             xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send('score='+score);
+            xmlhttp.send('score='+score+'&body_map='+container.body_map);
         }
     }
 };

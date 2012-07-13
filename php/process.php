@@ -12,6 +12,9 @@ $name = $_POST['name']; //TODO CHANGE TO POST
 $email = $_POST['email'];
 $score = $_POST['score'];
 $firstget = $_POST['firstget'];
+$bodyMap = json_decode($_POST['body_map'],true); //Make associative array
+print_r($body_map);
+exit();
 define('DEFAULT_SCORE','-1');
 if(!$conn) {
     die('Error Connecting:'.mysql_error());
@@ -46,13 +49,20 @@ if(!empty($uuid)) {
         $result = select_all_who_match('sessionId',$uuid);
         print_result_json($result[0]);
     } else {
-        if(!empty($score)) {
-            $result = select_all_who_match('sessionId',$uuid);
-            $row = $result[0];
-            if($row['highestScore'] < $score) {
-                $query = 'Update `snake` set `highestScore` = '.$score.' where `sessionId` = "'.$uuid.'"';
-                run_query($query,2);
+        if(!empty($score) || !empty($bodyMap)) {
+            $part_query = "";
+            if(!empty($score)) {
+                $part_query .= '`highestScore` = '.$score.",";
             }
+            if(!empty($bodyMap)) {
+                $part_query .= '`bodyMap` = '.$bodyMap;
+            }
+                $query = 'Update `snake` set '.$part_query.' where `sessionId` = "'.$uuid.'"';
+                $result = select_all_who_match('sessionId',$uuid);
+                $row = $result[0];
+                if($row['highestScore'] < $score) {
+                    run_query($query,2);
+                }
         }
     }
   
