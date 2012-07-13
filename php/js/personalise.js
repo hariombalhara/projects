@@ -111,6 +111,7 @@ window.onmessage = function(e) {
         mode = container.mode;
         if(container.msgType === MSG_TYPE.UPLOAD_DATA) {
             score = container.score;    
+            body_map = container.body_map;
             xmlhttp.onreadystatechange = function(){
                 container = {
                 mode:mode    
