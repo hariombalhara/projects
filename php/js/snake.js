@@ -339,6 +339,9 @@
             node.style.left = (obj.left)*width + "px";
             node.style.top = (obj.top)*height + "px";
             node.rotation = obj.rotation;
+            gulp_counter_el.innerHTML = obj.score;
+            point.style.left = (obj.point.left)*width + "px";
+            point.style.top = (obj.point.top)*height + "px";
         }
         snake.paused = true;
     }
@@ -727,13 +730,21 @@
         if(mode === MODE.SAVE) {
             var childNodes = snake_body.childNodes,
                 len = childNodes.length,
-                node,i,xy = {};
+                node,i,xy = {},
+                p_xy = {};
             for(i = 0; i < len; i++) {
                 xy = {};
+                p_xy = {};
                 node = childNodes[i];
                 xy.left = (getIntPartFromStr(node.style.left))/width;
                 xy.top = (getIntPartFromStr(node.style.top))/height;
+                
+                p_xy.left = (getIntPartFromStr(point.style.left))/width;
+                p_xy.top = (getIntPartFromStr(point.style.top))/height;
                 xy.rotation = node.rotation;
+                xy.score = gulp_counter_el.innerHTML;
+                
+                xy.point = p_xy;
                 bodyMap[i] = xy;
             }
             container.bodyMap = JSON.stringify(bodyMap);
