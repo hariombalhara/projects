@@ -7,7 +7,7 @@ rect.snake_figure#snake_figure
     
 div.snake_playground#snake_playground
 {
-    position:fixed;display:inline;overflow:hidden;z-index:1000000;opacity:0.85;background:black;left:0;top:0;border:1px dashed white 
+    position:fixed;display:inline;overflow:hidden;z-index:1000000;opacity:0.85;background:black;border:1px dashed white 
 }
 div.snake#snake
 {

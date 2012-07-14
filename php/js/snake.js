@@ -158,7 +158,7 @@
         } else {
             common = window_availWidth = window_availHeight;
         }*/
-        common = 600;
+        common = 400;
         BODY_PART_SIZE = Math.ceil(0.02 * common) ;
         SNAKE_FIGURE = '<svg xmlns = "http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure" width="' + BODY_PART_SIZE + '" height="' + BODY_PART_SIZE + '"/></svg>',
         width = height = snake.width = snake.height = Math.floor(common-(common%BODY_PART_SIZE));
@@ -247,8 +247,8 @@
             className: PLAYGROUND_CLASS,
             id: PLAYGROUND_ID,
             style: {
-            height: "600px",
-            width: "600px"
+            height: "400px",
+            width: "400px"
         }
     });//Its the root element for the snake game
         snake_body = snake_playground.appendChildWithInformation.call(snake_playground, {
