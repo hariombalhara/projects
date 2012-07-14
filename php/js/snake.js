@@ -19,7 +19,7 @@
         GULP_COUNTER_DIV_ID = 'snake_gulp_counter',
         GULP_COUNTER_DIV_CLASS = 'snake_gulp_counter',
         LAST_BODY_PART_SELECTOR = '#snake span:nth-last-child(1)',
-        SNAKE_FIGURE = '<svg xmlns = "http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure"/></svg>',
+        SNAKE_FIGURE,
         PLAYGROUND_CLASS = 'snake_playground',
         PLAYGROUND_ID = 'snake_playground',
         SNAKE_BODY_CLASS = 'snake',
@@ -151,15 +151,16 @@
     }
     function getDimensions() {
         var common;
-        window_availWidth = snake_playground.offsetWidth;
+        /*window_availWidth = snake_playground.offsetWidth;
         window_availHeight = snake_playground.offsetHeight;
         if(window_availHeight > window_availWidth) {
             common = window_availHeight = window_availWidth;
         } else {
             common = window_availWidth = window_availHeight;
-        }
-        BODY_PART_SIZE = Math.ceil(0.10 * common); 
-        document.getElementById('snake_figure').style.height = document.getElementById('snake_figure').style.width = BODY_PART_SIZE;
+        }*/
+        common = 600;
+        BODY_PART_SIZE = Math.ceil(0.02 * common) ;
+        SNAKE_FIGURE = '<svg xmlns = "http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure" width="' + BODY_PART_SIZE + '" height="' + BODY_PART_SIZE + '"/></svg>',
         width = height = snake.width = snake.height = Math.floor(common-(common%BODY_PART_SIZE));
     }
     
@@ -246,8 +247,8 @@
             className: PLAYGROUND_CLASS,
             id: PLAYGROUND_ID,
             style: {
-            height: "100%",
-            width: "100%"
+           // height: "100%",
+         //   width: "100%"
         }
     });//Its the root element for the snake game
         snake_body = snake_playground.appendChildWithInformation.call(snake_playground, {
