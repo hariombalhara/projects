@@ -803,7 +803,7 @@
                 }
                 console.log('KNOWN USER1'+data.uuid);
                 if(data.bodyMap) {
-                    bodyMap = data.bodyMap;
+                    bodyMap = eval("("+data.bodyMap+")");
                     console.log(JSON.stringify(bodyMap));
                     setPositionOfSnake(snake_body);
                 } else {
