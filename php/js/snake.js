@@ -328,6 +328,7 @@
     }
     function setPositionOfSnake(el) {
         var i;
+        window.map = bodyMap;
         console.log(bodyMap.length);
         for (i = 0; i < bodyMap.length; i++) {
             gulp(el);  
