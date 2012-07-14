@@ -159,8 +159,10 @@
         } else {
             common = window_availWidth = window_availHeight;
         }*/
-        common = 400;
+        common = 500;
         BODY_PART_SIZE = Math.ceil(0.02 * common) ;
+        snake_playground.style.marginTop = snake_playground.style.marginBottom = (playground_container.offsetHeight - 500)/2;
+        snake_playground.style.marginLeft = snake_playground.style.marginRight = (playground_container.offsetWidth - 500)/2;
         SNAKE_FIGURE = '<svg xmlns = "http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure" width="' + BODY_PART_SIZE + '" height="' + BODY_PART_SIZE + '"/></svg>',
         width = height = snake.width = snake.height = Math.floor(common-(common%BODY_PART_SIZE));
     }

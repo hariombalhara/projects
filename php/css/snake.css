@@ -14,16 +14,16 @@ div.snake_playground#snake_playground
 }
 div.snake#snake
 {
-    position:fixed;display:inline;left:0px;top:0px;
+    position:absolute;display:inline;left:0px;top:0px;
 }
 
 div.snake_point#snake_point
 {
-    position:fixed;
+    position:absolute;
 }
 div.snake#snake>span
 {
-    position:fixed;
+    position:absolute;
 }
 div.snake#snake span:last-child span
 {
