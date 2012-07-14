@@ -336,8 +336,8 @@
             gulp(el);
             obj = bodyMap[i];
             node = el.childNodes[i];
-            node.style.left = obj.left + "px";
-            node.style.top = obj.top + "px";
+            node.style.left = (obj.left)*width + "px";
+            node.style.top = (obj.top)*height + "px";
             node.rotation = obj.rotation;
         }
         snake.paused = true;
@@ -731,8 +731,8 @@
             for(i = 0; i < len; i++) {
                 xy = {};
                 node = childNodes[i];
-                xy.left = (node.style.left)/width;
-                xy.top = (node.style.top)/height;
+                xy.left = (getIntPartFromStr(node.style.left))/width;
+                xy.top = (getIntPartFromStr(node.style.top))/height;
                 xy.rotation = node.rotation;
                 bodyMap[i] = xy;
             }
