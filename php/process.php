@@ -68,7 +68,7 @@ if(!empty($uuid)) {
                 }    
             }
             if(!empty($bodyMap)) {
-                $part_query .= '`snapshot` = '.$snapshot;
+                $part_query .= "`snapshot` = '".$snapshot."'";
             }
                 $query = 'Update `snake` set '.$part_query.' where `sessionId` = "'.$uuid.'"';   
                 echo $query;
