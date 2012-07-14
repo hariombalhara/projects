@@ -811,6 +811,8 @@
                     else {
                         makeInitialSnake(snake_body);
                     }
+                } else {
+                    makeInitialSnake(snake_body);
                 }
                  
                     
