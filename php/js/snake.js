@@ -152,14 +152,14 @@
     function getDimensions() {
         window_availWidth = snake_playground.offsetWidth;
         window_availHeight = snake_playground.offsetHeight;
+        var common;
         if(window_availHeight > window_availWidth) {
-            window_availHeight = window_availWidth;
+            common = window_availHeight = window_availWidth;
         } else {
-            window_availHeight = window_availWidth;
-        BODY_PART_SIZE = 
+            common = window_availHeight = window_availWidth;
         }
-        width = snake.width = Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE));
-        height = snake.height = Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE));
+         BODY_PART_SIZE = (0.1)*common;
+        width = snake.width = height = snake.height = Math.floor(common-(common%BODY_PART_SIZE));
     }
     function appendChildWithInformation(child) {
         var el = createSnakeElement(child);
