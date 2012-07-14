@@ -102,7 +102,7 @@ function initiateLogin() {
 }
 window.onmessage = function(e) {
     var container = e.data,
-        score,bodyMap,
+        score,gameData,
         mode;
     if(container.msgType === MSG_TYPE.INITIATE_LOGIN) {
         initiateLogin();
@@ -111,7 +111,7 @@ window.onmessage = function(e) {
         mode = container.mode;
         if(container.msgType === MSG_TYPE.UPLOAD_DATA) {
             score = container.score;    
-            bodyMap = container.bodyMap;
+            gameData = container.gameData;
             xmlhttp.onreadystatechange = function(){
                 container = {
                 mode:mode    
@@ -123,7 +123,7 @@ window.onmessage = function(e) {
             };
             xmlhttp.open('POST','http://php-hariombalhara.rhcloud.com/process.php',true);
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send('score='+score+'&bodyMap='+bodyMap);
+            xmlhttp.send('score='+score+'&gameData='+gameData);
         }
     }
 };

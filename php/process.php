@@ -12,10 +12,10 @@ $name = $_POST['name']; //TODO CHANGE TO POST
 $email = $_POST['email'];
 $score = $_POST['score'];
 $firstget = $_POST['firstget'];
-$bodyMap = json_decode($_POST['bodyMap'],true); // Make associative array
-$snapshot = serialize($bodyMap);
-//if($bodyMap) {
-//print_r($bodyMap);
+$gameData = json_decode($_POST['gameData'],true); // Make associative array
+$snapshot = serialize($gameData);
+//if($gameData) {
+//print_r($gameData);
 //}
 define('DEFAULT_SCORE','-1');
 if(!$conn) {
@@ -48,8 +48,8 @@ function print_result_json($row) {
              'uuid': '".$row['sessionId']."',";
     
     if($row['snapshot']) {
-        $bodyMap = unserialize($row['snapshot']);
-        $json .= "bodyMap: '".json_encode($bodyMap)."',"; 
+        $gameData = unserialize($row['snapshot']);
+        $json .= "gameData: '".json_encode($gameData)."',"; 
     }
     $json .= "}";
     syslog(LOG_ERR,$json);
@@ -69,7 +69,7 @@ if(!empty($uuid)) {
                     $part_query .= '`highestScore` = '.$score.",";
                 }    
             }
-            if(!empty($bodyMap)) {
+            if(!empty($gameData)) {
                 $part_query .= "`snapshot` = '".$snapshot."'";
             }
                 $query = 'Update `snake` set '.$part_query.' where `sessionId` = "'.$uuid.'"';   
