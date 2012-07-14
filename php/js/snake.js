@@ -333,6 +333,7 @@
             el.childNodes[i].style.left = bodyMap[i].left+"px";
             el.childNodes[i].style.top = bodyMap[i].top+"px";
         }
+        snake.paused = true;
     }
     function makeInitialSnake(el) {
         var i;
