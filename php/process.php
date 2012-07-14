@@ -40,16 +40,16 @@ function select_all_who_match($columnName,$value) {
 }
 function print_result_json($row) {
     $json = "{";
-    $json += "'email': '".$row['email']."',
+    $json .= "'email': '".$row['email']."',
              'highestScore': '".$row['highestScore']."',
              'name': '".$row['username']."',
              'uuid': '".$row['sessionId']."',";
     
     if($row['snapshot']) {
         $bodyMap = unserialize($row['snapshot']);
-        $json += "bodyMap: '".json_encode($bodyMap)."',"; 
+        $json .= "bodyMap: '".json_encode($bodyMap)."',"; 
     }
-    $json += "}";
+    $json .= "}";
     syslog(LOG_ERR,$json);
     echo $json;
 }
