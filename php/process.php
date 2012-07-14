@@ -48,9 +48,7 @@ function print_result_json($row) {
              'uuid': '".$row['sessionId']."',";
     
     if($row['snapshot']) {
-        echo $row['snapshot'];
         $bodyMap = unserialize($row['snapshot']);
-        echo $bodyMap;
         $json .= "bodyMap: '".json_encode($bodyMap)."',"; 
     }
     $json .= "}";
