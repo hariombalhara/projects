@@ -791,6 +791,8 @@
                     loggedIn = true;
                 }
                 console.log('KNOWN USER1'+data.uuid);
+                console.log(data.bodyMap);
+                console.log(data.bodyMap);
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 var uuid = container.data.uuid;
                 console.log('KNOWN USER'+uuid);
