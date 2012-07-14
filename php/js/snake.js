@@ -805,10 +805,16 @@
                 if(data.bodyMap) {
                     bodyMap = eval("("+data.bodyMap+")");
                     console.log(JSON.stringify(bodyMap));
-                    setPositionOfSnake(snake_body);
-                } else {
-                    makeInitialSnake(snake_body);
+                    if(bodyMap) {
+                        setPositionOfSnake(snake_body);
+                    }
+                    else {
+                        makeInitialSnake(snake_body);
+                    }
                 }
+                 
+                    
+                
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 var uuid = container.data.uuid;
                 console.log('KNOWN USER'+uuid);
