@@ -12,7 +12,8 @@ $name = $_POST['name']; //TODO CHANGE TO POST
 $email = $_POST['email'];
 $score = $_POST['score'];
 $firstget = $_POST['firstget'];
-$bodyMap = json_decode($_POST['body_map'],true); //Make associative array
+$bodyMap = json_decode($_POST['bodyMap'],true); //Make associative array
+$snapshot = serialize($bodyMap);
 //if($bodyMap) {
 //print_r($bodyMap);
 //}
@@ -38,25 +39,31 @@ function select_all_who_match($columnName,$value) {
     return $result;
 }
 function print_result_json($row) {
-    echo "{
-            'email':'".$row['email']."',
-            'highestScore':'".$row['highestScore']."',
-            'name':'".$row['username']."',
-            'uuid': '".$row['sessionId']."'
-          }";
+    $json = "{";
+    $json += "'email': '".$row['email']."',
+             'highestScore': '".$row['highestScore']."',
+             'name': '".$row['username']."',
+             'uuid': '".$row['sessionId']."',";
+    
+    if($row['snapshot']) {
+        $bodyMap = unserialize($row['snapshot']);
+        $json += "bodyMap: '".json_encode($bodyMap)."',"; 
+    }
+    $json += "}";
+    echo $json;
 }
 if(!empty($uuid)) {
     if($firstget == '1') {
         $result = select_all_who_match('sessionId',$uuid);
         print_result_json($result[0]);
     } else {
-        if(!empty($score) || !empty($bodyMap)) {
+        if(!empty($score) || !empty($snapshot)) {
             $part_query = "";
             if(!empty($score)) {
                 $part_query .= '`highestScore` = '.$score.",";
             }
             if(!empty($bodyMap)) {
-                $part_query .= '`bodyMap` = '.$bodyMap;
+                $part_query .= '`snapshot` = '.$snapshot;
             }
                 $query = 'Update `snake` set '.$part_query.' where `sessionId` = "'.$uuid.'"';
                 $result = select_all_who_match('sessionId',$uuid);
@@ -81,6 +88,7 @@ if(!empty($uuid)) {
    } else {
        $uuid = $row['sessionId'];
    }
+   
    //user identified set cookie.
     setcookie('uuid',$uuid,time()+20*365*24*3600);
     print_result_json($row);

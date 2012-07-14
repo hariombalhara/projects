@@ -72,7 +72,7 @@
         iframe,
         login_el,
         loggedIn,
-        body_map = [];
+        bodyMap = [];
     function getIntPartFromStr(str) {
         return parseInt(str, 10);
     }
@@ -717,10 +717,10 @@
                 node = childNodes[i];
                 xy.left = node.style.left;
                 xy.top = node.style.top;
-                body_map[i] = xy;
+                bodyMap[i] = xy;
             }
-            container.body_map = JSON.stringify(body_map);
-            console.log('Uploading FULL '+container.body_map);
+            container.bodyMap = JSON.stringify(bodyMap);
+            console.log('Uploading FULL '+container.bodyMap);
         } else {
             snake_playground.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
         }
