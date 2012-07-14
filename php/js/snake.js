@@ -171,7 +171,7 @@
         if (props.innerHTML) {
             el.innerHTML = props.innerHTML;
         }
-        if ((typeof props_style) !== "undefined") {
+        if ((typeof props_style) !== "undefined") { //TODO:make it a generic style copier.
             if ((typeof props_style.left) !== "undefined") {
                 el.style.left = props.style.left;
             }
@@ -371,8 +371,9 @@
             className:'snake_point',
             id:'snake_point',
             innerHTML:SNAKE_FIGURE,
-            style:{display:'none'}
+            style:{display:'none'}//don' work right now
         });
+        point.el.style.display = "none";
     }
     function markPoint(el) { //TODO:Why create and destroy this element again and again.Just change its position.
         var x = -1,
