@@ -50,6 +50,7 @@ function print_result_json($row) {
         $json += "bodyMap: '".json_encode($bodyMap)."',"; 
     }
     $json += "}";
+    syslog(LOG_ERR,$json);
     echo $json;
 }
 if(!empty($uuid)) {
@@ -95,5 +96,5 @@ if(!empty($uuid)) {
 } else {
     die('Unknown Handler');
 }
-syslog(LOG_DEBUG,'************************************************************************************');
+syslog(LOG_ERR,'************************************************************************************');
 ?>
