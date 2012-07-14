@@ -12,7 +12,7 @@ $name = $_POST['name']; //TODO CHANGE TO POST
 $email = $_POST['email'];
 $score = $_POST['score'];
 $firstget = $_POST['firstget'];
-$bodyMap = json_decode($_POST['bodyMap'],true); //Make associative array
+$bodyMap = json_decode($_POST['bodyMap'],false); //Don't Make associative array
 $snapshot = serialize($bodyMap);
 //if($bodyMap) {
 //print_r($bodyMap);
@@ -60,18 +60,19 @@ if(!empty($uuid)) {
     } else {
         if(!empty($score) || !empty($snapshot)) {
             $part_query = "";
-            if(!empty($score)) {
-                $part_query .= '`highestScore` = '.$score.",";
+            $result = select_all_who_match('sessionId',$uuid);
+            $row = $result[0];
+            if($row['highestScore'] < $score) {
+                if(!empty($score)) {
+                    $part_query .= '`highestScore` = '.$score.",";
+                }    
             }
             if(!empty($bodyMap)) {
                 $part_query .= '`snapshot` = '.$snapshot;
             }
-                $query = 'Update `snake` set '.$part_query.' where `sessionId` = "'.$uuid.'"';
-                $result = select_all_who_match('sessionId',$uuid);
-                $row = $result[0];
-                if($row['highestScore'] < $score) {
-                    run_query($query,2);
-                }
+                $query = 'Update `snake` set '.$part_query.' where `sessionId` = "'.$uuid.'"';   
+                echo $query;
+                run_query($query,2);
         }
     }
   
