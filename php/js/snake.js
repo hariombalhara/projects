@@ -72,7 +72,8 @@
         iframe,
         login_el,
         loggedIn,
-        bodyMap = [];
+        gameData = {},
+        bodyMap = gameData.bodyMap = [];
     function getIntPartFromStr(str) {
         return parseInt(str, 10);
     }
@@ -330,7 +331,8 @@
         var i,
             node,
             obj;
-        window.snmap = bodyMap;
+        window.snmap = gameData;
+        bodyMap = gameData.bodyMap; //Its Important
         console.log(bodyMap.length);
         for (i = 0; i < bodyMap.length; i++) {
             gulp(el);
@@ -340,7 +342,7 @@
             node.style.top = (obj.top)*height + "px";
             node.rotation = obj.rotation;
         }
-        gulp_counter_el.innerHTML = bodyMap.score;
+        gulp_counter_el.innerHTML = gameData.score;
         snake.paused = true;
     }
     function makeInitialSnake(el) {
@@ -362,8 +364,8 @@
     }
     function getInitialPoint() {
         point.el.style.display = "block";
-        point.el.style.left = (bodyMap.point.left)*width + "px";
-        point.el.style.top = (bodyMap.point.top)*height + "px";
+        point.el.style.left = (gameData.point.left)*width + "px";
+        point.el.style.top = (gameData.point.top)*height + "px";
     }
     function createPoint() {
         point.el = snake_playground.appendChildWithInformation.call(snake_playground, {
@@ -746,10 +748,10 @@
                 xy.rotation = node.rotation;
                 bodyMap[i] = xy;
             }
-            bodyMap.point = p_xy;
-            bodyMap.score = gulp_counter_el.innerHTML;
-            container.bodyMap = JSON.stringify(bodyMap);
-            console.log('Uploading FULL '+container.bodyMap);
+            gameData.point = p_xy;
+            gameData.score = gulp_counter_el.innerHTML;
+            container.gameData = JSON.stringify(gameData);
+            console.log('Uploading FULL '+container.gameData);
         } else {
             snake_playground.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
         }
@@ -820,10 +822,10 @@
                     loggedIn = true;
                 }
                 console.log('KNOWN USER1'+data.uuid);
-                if(data.bodyMap) {
-                    bodyMap = eval("("+data.bodyMap+")");
-                    console.log(JSON.stringify(bodyMap));
-                    if(bodyMap) {
+                if(data.gameData) {
+                    gameData = eval("("+data.gameData+")");
+                    console.log(JSON.stringify(gameData));
+                    if(gameData) {
                         getInitialSnake(snake_body);
                         getInitialPoint(snake_body);
                     }
