@@ -326,7 +326,7 @@
             });
         }
     }
-    function setPositionOfSnake(el) {
+    function getInitialSnake(el) {
         var i,
             node,
             obj;
@@ -339,10 +339,8 @@
             node.style.left = (obj.left)*width + "px";
             node.style.top = (obj.top)*height + "px";
             node.rotation = obj.rotation;
-            gulp_counter_el.innerHTML = obj.score;
-            point.style.left = (obj.point.left)*width + "px";
-            point.style.top = (obj.point.top)*height + "px";
         }
+        gulp_counter_el.innerHTML = bodyMap.score;
         snake.paused = true;
     }
     function makeInitialSnake(el) {
@@ -362,7 +360,19 @@
         document.title = original_cfg.document.title;
         body.onbeforeunload = b.onbeforeunload;
     }
-    function markPoint(el) {
+    function getInitialPoint() {
+        point.el.style.left = (bodyMap.point.left)*width + "px";
+        point.el.style.top = (bodyMap.point.top)*height + "px";
+    }
+    function createPoint() {
+        point.el = snake_playground.appendChildWithInformation.call(snake_playground, {
+            tagName:'div',
+            className:'snake_point',
+            id:'snake_point',
+            innerHTML:SNAKE_FIGURE
+        });
+    }
+    function markPoint(el) { //TODO:Why create and destroy this element again and again.Just change its position.
         var x = -1,
             y = -1,
             count = 0,
@@ -396,19 +406,8 @@
                 count++;
             }
         }
-        point.el = snake_playground.appendChildWithInformation.call(snake_playground, {
-            tagName:'div',
-            className:'snake_point',
-            id:'snake_point',
-            innerHTML:SNAKE_FIGURE,
-            style:{
-                left:x+"px",
-                top:y+"px"
-            }
-        });
-        //Store the position of the point in snake namespace for easy accessibilty
-        point.x = x;
-        point.y = y;
+        point.el.style.left = x+"px";
+        point.el.style.top = y+"px";
     }
     function append(keyCode) {
         //FOR NOW ONLY THE LAST ELEMENT of QUEUE IS CONSIDERED
@@ -572,8 +571,8 @@
         var last_style = last.style;
         var last_style_top = last_style.top;
         var last_style_left = last_style.left;
-        if(((snake.point.x+"px") === last_style_left) && ((snake.point.y+"px") === last_style_top)) {
-            snake_playground.removeChild(point.el);
+        if(((point.el.style.left) === last_style_left) && ((point.el.style.top) === last_style_top)) {
+           // snake_playground.removeChild(point.el);
             gulp(el, true);
             markPoint(el);
         }
@@ -732,21 +731,18 @@
                 len = childNodes.length,
                 node,i,xy = {},
                 p_xy = {};
+                p_xy.left = (getIntPartFromStr(point.el.style.left))/width;
+                p_xy.top = (getIntPartFromStr(point.el.style.top))/height;
             for(i = 0; i < len; i++) {
                 xy = {};
-                p_xy = {};
                 node = childNodes[i];
                 xy.left = (getIntPartFromStr(node.style.left))/width;
                 xy.top = (getIntPartFromStr(node.style.top))/height;
-                
-                p_xy.left = (getIntPartFromStr(point.style.left))/width;
-                p_xy.top = (getIntPartFromStr(point.style.top))/height;
                 xy.rotation = node.rotation;
-                xy.score = gulp_counter_el.innerHTML;
-                
-                xy.point = p_xy;
                 bodyMap[i] = xy;
             }
+            bodyMap.point = p_xy;
+            bodyMap.score = gulp_counter_el.innerHTML;
             container.bodyMap = JSON.stringify(bodyMap);
             console.log('Uploading FULL '+container.bodyMap);
         } else {
@@ -823,13 +819,16 @@
                     bodyMap = eval("("+data.bodyMap+")");
                     console.log(JSON.stringify(bodyMap));
                     if(bodyMap) {
-                        setPositionOfSnake(snake_body);
+                        getInitialSnake(snake_body);
+                        getInitialPoint(snake_body);
                     }
                     else {
                         makeInitialSnake(snake_body);
+                        markPoint(snake_body);
                     }
                 } else {
                     makeInitialSnake(snake_body);
+                    markPoint(snake_body);
                 }
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 var uuid = container.data.uuid;
@@ -850,7 +849,7 @@
         setupPlayground();
         getDimensions();
         //makeInitialSnake(snake_body);
-        markPoint(snake_body);
+        //markPoint(snake_body);
         addKeyListener();
         personaliseGame();
     }
