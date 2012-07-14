@@ -868,8 +868,8 @@
         snake.state = STATES.INITIALISING,
         saveCurrentCfg();
         modifyCfg();
-        setupPlayground();
         getDimensions();
+        setupPlayground();
         //makeInitialSnake(snake_body);
         //markPoint(snake_body);
         addKeyListener();
