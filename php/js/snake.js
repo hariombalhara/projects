@@ -247,8 +247,8 @@
             className: PLAYGROUND_CLASS,
             id: PLAYGROUND_ID,
             style: {
-           // height: "100%",
-         //   width: "100%"
+            height: "600px",
+            width: "600px"
         }
     });//Its the root element for the snake game
         snake_body = snake_playground.appendChildWithInformation.call(snake_playground, {
