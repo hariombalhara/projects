@@ -13,7 +13,7 @@
         NEGATIVE_90_ROTATION = "rotate(-90deg)",
         NEGATIVE_180_ROTATION = "rotate(-180deg)",
         ZERO_ROTATION = "",
-        BODY_PART_SIZE = 20, 
+        BODY_PART_SIZE, 
         SPEED = 60,
         INCREASE_SIZE_BY = 1,
         GULP_COUNTER_DIV_ID = 'snake_gulp_counter',
@@ -152,6 +152,12 @@
     function getDimensions() {
         window_availWidth = snake_playground.offsetWidth;
         window_availHeight = snake_playground.offsetHeight;
+        if(window_availHeight > window_availWidth) {
+            window_availHeight = window_availWidth;
+        } else {
+            window_availHeight = window_availWidth;
+        BODY_PART_SIZE = 
+        }
         width = snake.width = Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE));
         height = snake.height = Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE));
     }
