@@ -53,6 +53,7 @@
             SAVE: 1,
             SAVE_KILL_RESTART:2
         },
+        playground_container,
         body = document.body,
         snake = window.snake = {},//Snake Namespace
         point = snake.point = {},//Holds the position of the point.
@@ -242,7 +243,15 @@
         snake_playground.appendChild(login_el);
     }
     function setupPlayground() {
-        snake_playground = createSnakeElement({
+        playground_container = createSnakeElement({
+            tagName: 'div',
+            className: 'playground_container',
+            style: {
+                height: "100%",
+                width: "100%"
+            }
+        })
+        snake_playground = playground_container.appendChildWithInformation.call(playground_container,{
             tagName: 'div',
             className: PLAYGROUND_CLASS,
             id: PLAYGROUND_ID,
@@ -276,8 +285,8 @@
             id: CRASH_OPTIONS_ID,
             innerHTML: CRASH_OPTIONS_HTML
         });
-        //Finally append the snake playground to the body.
-        body.appendChild(snake_playground);
+        
+        body.appendChild(playground_container);
         insertLoginButton();
         insertFrame();
         createPoint();
@@ -452,8 +461,8 @@
         var script = document.getElementById('snake_script');
         freeze();
         try {
-            if(snake_playground) {
-                body.removeChild(snake_playground);
+            if(playground_container) {
+                body.removeChild(playground_container);
             }
         }
         catch(e) {
@@ -768,7 +777,7 @@
             container.gameData = JSON.stringify(gameData);
             console.log('Uploading FULL '+container.gameData);
         } else {
-            snake_playground.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
+            playground_container.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
         }
         postToHostingSite(container);
     }
