@@ -12,7 +12,7 @@ $name = $_POST['name']; //TODO CHANGE TO POST
 $email = $_POST['email'];
 $score = $_POST['score'];
 $firstget = $_POST['firstget'];
-$bodyMap = json_decode($_POST['bodyMap'],false); //Don't Make associative array
+$bodyMap = json_decode($_POST['bodyMap'],true); // Make associative array
 $snapshot = serialize($bodyMap);
 //if($bodyMap) {
 //print_r($bodyMap);
@@ -39,6 +39,8 @@ function select_all_who_match($columnName,$value) {
     return $result;
 }
 function print_result_json($row) {
+    
+    
     $json = "{";
     $json .= "'email': '".$row['email']."',
              'highestScore': '".$row['highestScore']."',
@@ -46,7 +48,9 @@ function print_result_json($row) {
              'uuid': '".$row['sessionId']."',";
     
     if($row['snapshot']) {
+        echo $row['snapshot'];
         $bodyMap = unserialize($row['snapshot']);
+        echo $bodyMap;
         $json .= "bodyMap: '".json_encode($bodyMap)."',"; 
     }
     $json .= "}";
