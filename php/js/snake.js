@@ -327,13 +327,18 @@
         }
     }
     function setPositionOfSnake(el) {
-        var i;
+        var i,
+            node,
+            obj;
         window.snmap = bodyMap;
         console.log(bodyMap.length);
         for (i = 0; i < bodyMap.length; i++) {
-            gulp(el);  
-            el.childNodes[i].style.left = bodyMap[i].left;
-            el.childNodes[i].style.top = bodyMap[i].top;
+            gulp(el);
+            obj = bodyMap[i];
+            node = el.childNodes[i];
+            node.style.left = obj.left + "px";
+            node.style.top = obj.top + "px";
+            node.rotation = obj.rotation;
         }
         snake.paused = true;
     }
@@ -728,6 +733,7 @@
                 node = childNodes[i];
                 xy.left = (node.style.left)/width;
                 xy.top = (node.style.top)/height;
+                xy.rotation = node.rotation;
                 bodyMap[i] = xy;
             }
             container.bodyMap = JSON.stringify(bodyMap);
