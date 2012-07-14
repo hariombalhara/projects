@@ -326,6 +326,14 @@
             });
         }
     }
+    function setPositionOfSnake(el) {
+        var i;
+        for (i = 0; i < bodyMap.length; i++) {
+            gulp(el);  
+            el.childNodes[i].style.left = bodyMap[i].left+"px";
+            el.childNodes[i].style.top = bodyMap[i].top+"px";
+        }
+    }
     function makeInitialSnake(el) {
         var i;
         for (i = 0; i < NO_OF_INITIAL_BODY_PARTS; i++) {
@@ -791,8 +799,12 @@
                     loggedIn = true;
                 }
                 console.log('KNOWN USER1'+data.uuid);
-                console.log(data.bodyMap);
-                console.log(data.bodyMap);
+                if(data.bodyMap) {
+                    bodyMap = data.bodyMap;
+                    setPositionOfSnake(snake_body);
+                } else {
+                    makeInitialSnake(snake_body);
+                }
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 var uuid = container.data.uuid;
                 console.log('KNOWN USER'+uuid);
@@ -811,7 +823,7 @@
         modifyCfg();
         setupPlayground();
         getDimensions();
-        makeInitialSnake(snake_body);
+        //makeInitialSnake(snake_body);
         markPoint(snake_body);
         addKeyListener();
         personaliseGame();
