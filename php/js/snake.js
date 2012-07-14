@@ -264,7 +264,7 @@
         body.appendChild(snake_playground);
         insertLoginButton();
         insertFrame();
-        
+        createPoint();
     }
     function gulp(el, consume) {
         var i;
@@ -361,6 +361,7 @@
         body.onbeforeunload = b.onbeforeunload;
     }
     function getInitialPoint() {
+        point.el.style.display = "block";
         point.el.style.left = (bodyMap.point.left)*width + "px";
         point.el.style.top = (bodyMap.point.top)*height + "px";
     }
@@ -369,7 +370,8 @@
             tagName:'div',
             className:'snake_point',
             id:'snake_point',
-            innerHTML:SNAKE_FIGURE
+            innerHTML:SNAKE_FIGURE,
+            style:{display:'none'}
         });
     }
     function markPoint(el) { //TODO:Why create and destroy this element again and again.Just change its position.
@@ -377,6 +379,8 @@
             y = -1,
             count = 0,
             len = el.childNodes.length;
+            if(point.el.style.display !== "block")
+            point.el.style.display = "block";
         while(true) {
             var startover = false,
                 randx = Math.random(),
