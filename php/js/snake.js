@@ -332,8 +332,8 @@
         console.log(bodyMap.length);
         for (i = 0; i < bodyMap.length; i++) {
             gulp(el);  
-            el.childNodes[i].style.left = bodyMap[i].left+"px";
-            el.childNodes[i].style.top = bodyMap[i].top+"px";
+            el.childNodes[i].style.left = bodyMap[i].left;
+            el.childNodes[i].style.top = bodyMap[i].top;
         }
         snake.paused = true;
     }
