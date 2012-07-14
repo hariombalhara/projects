@@ -328,6 +328,7 @@
     }
     function setPositionOfSnake(el) {
         var i;
+        console.log(bodyMap.length);
         for (i = 0; i < bodyMap.length; i++) {
             gulp(el);  
             el.childNodes[i].style.left = bodyMap[i].left+"px";
@@ -802,6 +803,7 @@
                 console.log('KNOWN USER1'+data.uuid);
                 if(data.bodyMap) {
                     bodyMap = data.bodyMap;
+                    console.log(JSON.stringify(bodyMap));
                     setPositionOfSnake(snake_body);
                 } else {
                     makeInitialSnake(snake_body);
