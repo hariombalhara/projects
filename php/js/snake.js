@@ -726,8 +726,8 @@
             for(i = 0; i < len; i++) {
                 xy = {};
                 node = childNodes[i];
-                xy.left = node.style.left;
-                xy.top = node.style.top;
+                xy.left = (node.style.left)/width;
+                xy.top = (node.style.top)/height;
                 bodyMap[i] = xy;
             }
             container.bodyMap = JSON.stringify(bodyMap);
@@ -814,9 +814,6 @@
                 } else {
                     makeInitialSnake(snake_body);
                 }
-                 
-                    
-                
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 var uuid = container.data.uuid;
                 console.log('KNOWN USER'+uuid);
