@@ -19,7 +19,7 @@
         GULP_COUNTER_DIV_ID = 'snake_gulp_counter',
         GULP_COUNTER_DIV_CLASS = 'snake_gulp_counter',
         LAST_BODY_PART_SELECTOR = '#snake span:nth-last-child(1)',
-        SNAKE_FIGURE = '<svg xmlns = "http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure" width="' + BODY_PART_SIZE + '" height="' + BODY_PART_SIZE + '"/></svg>',
+        SNAKE_FIGURE = '<svg xmlns = "http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure"/></svg>',
         PLAYGROUND_CLASS = 'snake_playground',
         PLAYGROUND_ID = 'snake_playground',
         SNAKE_BODY_CLASS = 'snake',
@@ -150,16 +150,24 @@
         }
     }
     function getDimensions() {
+        var common;
         window_availWidth = snake_playground.offsetWidth;
         window_availHeight = snake_playground.offsetHeight;
-        var common;
         if(window_availHeight > window_availWidth) {
             common = window_availHeight = window_availWidth;
         } else {
-            common = window_availHeight = window_availWidth;
+            common = window_availWidth = window_availHeight;
         }
-         BODY_PART_SIZE = (0.1)*common;
-        width = snake.width = height = snake.height = Math.floor(common-(common%BODY_PART_SIZE));
+        BODY_PART_SIZE = Math.ceil(0.10 * common); 
+        document.getElementById('snake_figure').style.height = document.getElementById('snake_figure').style.width = BODY_PART_SIZE;
+        width = height = snake.width = snake.height = Math.floor(common-(common%BODY_PART_SIZE));
+    }
+    
+    function getDimensions_orig() {
+        window_availWidth = snake_playground.offsetWidth;
+        window_availHeight = snake_playground.offsetHeight;
+        width = snake.width = Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE));
+        height = snake.height = Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE));
     }
     function appendChildWithInformation(child) {
         var el = createSnakeElement(child);
