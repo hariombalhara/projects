@@ -74,6 +74,7 @@
         iframe,
         login_el,
         loggedIn,
+        highestScore_el,
         gameData = {},
         bodyMap = gameData.bodyMap = [];
     function getIntPartFromStr(str) {
