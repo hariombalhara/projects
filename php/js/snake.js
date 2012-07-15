@@ -370,9 +370,7 @@
         var i;
         for (i = 0; i < NO_OF_INITIAL_BODY_PARTS; i++) {
             gulp(el);
-            if(i >= 1 && (i <  NO_OF_INITIAL_BODY_PARTS)) {
-                setPositionForBodyPart(el.childNodes[i],(i*BODY_PART_SIZE),0)
-            }
+            setPositionForBodyPart(el.childNodes[i],(i*BODY_PART_SIZE),0);
         }
         snake.paused = true;
     }
