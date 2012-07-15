@@ -163,7 +163,7 @@
         }*/
         
         common = PLAYGROUND_DIMENSION;
-        BODY_PART_SIZE = Math.ceil(0.04 * common) ;
+        BODY_PART_SIZE = Math.ceil(0.02 * common) ;
         SNAKE_FIGURE = '<svg xmlns = "http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure" width="' + BODY_PART_SIZE + '" height="' + BODY_PART_SIZE + '"/></svg>',
         width = height = snake.width = snake.height = Math.floor(common-(common%BODY_PART_SIZE));
     }
