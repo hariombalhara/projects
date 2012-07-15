@@ -152,23 +152,10 @@
         }
     }
     function getDimensions() {
-        var common;
-        /*window_availWidth = snake_playground.offsetWidth;
-        window_availHeight = snake_playground.offsetHeight;
-        if(window_availHeight > window_availWidth) {
-            common = window_availHeight = window_availWidth;
-        } else {
-            common = window_availWidth = window_availHeight;
-        }*/
-        common = PLAYGROUND_DIMENSION;
-        BODY_PART_SIZE = Math.ceil(0.04 * common) ;
-        SNAKE_FIGURE = '<svg xmlns = "http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure" width="' + BODY_PART_SIZE + '" height="' + BODY_PART_SIZE + '"/></svg>',
-        width = height = snake.width = snake.height = Math.floor(common-(common%BODY_PART_SIZE));
-    }
-    
-    function getDimensions_orig() {
         window_availWidth = snake_playground.offsetWidth;
         window_availHeight = snake_playground.offsetHeight;
+        BODY_PART_SIZE = Math.ceil(0.04 * window_availWidth) ;
+        SNAKE_FIGURE = '<svg xmlns = "http://www.w3.org/2000/svg" version="1.1"><rect class="snake_figure" id="snake_figure" width="' + BODY_PART_SIZE + '" height="' + BODY_PART_SIZE + '"/></svg>',
         width = snake.width = Math.floor(window_availWidth-(window_availWidth%BODY_PART_SIZE));
         height = snake.height = Math.floor(window_availHeight-(window_availHeight%BODY_PART_SIZE));
     }
