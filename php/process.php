@@ -74,9 +74,11 @@ if(!empty($uuid)) {
             if(!empty($gameData)) {
                 $part_query .= "`snapshot` = '".$snapshot."'";
             }
-                $query = 'Update `snake` set '.$part_query.' where `sessionId` = "'.$uuid.'"';   
-                echo $query;
-                run_query($query,2);
+		if($part_query != "") {
+	                $query = 'Update `snake` set '.$part_query.' where `sessionId` = "'.$uuid.'"';   
+        	        echo $query;
+        	        run_query($query,2);
+		}
         }
     }
   
