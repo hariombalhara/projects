@@ -345,11 +345,7 @@
                 tagName:'span',
                 className:SNAKE_BODY_PART_CLASS,
                 id:SNAKE_BODY_PART_ID+gulp.id,
-                innerHTML:SNAKE_FIGURE,
-                style:{
-                    left:snake_playground.offsetLeft,
-                    top:snake_playground.offsettop
-                }
+                innerHTML:SNAKE_FIGURE
             });
         }
     }
@@ -375,7 +371,7 @@
         for (i = 0; i < NO_OF_INITIAL_BODY_PARTS; i++) {
             gulp(el);
             if(i >= 1 && (i <  NO_OF_INITIAL_BODY_PARTS)) {
-                setPositionForBodyPart(el.childNodes[i],(getIntPartFromStr(el.childNodes[i].style.left)+(i*BODY_PART_SIZE)),0)
+                setPositionForBodyPart(el.childNodes[i],(i*BODY_PART_SIZE),0)
             }
         }
         snake.paused = true;
