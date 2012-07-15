@@ -258,8 +258,8 @@
             className: PLAYGROUND_CLASS,
             id: PLAYGROUND_ID,
             style: {
-            height: PLAYGROUND_DIMENSION,
-            width: PLAYGROUND_DIMENSION
+            height: PLAYGROUND_DIMENSION + "px",
+            width: PLAYGROUND_DIMENSION + "px"
         }
     });//Its the root element for the snake game
         snake_body = snake_playground.appendChildWithInformation.call(snake_playground, {
@@ -504,10 +504,10 @@
     }
     function setPositionForBodyPart(node,left,top) {
         if(left) {
-            node.style.left = snake_playground.offsetLeft + left;
+            node.style.left = snake_playground.offsetLeft + left +"px";
         }
         if (top) {
-            node.style.top = snake_playground.offsetTop + top;
+            node.style.top = snake_playground.offsetTop + top + "px";
         }
     }
     function processGeneral(element, distance, leave_last) {
