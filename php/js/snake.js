@@ -32,7 +32,7 @@
         GAME_STATE_HTML = '<b>PAUSED</b>',
         CRASH_OPTIONS_CLASS = 'crash_options',
         CRASH_OPTIONS_ID = 'crash_options',
-        CRASH_OPTIONS_HTML = "Press <b><i>'r'</i></b> to Restart or <b><i>'Esc'</i></b> to Exit",
+        CRASH_OPTIONS_HTML = "Game Over.<br />r -> Restart<br/>Esc -> Exit",
         IFRAME_ID = "snake_iframe",
         IFRAME_SRC = "http://php-hariombalhara.rhcloud.com/personalise.html",
         STATES = {
@@ -224,6 +224,7 @@
     function continueAsGuest() {
         login_el.style.display = "none";
         noSignIn = true;
+        gulp_counter_el.style.display = "block";
     }
     function updateLoginButton() {
         var login_anchor=document.createElement('a');
@@ -275,6 +276,12 @@
             id: GULP_COUNTER_DIV_ID,
             innerHTML: '0'
         });
+        highestScore_el = snake_playground.appendChildWithInformation.call(snake_playground, {
+            tagName: 'div',
+            className: 'highestScore',
+        });
+
+        gulp_counter_el.style.display = "none";
         state_of_game_el = snake_playground.appendChildWithInformation.call(snake_playground, {
             tagName: 'div',
             className: GAME_STATE_CLASS,
@@ -338,7 +345,7 @@
                 el.insertBefore(span, el.childNodes[0]);
             }
             gulp.count+=1;
-            gulp_counter_el.innerHTML = gulp.count;
+            gulp_counter_el.innerHTML = getIntPartFromStr(gulp_counter_el.innerHTML) + 1;
         } else {
             gulp.id+=1;
             el.appendChildWithInformation.call(el, {
@@ -839,9 +846,11 @@
             else if(container.msgType === MSG_TYPE.UPDATE_PAGE) {
                 data = container.data;
                 if(data.highestScore !== '-1') {
-                    gulp_counter_el.innerHTML = data.highestScore;
+                  highestScore_el.innerHTML = data.highestScore;
                 }
+                //Processing after logging In
                 login_el.style.display = "none";
+                gulp_counter_el.style.display = "block";
                 document.title = "Hi "+data.email+"("+data.name+")";
                 if(data.uuid) {
                     loggedIn = true;
