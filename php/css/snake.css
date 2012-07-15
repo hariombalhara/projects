@@ -1,4 +1,3 @@
-
 /**Here provide style for ony those elements which will be removed later on when snake game ends.For all other elements internal style will be added and removed through javascript **/
 div.playground_container {
     position:fixed;
@@ -10,7 +9,7 @@ rect.snake_figure#snake_figure
     
 div.snake_playground#snake_playground
 {
-    position:fixed;display:inline;overflow:hidden;z-index:1000000;opacity:0.85;background:black;left:0px;top:0px;border:1px dashed white 
+    display:inline;overflow:hidden;z-index:1000000;opacity:0.85;background:black;margin:auto;left:0px;top:0px;border:1px dashed white 
 }
 div.snake#snake
 {
