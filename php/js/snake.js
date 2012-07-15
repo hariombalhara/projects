@@ -364,8 +364,7 @@
             gulp(el);
             obj = bodyMap[i];
             node = el.childNodes[i];
-            node.style.left = (obj.left)*width + "px";
-            node.style.top = (obj.top)*height + "px";
+            setPositionForBodyPart(node,((obj.left)*width),((obj.top)*height))
             node.rotation = obj.rotation;
         }
         gulp_counter_el.innerHTML = gameData.score;
@@ -376,7 +375,7 @@
         for (i = 0; i < NO_OF_INITIAL_BODY_PARTS; i++) {
             gulp(el);
             if(i >= 1 && (i <  NO_OF_INITIAL_BODY_PARTS)) {
-                el.childNodes[i].style.left=(getIntPartFromStr(el.childNodes[i].style.left)+(i*BODY_PART_SIZE))+"px";
+                setPositionForBodyPart(el.childNodes[i],(getIntPartFromStr(el.childNodes[i].style.left)+(i*BODY_PART_SIZE)),0)
             }
         }
         snake.paused = true;
@@ -390,8 +389,7 @@
     }
     function getInitialPoint() {
         point.el.style.display = "block";
-        point.el.style.left = (gameData.point.left)*width + "px";
-        point.el.style.top = (gameData.point.top)*height + "px";
+        setPositionForBodyPart(point.el,((gameData.point.left)*width),((gameData.point.top)*height))
     }
     function createPoint() {
         point.el = snake_playground.appendChildWithInformation.call(snake_playground, {
@@ -439,8 +437,7 @@
                 count++;
             }
         }
-        point.el.style.left = x+"px";
-        point.el.style.top = y+"px";
+        setPositionForBodyPart(point.el,x,y);
     }
     function append(keyCode) {
         //FOR NOW ONLY THE LAST ELEMENT of QUEUE IS CONSIDERED
@@ -503,6 +500,14 @@
     function checkDownCrash(last_style, offset) {
         if((getIntPartFromStr(last_style.top)+offset) > (snake_playground.offsetTop+PLAYGROUND_DIMENSION)) {
             crashSnake();
+        }
+    }
+    function setPositionForBodyPart(node,left,top) {
+        if(left) {
+            node.style.left = snake_playground.offsetLeft + left;
+        }
+        if (top) {
+            node.style.top = snake_playground.offsetTop + top;
         }
     }
     function processGeneral(element, distance, leave_last) {
