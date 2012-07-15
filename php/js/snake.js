@@ -347,8 +347,8 @@
                 id:SNAKE_BODY_PART_ID+gulp.id,
                 innerHTML:SNAKE_FIGURE,
                 style:{
-                    left:0,
-                    top:0
+                    left:snake_playground.offsetLeft,
+                    top:snake_playground.offsettop
                 }
             });
         }
