@@ -403,7 +403,7 @@
         });
         point.el.style.display = "none";
     }
-    function markPoint(el) { //TODO:Why create and destroy this element again and again.Just change its position.
+    function markPoint(el) { 
         var x = -1,
             y = -1,
             count = 0,
@@ -424,7 +424,7 @@
                     child_style = child.style,
                     top = child_style.top,
                     left = child_style.left;
-                if((top === (y + "px")) && (left === (x + "px"))) {
+                if((top === (y + snake_playground.style.offsetTop + "px")) && (left === (x + snake_playground.style.offsetLeft + "px"))) {
                     startover = true;
                     if(startover_max_counter < count) {
                         startover_max_counter = count;
