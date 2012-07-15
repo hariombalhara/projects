@@ -763,13 +763,13 @@
                 len = childNodes.length,
                 node,i,xy = {},
                 p_xy = {};
-                p_xy.left = (getIntPartFromStr(point.el.style.left))/width;
-                p_xy.top = (getIntPartFromStr(point.el.style.top))/height;
+                p_xy.left = (getIntPartFromStr(point.el.style.left) - snake_playground.offsetLeft)/width;
+                p_xy.top = (getIntPartFromStr(point.el.style.top) - snake_playground.offsetTop)/height;
             for(i = 0; i < len; i++) {
                 xy = {};
                 node = childNodes[i];
-                xy.left = (getIntPartFromStr(node.style.left))/width;
-                xy.top = (getIntPartFromStr(node.style.top))/height;
+                xy.left = (getIntPartFromStr(node.style.left) - snake_playground.offsetLeft)/width;
+                xy.top = (getIntPartFromStr(node.style.top) - snake_playground.offsetTop)/height;
                 xy.rotation = node.rotation;
                 bodyMap[i] = xy;
             }
