@@ -503,10 +503,10 @@
         }
     }
     function setPositionForBodyPart(node,left,top) {
-        if(left) {
+        if((typeof left) !== 'undefined') {
             node.style.left = snake_playground.offsetLeft + left +"px";
         }
-        if (top) {
+        if ((typeof top) !== 'undefined') {
             node.style.top = snake_playground.offsetTop + top + "px";
         }
     }
