@@ -14,7 +14,7 @@
         NEGATIVE_180_ROTATION = "rotate(-180deg)",
         ZERO_ROTATION = "",
         BODY_PART_SIZE,
-        PLAYGROUND_DIMENSION = 500,
+        PLAYGROUND_DIMENSION = 550,
         SPEED = 60,
         INCREASE_SIZE_BY = 1,
         GULP_COUNTER_DIV_ID = 'snake_gulp_counter',
