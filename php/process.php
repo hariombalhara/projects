@@ -12,8 +12,10 @@ $name = $_POST['name']; //TODO CHANGE TO POST
 $email = $_POST['email'];
 $score = $_POST['score'];
 $firstget = $_POST['firstget'];
-$gameData = json_decode($_POST['gameData'],true); // Make associative array
-$snapshot = serialize($gameData);
+if($_POST['gameData'] != "undefined") {
+	$gameData = json_decode($_POST['gameData'],true); // Make associative array
+	$snapshot = serialize($gameData);
+}
 //if($gameData) {
 //print_r($gameData);
 //}
