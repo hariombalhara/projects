@@ -373,14 +373,15 @@
         snake.paused = true; 
         moveStateTo(STATES.PAUSED);
         e.target.style.opacity = "0.3";
-        redrawPlayground();
+        drawSnake(snake_body,false);
+        drawPoint();
     }
     function dragPlaygroundEnd(e) {
         snake.paused = false
         moveStateTo(STATES.RUNNING);
         e.target.style.opacity ="none";
     }
-    function getInitialSnake(el,onstart) {
+    function drawSnake(el,onstart) {
         var i,
             node,
             obj;
@@ -400,14 +401,6 @@
             gulp_counter_el.innerHTML = score = gameData.score;
             highestScore_el.innerHTML = highestScore = gameData.highestScore;
             snake.paused = true;
-        }
-    }
-    function redrawPlayground() {
-        var len = element.childNodes.length,
-            child,i;
-        for(i = 0; i < len; i++) {
-            child = element.childNodes[i];
-            setPositionForBodyPart(child,(i*BODY_PART_SIZE),0);
         }
     }
     function makeInitialSnake(el) {
@@ -430,7 +423,7 @@
         body.onbeforeunload = b.onbeforeunload;
     }
     
-    function getInitialPoint() {
+    function drawPoint() {
         point.el.style.display = "block";
         setPositionForBodyPart(point.el,((gameData.point.left)*width),((gameData.point.top)*height))
     }
@@ -909,8 +902,8 @@
                     gameData = eval("("+data.gameData+")");
                     console.log(JSON.stringify(gameData));
                     if(gameData) {
-                        getInitialSnake(snake_body);
-                        getInitialPoint(snake_body);
+                        drawSnake(snake_body);
+                        drawPoint(snake_body);
                     }
                     else {
                         makeInitialSnake(snake_body);
