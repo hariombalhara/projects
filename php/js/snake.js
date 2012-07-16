@@ -411,6 +411,8 @@
             setPositionForBodyPart(child,(i*BODY_PART_SIZE),0);
         }
         snake.paused = true;
+        gulp_counter_el.innerHTML = score = gameData.score;
+        highestScore_el.innerHTML = highestScore = gameData.highestScore;
     }
     function restoreCfg() {
         var b = original_cfg.body;
