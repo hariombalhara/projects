@@ -283,7 +283,7 @@
             id: GULP_COUNTER_DIV_ID,
             innerHTML: score,
             style: {
-                display:"none";
+                display:"none"
             }
         });
         highestScore_el = snake_playground.appendChildWithInformation.call(snake_playground, {
