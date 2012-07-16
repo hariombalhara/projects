@@ -13,7 +13,7 @@ rect.snake_figure#snake_figure
     
 div.snake_playground#snake_playground
 {
-    position:static;display:block;overflow:hidden;z-index:1000000;opacity:0.85;background:black;margin:auto; 
+    position:static;display:block;overflow:hidden;z-index:1000000;/*opacity:0.85;*/background:black;margin:auto;box-shadow:10px 10px 5px #888 
 }
 div.snake#snake
 {
@@ -58,13 +58,13 @@ div.snake_gulp_counter#snake_gulp_counter
 }
 div.crash_options#crash_options
 {
-    position: fixed;
-    left: 40%;
-    top:50%;
+    position: relative;
+    top:45%;
     display:none;
     font-size: 2em;
     font-weight:bolder;
-    color:white
+    color:white;
+    margin:auto
 }
 #snake_iframe
 {
@@ -72,12 +72,12 @@ div.crash_options#crash_options
 }
 #login_snake_game
 {
+    height: 100px;
+    left: 45%;
+    margin: auto;
     position: relative;
-    top:40%;
-    /*left: 45%;
-    top: 50%;
-    width:20%;
-    height:20%*/
+    top: 33%;
+    width: 100px;
 }
 .login_snake_game.waiting 
 {
