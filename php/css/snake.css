@@ -71,7 +71,7 @@ div.snake_playground
     color:white;
     margin:auto;
     width:38%
-}
+} 
 .snake_playground >  #snake_iframe
 {
     display:none;
@@ -83,6 +83,7 @@ div.snake_playground
     position: relative;
     top: 36%;
     width: 100px;
+    background:none;
 }
 .snake_playground > .login_snake_game.waiting 
 {
