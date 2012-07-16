@@ -379,7 +379,7 @@
     function dragPlaygroundStart(e) {
         snake.paused = true; 
         moveStateTo(STATES.PAUSED);
-        e.target.style.display = "none";
+        e.target.style.opacity = "0.3";
     }
     function dragPlaygroundEnd() {
         snake.paused = false
@@ -419,8 +419,8 @@
         var i,
             child;
         for (i = 0; i < NO_OF_INITIAL_BODY_PARTS; i++) {
-            child = el.childNodes[i]; 
             gulp(el);
+            child = el.childNodes[i]; 
             setPositionForBodyPart(child,(i*BODY_PART_SIZE),0);
         }
         snake.paused = true;
