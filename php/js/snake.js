@@ -109,19 +109,6 @@
             obj_style[i] = style[i];
         }
     }
-    function toggle(boolvar)
-    {
-        if (typeof boolvar !== 'boolean') {
-            throw new Error('boolvar is not a bool');
-        }
-        if (boolvar === true)
-        {
-            boolvar = false;
-        } else {
-            boolvar = true;
-        }
-        return boolvar;
-    }
     //Save the current style info in case something wrong happens or fore restoration
     function saveCurrentCfg() {
         var b = original_cfg.body = {};
@@ -869,7 +856,6 @@
                 } else {
                     moveStateTo(STATES.PAUSED);
                 }
-                snake.paused = toggle(snake.paused);
             } else if((noSignIn || loggedIn)&&(e.keyCode === RESTART_KEY_CODE)) {
                 e.preventDefault();
                 e.stopPropagation();

@@ -5,8 +5,9 @@ div.playground_container {
     top:0;
     width:100%;
     height:100%;
-    background:orangered
-    opacity:0.95
+    background:orangered;
+    opacity:0.95;
+    z-index:2147483647;
 }
 rect.snake_figure
 {
@@ -17,7 +18,7 @@ div.snake_playground
     position:static;
     display:block;
     overflow:hidden;
-    z-index:1000000;
+    z-index:2147483647;
     /*opacity:0.85;*/
     background:black;
     margin:auto;
