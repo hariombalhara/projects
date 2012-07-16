@@ -5,9 +5,6 @@ div.playground_container {
     top:0;
     width:100%;
     height:100%;
-    z-index:2000000;
-    background:grey;
-    opacity:0.8;
 }
 rect.snake_figure#snake_figure
 {
@@ -83,11 +80,11 @@ div.crash_options#crash_options
 }
 .login_snake_game.waiting 
 {
-    background: url('http://www.nassauares.net/apps/tabbed_menu/images/loading.gif') no-repeat scroll 0 0 transparent;
+    background: url('../images/ajax-loader.gif') no-repeat scroll 0 0 transparent;
 }
 #login_snake_game > a:nth-child(1)
 {
-    background: url("https://browserid.org/i/sign_in_orange.png") no-repeat scroll 0 0 transparent;
+    background: url("../images/sign_in_orange.png") no-repeat scroll 0 0 transparent;
     height: 20px;
     width: 80px;
     position: absolute;
