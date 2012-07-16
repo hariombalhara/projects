@@ -8,7 +8,7 @@
         SPACE_KEY_CODE = 32,//TO PAUSE THE GAME
         RESTART_KEY_CODE = 82,//R KEY
         SAVE_KEY_CODE = 113,//F2 KEY
-        NO_OF_INITIAL_BODY_PARTS = 3,
+        NO_OF_INITIAL_BODY_PARTS = 1,
         POSITIVE_90_ROTATION = "rotate(90deg)",
         NEGATIVE_90_ROTATION = "rotate(-90deg)",
         NEGATIVE_180_ROTATION = "rotate(-180deg)",
@@ -16,7 +16,7 @@
         BODY_PART_SIZE, 
         PLAYGROUND_DIMENSION = 550,
         SPEED = 60,
-        INCREASE_SIZE_BY = 1,
+        INCREASE_SIZE_BY = 2,
         GULP_COUNTER_DIV_ID = 'snake_gulp_counter',
         GULP_COUNTER_DIV_CLASS = 'snake_gulp_counter',
         LAST_BODY_PART_SELECTOR = '#snake span:nth-last-child(1)',
@@ -70,6 +70,7 @@
         gulp_counter_el = {},
         startover_max_counter = 0,
         noSignIn = false,
+        score = highestScore = 0;
         crash_options,
         iframe,
         login_el,
@@ -140,6 +141,7 @@
     }    
     function moveStateTo(state) {
         if (state === STATES.PAUSED) {
+            snake.paused = true;
             snake.state = state;
             state_of_game_el.innerHTML = "PAUSED";
             clearInterval(snake.interval);
@@ -148,6 +150,7 @@
             state_of_game_el.innerHTML = "ENDED";
             clearInterval(snake.interval);
         } else if (state == STATES.RUNNING) {
+            snake.paused = false;
             state_of_game_el.innerHTML = "";
             snake.interval = setInterval(function() {simulateSnake(snake_body);}, SPEED);
         }
@@ -181,7 +184,8 @@
     }
     function createSnakeElement(props) {
         var el = document.createElement(props.tagName),
-            props_style=props.style;
+            props_style=props.style,
+            i;
         if (props.className) {
             el.setAttribute('class', props.className);
         }
@@ -192,19 +196,10 @@
             el.innerHTML = props.innerHTML;
         }
         if ((typeof props_style) !== "undefined") { //TODO:make it a generic style copier.
-            if ((typeof props_style.left) !== "undefined") {
-                el.style.left = props.style.left;
+                for(i in props_style) {
+                    el.style[i] = props.style[i];
+                }
             }
-            if ((typeof props_style.top) !== "undefined") {
-                el.style.top = props.style.top;
-            }
-            if ((typeof props_style.height) !== "undefined") {
-                el.style.height = props.style.height;
-            }
-            if ((typeof props_style.width) !== "undefined") {
-                el.style.width = props.style.width;
-            }
-        }
         el.appendChildWithInformation = appendChildWithInformation;
         return el;
     }
@@ -251,6 +246,11 @@
         login_el.setAttribute('class',login_el.getAttribute('class')+" waiting");
         snake_playground.appendChild(login_el);
     }
+    function makePlaygroundDraggable(el) {
+        el.draggable = "true";
+        el.addEventListener('dragstart',dragPlaygroundStart,false);
+        document.addEventListener('dragenter');
+    }
     function setupPlayground() {
         playground_container = createSnakeElement({
             tagName: 'div',
@@ -268,7 +268,8 @@
             height: PLAYGROUND_DIMENSION + "px",
             width: PLAYGROUND_DIMENSION + "px"
         }
-    });//Its the root element for the snake game
+    });
+        makePlaygroundDraggable(snake_playground);
         snake_body = snake_playground.appendChildWithInformation.call(snake_playground, {
             tagName: 'div',
             className: SNAKE_BODY_CLASS,
@@ -280,14 +281,17 @@
             tagName: 'div',
             className: GULP_COUNTER_DIV_CLASS,
             id: GULP_COUNTER_DIV_ID,
-            innerHTML: '0'
+            innerHTML: score,
+            style: {
+                display:"none";
+            }
         });
         highestScore_el = snake_playground.appendChildWithInformation.call(snake_playground, {
             tagName: 'div',
             className: 'highestScore',
+            innerHTML:highestScore
         });
 
-        gulp_counter_el.style.display = "none";
         state_of_game_el = snake_playground.appendChildWithInformation.call(snake_playground, {
             tagName: 'div',
             className: GAME_STATE_CLASS,
@@ -305,6 +309,14 @@
         insertLoginButton();
         insertFrame();
         createPoint();
+    }
+    function updateCounters() {
+         score += 1;
+         if(score > highestScore) {
+            highestScore += 1;
+         }
+         gulp_counter_el.innerHTML = score;
+         highestScore_el.innerHTML = highestScore;
     }
     function gulp(el, consume) {
         var i;
@@ -351,7 +363,7 @@
                 el.insertBefore(span, el.childNodes[0]);
             }
             gulp.count+=1;
-            gulp_counter_el.innerHTML = getIntPartFromStr(gulp_counter_el.innerHTML) + 1;
+            updateCounters();
         } else {
             gulp.id+=1;
             el.appendChildWithInformation.call(el, {
@@ -362,7 +374,17 @@
             });
         }
     }
-    function getInitialSnake(el) {
+
+    function dragPlaygroundStart(e) {
+        snake.paused = true; 
+        moveStateTo(STATES.PAUSED);
+        e.target.style.display = "none";
+    }
+    function dragPlaygroundEnd() {
+        snake.paused = false
+        moveStateTo(STATES.RUNNING);
+    }
+    function getInitialSnake(el,onstart) {
         var i,
             node,
             obj;
@@ -374,16 +396,31 @@
             obj = bodyMap[i];
             node = el.childNodes[i];
             setPositionForBodyPart(node,((obj.left)*width),((obj.top)*height))
-            node.rotation = obj.rotation;
+            if(onstart) {
+                node.rotation = obj.rotation;
+            }
         }
-        gulp_counter_el.innerHTML = gameData.score;
-        snake.paused = true;
+        if(onstart) {
+            gulp_counter_el.innerHTML = score = gameData.score;
+            highestScore_el.innerHTML = highestScore = gameData.highestScore;
+            snake.paused = true;
+        }
+    }
+    function redrawPlayground() {
+        var len = element.childNodes.length,
+            child,i;
+        for(i = 0; i < len; i++) {
+            child = element.childNodes[i];
+            setPositionForBodyPart(child,(i*BODY_PART_SIZE),0);
+        }
     }
     function makeInitialSnake(el) {
-        var i;
+        var i,
+            child;
         for (i = 0; i < NO_OF_INITIAL_BODY_PARTS; i++) {
+            child = el.childNodes[i]; 
             gulp(el);
-            setPositionForBodyPart(el.childNodes[i],(i*BODY_PART_SIZE),0);
+            setPositionForBodyPart(child,(i*BODY_PART_SIZE),0);
         }
         snake.paused = true;
     }
@@ -394,6 +431,7 @@
         document.title = original_cfg.document.title;
         body.onbeforeunload = b.onbeforeunload;
     }
+    
     function getInitialPoint() {
         point.el.style.display = "block";
         setPositionForBodyPart(point.el,((gameData.point.left)*width),((gameData.point.top)*height))
@@ -479,6 +517,7 @@
         document.getElementsByTagName('head')[0].removeChild(script);
     }
     function restartGame() {
+        if(loggedIn)
         saveGame(MODE.SAVE_KILL_RESTART);
     }
     function crashSnake() {
@@ -730,7 +769,7 @@
     function simulateSnake(el) {
         var queue = key_queue;
         var len = queue.length;
-        getDimensions(); //Get updated dimensions alwasy
+        getDimensions(); //Get updated dimensions always
         if(len === 0) {
             processGeneral(el, BODY_PART_SIZE);
             //Not pressing any key means snake is moving in direction of last body_part
@@ -760,12 +799,33 @@
         else {
             processKeyEvent(el, queue.pop());
         }
+        cacheGameData();
     }
 
     function postToHostingSite(container) {
         //TODO:Put Restriction here for target ORigin
         console.log('POSTING MESSAGE to Game Host'+JSON.stringify(container));
         iframe.contentWindow.postMessage(container,'*');
+    }
+    function cacheGameData() {
+      var childNodes = snake_body.childNodes,
+          len = childNodes.length,
+          node,i,xy = {},
+          p_xy = {};
+      p_xy.left = (getIntPartFromStr(point.el.style.left) - snake_playground.offsetLeft)/width;
+      p_xy.top = (getIntPartFromStr(point.el.style.top) - snake_playground.offsetTop)/height;
+      for(i = 0; i < len; i++) {
+        xy = {};
+        node = childNodes[i];
+        xy.left = (getIntPartFromStr(node.style.left) - snake_playground.offsetLeft)/width;
+        xy.top = (getIntPartFromStr(node.style.top) - snake_playground.offsetTop)/height;
+        xy.rotation = node.rotation;
+        bodyMap[i] = xy;
+      }
+      gameData.point = p_xy;
+      gameData.score = gulp_counter_el.innerHTML;
+      container.gameData = JSON.stringify(gameData);
+      window.gameData = container.gameData;//hariom- Delete it
     }
     function saveGame(mode) {
         var container = {
@@ -774,23 +834,7 @@
             mode:mode
         };
         if(mode === MODE.SAVE) {
-            var childNodes = snake_body.childNodes,
-                len = childNodes.length,
-                node,i,xy = {},
-                p_xy = {};
-                p_xy.left = (getIntPartFromStr(point.el.style.left) - snake_playground.offsetLeft)/width;
-                p_xy.top = (getIntPartFromStr(point.el.style.top) - snake_playground.offsetTop)/height;
-            for(i = 0; i < len; i++) {
-                xy = {};
-                node = childNodes[i];
-                xy.left = (getIntPartFromStr(node.style.left) - snake_playground.offsetLeft)/width;
-                xy.top = (getIntPartFromStr(node.style.top) - snake_playground.offsetTop)/height;
-                xy.rotation = node.rotation;
-                bodyMap[i] = xy;
-            }
-            gameData.point = p_xy;
-            gameData.score = gulp_counter_el.innerHTML;
-            container.gameData = JSON.stringify(gameData);
+            cacheGameData();
             console.log('Uploading FULL '+container.gameData);
         } else {
             playground_container.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
@@ -854,7 +898,7 @@
             else if(container.msgType === MSG_TYPE.UPDATE_PAGE) {
                 data = container.data;
                 if(data.highestScore !== '-1') {
-                  highestScore_el.innerHTML = data.highestScore;
+                  highestScore_el.innerHTML = highestScore = data.highestScore;
                 }
                 //Processing after logging In
                 login_el.style.display = "none";

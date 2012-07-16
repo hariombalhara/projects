@@ -5,6 +5,8 @@ div.playground_container {
     top:0;
     width:100%;
     height:100%;
+    background:orangered
+    opacity:0.95
 }
 rect.snake_figure
 {
@@ -12,13 +14,23 @@ rect.snake_figure
 }  
 div.snake_playground
 {
-    position:static;display:block;overflow:hidden;z-index:1000000;/*opacity:0.85;*/background:black;margin:auto;box-shadow:10px 10px 5px #888 
+    position:static;
+    display:block;
+    overflow:hidden;
+    z-index:1000000;
+    /*opacity:0.85;*/
+    background:black;
+    margin:auto;
+    box-shadow:10px 10px 5px #888 ;
+    cursor:move;
 }
 .snake_playground > .highestScore 
 {
     position:fixed;
-    left:0;
-    top:0;
+    color:white;
+    left:10px;
+    top:10;
+    font-size:3em
 }
 .snake_playground > .snake
 {
@@ -57,7 +69,7 @@ div.snake_playground
     position:fixed;
     right:10px;
     top:10px;
-    font-size:50px;
+    font-size:3em;
     color:white;
     text-align:right;
 }
