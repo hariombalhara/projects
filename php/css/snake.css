@@ -31,7 +31,8 @@ div.snake_playground
     color:white;
     left:10px;
     top:10;
-    font-size:3em
+    font-size:3em;
+    text-decoration:underline;
 }
 .snake_playground > .snake
 {

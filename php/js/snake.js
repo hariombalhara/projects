@@ -234,10 +234,13 @@
         login_el.setAttribute('class',login_el.getAttribute('class')+" waiting");
         snake_playground.appendChild(login_el);
     }
+    function dragPlaygroundEnter(e) {
+        e.target.title = "Hovering";
+    }
     function makePlaygroundDraggable(el) {
         el.draggable = "true";
         el.addEventListener('dragstart',dragPlaygroundStart,false);
-//        document.addEventListener('dragenter',dragPlaygroundEnter,false);
+        document.addEventListener('dragenter',dragPlaygroundEnter,false);
     }
     function setupPlayground() {
         playground_container = createSnakeElement({
