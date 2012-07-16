@@ -402,7 +402,6 @@
         }
         if(onstart) {
             gulp_counter_el.innerHTML = score = gameData.score;
-            highestScore_el.innerHTML = highestScore = gameData.highestScore;
             snake.paused = true;
         }
     }
@@ -896,7 +895,7 @@
                 //Processing after logging In
                 login_el.style.display = "none";
                 gulp_counter_el.style.display = "block";
-                document.title = "Hi "+data.email+"("+data.name+")";
+                document.title = "Hi "+data.email;
                 if(data.uuid) {
                     loggedIn = true;
                 }
@@ -907,6 +906,7 @@
                     if(gameData) {
                         drawSnake(snake_body,true);
                         drawPoint(snake_body);
+                        highestScore_el.innerHTML = highestScore = data.highestScore;
                         cacheGameData();
                     }
                     else {
