@@ -246,7 +246,7 @@
         el.draggable = "true";
         el.addEventListener('dragstart',dragPlaygroundStart,false);
         el.addEventListener('dragend',dragPlaygroundEnd,false);
-        document.addEventListener('dragenter',dragPlaygroundEnter,false);
+        playground_container.addEventListener('dragenter',dragPlaygroundEnter,false);
     }
     function setupPlayground() {
         playground_container = createSnakeElement({
@@ -390,7 +390,6 @@
             obj;
         window.snmap = gameData;
         bodyMap = gameData.bodyMap; //Its Important
-        console.log(bodyMap.length);
         for (i = 0; i < bodyMap.length; i++) {
             gulp(el);
             obj = bodyMap[i];
