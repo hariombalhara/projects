@@ -6,40 +6,46 @@ div.playground_container {
     width:100%;
     height:100%;
 }
-rect.snake_figure#snake_figure
+rect.snake_figure
 {
     fill:white;stroke-width:1;stroke:#c98d1e;opacity:0.8 
 }
     
-div.snake_playground#snake_playground
+div.snake_playground
 {
     position:static;display:block;overflow:hidden;z-index:1000000;/*opacity:0.85;*/background:black;margin:auto;box-shadow:10px 10px 5px #888 
 }
-div.snake#snake
+.snake_playground > .highestScore 
+{
+    position:fixed;
+    left:0;
+    top:0;
+}
+.snake_playground > .snake
 {
     position:absolute;display:inline;left:0px;top:0px;
 }
 
-div.snake_point#snake_point
+.snake_playground > .snake_point
 {
     position:absolute;
 }
-div.snake#snake>span
+.snake_playground > .snake>span
 {
     position:absolute;
 }
-div.snake#snake span:last-child span
+.snake_playground > .snake span:last-child span
 {
     font-size:10px;
     position:relative;
     top:8px
 }
-div.snake_playground#snake_playground svg
+.snake_playground > .snake_playground svg
 {
     height:20px;
     width:20px;
 }
-div.snake_state#snake_state
+.snake_playground > .snake_state
 {
     position:fixed;
     bottom:30px;
@@ -47,7 +53,7 @@ div.snake_state#snake_state
     color:white;
     text-align:right;
 }
-div.snake_gulp_counter#snake_gulp_counter
+.snake_playground > .snake_gulp_counter
 {
     position:fixed;
     right:10px;
@@ -56,7 +62,7 @@ div.snake_gulp_counter#snake_gulp_counter
     color:white;
     text-align:right;
 }
-div.crash_options#crash_options
+.snake_playground > .crash_options
 {
     position: relative;
     top:45%;
@@ -66,24 +72,23 @@ div.crash_options#crash_options
     color:white;
     margin:auto
 }
-#snake_iframe
+.snake_playground >  #snake_iframe
 {
     display:none;
 }
-#login_snake_game
+.snake_playground > .login_snake_game
 {
     height: 100px;
-    left: 45%;
     margin: auto;
     position: relative;
-    top: 33%;
+    top: 36%;
     width: 100px;
 }
-.login_snake_game.waiting 
+.snake_playground > .login_snake_game.waiting 
 {
     background:url('../images/ajax-loader.gif') no-repeat scroll 0 0 transparent;
 }
-#login_snake_game > a:nth-child(1)
+.snake_playground > .login_snake_game > a:nth-child(1)
 {
     background:url("../images/sign_in_orange.png") no-repeat scroll 0 0 transparent;
     height: 20px;
@@ -91,7 +96,7 @@ div.crash_options#crash_options
     position: absolute;
     display:block
 }
-#login_snake_game > a:nth-child(2)
+.snake_playground > .login_snake_game > a:nth-child(2)
 {
     color: orange;
     font-size: 1.4em;
