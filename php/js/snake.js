@@ -905,7 +905,7 @@
                     gameData = eval("("+data.gameData+")");
                     console.log(JSON.stringify(gameData));
                     if(gameData) {
-                        drawSnake(snake_body);
+                        drawSnake(snake_body,true);
                         drawPoint(snake_body);
                         cacheGameData();
                     }
