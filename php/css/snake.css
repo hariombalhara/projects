@@ -81,15 +81,15 @@ div.snake_playground
     height: 100px;
     margin: auto;
     position: relative;
-    top: 36%;
-    width: 100px;
     background:none;
+    width:50%;
+    top:48%;
 }
 .snake_playground > .login_snake_game.waiting 
 {
     background:url('../images/ajax-loader.gif') no-repeat scroll 0 0 transparent;
-    width:50%;
-    top:48%;
+    top: 36%;
+    width: 100px;
 }
 .snake_playground > .login_snake_game > a:nth-child(1)
 {
