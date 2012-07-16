@@ -367,6 +367,7 @@
         snake.paused = true; 
         moveStateTo(STATES.PAUSED);
         e.target.style.opacity = "0.3";
+        redrawPlayground();
     }
     function dragPlaygroundEnd() {
         snake.paused = false
@@ -411,8 +412,8 @@
             setPositionForBodyPart(child,(i*BODY_PART_SIZE),0);
         }
         snake.paused = true;
-        gulp_counter_el.innerHTML = score = gameData.score;
-        highestScore_el.innerHTML = highestScore = gameData.highestScore;
+        gulp_counter_el.innerHTML = score;
+        highestScore_el.innerHTML = highestScore;
     }
     function restoreCfg() {
         var b = original_cfg.body;
