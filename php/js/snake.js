@@ -13,7 +13,7 @@
         NEGATIVE_90_ROTATION = "rotate(-90deg)",
         NEGATIVE_180_ROTATION = "rotate(-180deg)",
         ZERO_ROTATION = "",
-        BODY_PART_SIZE,
+        BODY_PART_SIZE, 
         PLAYGROUND_DIMENSION = 550,
         SPEED = 60,
         INCREASE_SIZE_BY = 1,
@@ -482,6 +482,8 @@
             return;
         }
         crash_options.style.display = "block";
+        snake_body.style.display = "none";
+        point.el.style.display = "none";
         moveStateTo(STATES.ENDED);
     }
     function checkUpCrash(last_style) {
