@@ -9,8 +9,7 @@ div.playground_container {
 rect.snake_figure
 {
     fill:white;stroke-width:1;stroke:#c98d1e;opacity:0.8 
-}
-    
+}  
 div.snake_playground
 {
     position:static;display:block;overflow:hidden;z-index:1000000;/*opacity:0.85;*/background:black;margin:auto;box-shadow:10px 10px 5px #888 
@@ -70,7 +69,8 @@ div.snake_playground
     font-size: 2em;
     font-weight:bolder;
     color:white;
-    margin:auto
+    margin:auto;
+    width:38%
 }
 .snake_playground >  #snake_iframe
 {
