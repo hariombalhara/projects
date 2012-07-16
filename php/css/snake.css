@@ -87,6 +87,8 @@ div.snake_playground
 .snake_playground > .login_snake_game.waiting 
 {
     background:url('../images/ajax-loader.gif') no-repeat scroll 0 0 transparent;
+    width:50%;
+    top:48%;
 }
 .snake_playground > .login_snake_game > a:nth-child(1)
 {
