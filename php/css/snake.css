@@ -72,11 +72,12 @@ div.crash_options#crash_options
 }
 #login_snake_game
 {
-    left: 45%;
-    position: fixed;
+    position: relative;
+    top:40%;
+    /*left: 45%;
     top: 50%;
     width:20%;
-    height:20%
+    height:20%*/
 }
 .login_snake_game.waiting 
 {
