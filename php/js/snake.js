@@ -71,7 +71,7 @@
         startover_max_counter = 0,
         noSignIn = false,
         score = 0,
-        highestScore = 0;
+        highestScore = 0,
         crash_options,
         iframe,
         login_el,
