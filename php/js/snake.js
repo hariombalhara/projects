@@ -235,11 +235,14 @@
         snake_playground.appendChild(login_el);
     }
     function dragPlaygroundEnter(e) {
-        e.target.title = "Hovering";
+        this.title = "Hovering";
+        console.log(e.target.id);
+        console.log(e.currentTarget.title)
     }
     function makePlaygroundDraggable(el) {
         el.draggable = "true";
         el.addEventListener('dragstart',dragPlaygroundStart,false);
+        el.addEventListener('dragend',dragPlaygroundEnd,false);
         document.addEventListener('dragenter',dragPlaygroundEnter,false);
     }
     function setupPlayground() {
@@ -372,9 +375,10 @@
         e.target.style.opacity = "0.3";
         redrawPlayground();
     }
-    function dragPlaygroundEnd() {
+    function dragPlaygroundEnd(e) {
         snake.paused = false
         moveStateTo(STATES.RUNNING);
+        e.target.style.opacity ="none";
     }
     function getInitialSnake(el,onstart) {
         var i,
