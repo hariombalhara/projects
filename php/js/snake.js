@@ -236,6 +236,9 @@
     }
     function dragPlaygroundEnter(e) {
         this.title = "Hovering";
+        window._this = this;
+        window._target = e.target;
+        window._current = e.currentTarget
         console.log(e.target.id);
         console.log(e.currentTarget.title)
     }
@@ -379,7 +382,7 @@
     function dragPlaygroundEnd(e) {
         snake.paused = false
         moveStateTo(STATES.RUNNING);
-        e.target.style.opacity ="none";
+        e.target.style.opacity ="1";
     }
     function drawSnake(el,onstart) {
         var i,
@@ -815,8 +818,7 @@
       }
       gameData.point = p_xy;
       gameData.score = gulp_counter_el.innerHTML;
-      container.gameData = JSON.stringify(gameData);
-      window.gameData = container.gameData;//hariom- Delete it
+      window.gameData = gameData;//hariom- Delete it
     }
     function saveGame(mode) {
         var container = {
@@ -826,6 +828,7 @@
         };
         if(mode === MODE.SAVE) {
             cacheGameData();
+            container.gameData = JSON.stringify(gameData);
             console.log('Uploading FULL '+container.gameData);
         } else {
             playground_container.style.display = "none";//Set Display to none to make it look like the game is killed instantly.
