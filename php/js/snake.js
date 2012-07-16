@@ -401,7 +401,7 @@
             }
         }
         if(onstart) {
-            gulp_counter_el.innerHTML = score = gameData.score;
+            gulp_counter_el.innerHTML = score = getIntPartFromStr(gameData.score);
             snake.paused = true;
         }
     }
@@ -906,7 +906,7 @@
                     if(gameData) {
                         drawSnake(snake_body,true);
                         drawPoint(snake_body);
-                        highestScore_el.innerHTML = highestScore = data.highestScore;
+                        highestScore_el.innerHTML = highestScore = getIntPartFromStr(data.highestScore);
                         cacheGameData();
                     }
                     else {
