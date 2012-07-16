@@ -214,6 +214,7 @@
         login_el.style.display = "none";
         noSignIn = true;
         gulp_counter_el.style.display = "block";
+        cacheGameData();
     }
     function updateLoginButton() {
         var login_anchor=document.createElement('a');
@@ -906,14 +907,17 @@
                     if(gameData) {
                         drawSnake(snake_body);
                         drawPoint(snake_body);
+                        cacheGameData();
                     }
                     else {
                         makeInitialSnake(snake_body);
                         markPoint(snake_body);
+                        cacheGameData();
                     }
                 } else {
                     makeInitialSnake(snake_body);
                     markPoint(snake_body);
+                    cacheGameData();
                 }
             } else if(container.msgType === MSG_TYPE.INITIALIZE_HOST_PAGE) {
                 var uuid = container.data.uuid;
