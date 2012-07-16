@@ -215,6 +215,8 @@
         noSignIn = true;
         gulp_counter_el.style.display = "block";
         cacheGameData();
+        makeInitialSnake(snake_body);
+        markPoint(snake_body);
     }
     function updateLoginButton() {
         var login_anchor=document.createElement('a');
