@@ -218,7 +218,8 @@
     function gotAssertion(assertion) {
         var container = {
             msgType:MSG_TYPE.INITIATE_LOGIN,
-            assertion:assertion
+            assertion:assertion,
+            audience:location.host
         };
        postToHostingSite(container);
     }

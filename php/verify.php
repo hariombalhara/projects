@@ -1,6 +1,6 @@
 <?php
 $url = 'https://browserid.org/verify';
-$data = http_build_query(array('assertion' => $_POST['assertion'], 'audience' => urlencode('php-hariombalhara.rhcloud.com')));
+$data = http_build_query(array('assertion' => $_POST['assertion'], 'audience' => urlencode($_POST['audience'])));
 
 $params = array(
     'http' => array(

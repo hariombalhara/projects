@@ -56,12 +56,12 @@ function requestForCookie() {
         }
     };
 }
-function gotAssertion(assertion) {
+function gotAssertion(assertion,audience) {
     username = 'DEFAULT';
     if(!uuid) {
         xmlhttp.open('POST','../verify.php',true);
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlhttp.send('assertion='+assertion);//location.host should be changed to hardcoded string.Its not safe.
+        xmlhttp.send('assertion='+assertion+"&audience="+audience);//location.host should be changed to hardcoded string.Its not safe.
         xmlhttp.onreadystatechange = function() {
             if(xmlhttp.status === 200 && xmlhttp.readyState === 4) {
                 console.log('verified_obj',xmlhttp.responseText);      
@@ -102,7 +102,7 @@ window.onmessage = function(e) {
         score,gameData,
         mode;
     if(container.msgType === MSG_TYPE.INITIATE_LOGIN) {
-        gotAssertion(container.assertion);
+        gotAssertion(container.assertion,container.audience);
         return;
     } else {
         mode = container.mode;
