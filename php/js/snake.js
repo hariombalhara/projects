@@ -215,12 +215,16 @@
         snake_playground.appendChild(iframe);
     }
 
-    function init_persona_login(e) {
-        e.preventDefault();
+    function gotAssertion(assertion) {
         var container = {
-            msgType:MSG_TYPE.INITIATE_LOGIN
+            msgType:MSG_TYPE.INITIATE_LOGIN,
+            assertion:assertion
         };
        postToHostingSite(container);
+    }
+    function init_persona_login(e) {
+        e.preventDefault();
+        navigator.id.get(gotAssertion);
     }
     function continueAsGuest() {
         login_el.style.display = "none";

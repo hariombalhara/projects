@@ -7,6 +7,9 @@
     var script_type = "text/javascript",
         script_id = "snake_script",
         script_src = "http://php-hariombalhara.rhcloud.com/js/snake.js",
+        script_id2 = "snake_browserId_script",
+        script_src2 = "https://browserid.org/include.js",
+        style_href = "http://php-hariombalhara.rhcloud.com/css/snake.css",
         style_href = "http://php-hariombalhara.rhcloud.com/css/snake.css",
         style_type = "text/css",
         style_rel = "stylesheet"; 
@@ -17,7 +20,14 @@
         sscript.type = script_type; 
         document.getElementsByTagName('head')[0].appendChild(sscript);
     }
-    if(!document.querySelector('[src="'+style_href+'"]')) {
+    if(!document.querySelector('[src="'+script_src2+'"]')) {
+        var sscript = document.createElement('script');
+        sscript.src = script_src2;
+        sscript.id = script_id2;
+        sscript.type = script_type; 
+        document.getElementsByTagName('head')[0].appendChild(sscript);
+    }
+    if(!document.querySelector('[href="'+style_href+'"]')) {
         var sstyle=document.createElement('link');
         sstyle.rel = style_rel;
         sstyle.type = style_type;

@@ -97,15 +97,12 @@ function cookiedRequest() {
         }
     }
 }
-function initiateLogin() {
-    navigator.id.get(gotAssertion);
-}
 window.onmessage = function(e) {
     var container = e.data,
         score,gameData,
         mode;
     if(container.msgType === MSG_TYPE.INITIATE_LOGIN) {
-        initiateLogin();
+        gotAssertion(container.assertion);
         return;
     } else {
         mode = container.mode;
