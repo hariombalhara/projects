@@ -250,7 +250,7 @@
     function makePlaygroundDraggable(el) {
         el.draggable = "true";
         el.addEventListener('dragstart',dragPlaygroundStart,false);
-        document.addEventListener('dragenter');
+//        document.addEventListener('dragenter',dragPlaygroundEnter,false);
     }
     function setupPlayground() {
         playground_container = createSnakeElement({
