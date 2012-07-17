@@ -385,6 +385,7 @@
         snake.paused = true; 
         moveStateTo(STATES.PAUSED);
         e.target.style.opacity = "0.3";
+        e.dataTransfer.setData('text/html',"Hello Beign dragged")
         e.dataTransfer.effectAllowed = "move";
         drawSnake(snake_body,false);
         drawPoint();
