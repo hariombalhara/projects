@@ -382,10 +382,6 @@
         movePlayground(e);
     }
     function movePlayground(e) {
-       snake_playground.style.position = "absolute";
-       //Place the snake at ir original positon with absolute positioning.Cause placement of div will change when postioning type changes.
-       snake_playground.style.left = snake_playground.offsetLeft;
-       snake_playground.style.top = snake_playground.offsetTop; 
        
        var x = e.clientX;
        var y = e.clientY
@@ -408,6 +404,12 @@
         dragIcon.width = 100;
         e.dataTransfer.setDragImage(dragIcon, -10, -10);
         e.dataTransfer.effectAllowed = "move";
+        
+        snake_playground.style.position = "absolute";
+        //Place the snake at ir original positon with absolute positioning.Cause placement of div will change when postioning type changes.
+        snake_playground.style.left = snake_playground.offsetLeft;
+        snake_playground.style.top = snake_playground.offsetTop; 
+    
         drawSnake(snake_body,false);
         drawPoint();
     }
