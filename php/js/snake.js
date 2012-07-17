@@ -379,7 +379,6 @@
         e.preventDefault();
         e.stopPropagation();
         e.dataTransfer.dropEffect = "move"
-        console.log('Drag oVer');
         movePlayground(e);
     }
     function movePlayground(e) {
@@ -543,7 +542,6 @@
     }
     function crashSnake() {
         if(isDestroyed() || (snake.state === STATES.ENDED)) {
-            console.log('Crash Snake-STATE:',snake.state);
             return;
         }
         crash_options.style.display = "block";
