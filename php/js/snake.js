@@ -581,11 +581,18 @@
         }
     }
     function setPositionForBodyPart(node,left,top) {
+        var offsetx,offsety;
+        offsetx =  snake_playground.offsetLeft;
+        offsety =  snake_playground.offsetTop;
+        if(snake_playground.style.position != "static") {
+            offsetx = 0;
+            offsety = 0;
+        }
         if((typeof left) !== 'undefined') {
-            node.style.left = snake_playground.offsetLeft + left +"px";
+            node.style.left = offsetx + left +"px";
         }
         if ((typeof top) !== 'undefined') {
-            node.style.top = snake_playground.offsetTop + top + "px";
+            node.style.top = offsety + top + "px";
         }
     }
     function processGeneral(element, distance, leave_last) {
