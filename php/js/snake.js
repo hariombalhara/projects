@@ -398,7 +398,7 @@
         moveStateTo(STATES.PAUSED);
         cursor.x = e.clientX;
         cursor.y = e.clientY;
-        e.target.style.opacity = "0.3";
+//        e.target.style.opacity = "0.3";
         e.dataTransfer.setData('text/html',"Hello Beign dragged")
         var dragIcon = document.createElement('img');
         dragIcon.src = 'http://php-hariombalhara.rhcloud.com/images/ajax-loader.gif';
