@@ -8,6 +8,7 @@ div.playground_container {
     background:orangered;
     opacity:0.95;
     z-index:2147483647;
+    font-family:arial,sans-serif;
 }
 rect.snake_figure
 {
@@ -98,6 +99,7 @@ div.snake_playground
     background:none;
     width:40%;
     top:48%;
+    font-size: small;
 }
 .snake_playground > .login_snake_game.waiting 
 {
