@@ -8,7 +8,7 @@
         SPACE_KEY_CODE = 32,//TO PAUSE THE GAME
         RESTART_KEY_CODE = 82,//R KEY
         SAVE_KEY_CODE = 113,//F2 KEY
-        NO_OF_INITIAL_BODY_PARTS = 1,
+        NO_OF_INITIAL_BODY_PARTS = 2,
         POSITIVE_90_ROTATION = "rotate(90deg)",
         NEGATIVE_90_ROTATION = "rotate(-90deg)",
         NEGATIVE_180_ROTATION = "rotate(-180deg)",
@@ -562,8 +562,12 @@
         logsOn();
     }
     function restartGame() {
-        if(loggedIn)
-        saveGame(MODE.SAVE_KILL_RESTART);
+        if(loggedIn) {
+            saveGame(MODE.SAVE_KILL_RESTART); 
+        } else if(noSignIn) {
+            killGame();
+            main();
+        }
     }
     function crashSnake() {
         if(isDestroyed() || (snake.state === STATES.ENDED)) {
