@@ -485,7 +485,7 @@
                 display:'none'
             }
         });
-       point_svg_style = body.querySelector('.snake_point > svg')[0].style;
+       point_svg_style = body.querySelectorAll('.snake_point > svg')[0].style;
        point_svg_style.fill = "green";
        point_svg_style.stroke = "green";
     }
