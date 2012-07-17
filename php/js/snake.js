@@ -250,8 +250,8 @@
         el.draggable = "true";
         el.addEventListener('dragstart',dragPlaygroundStart,false);
         el.addEventListener('dragend',dragPlaygroundEnd,false);
-        playground_container.addEventListener('dragenter',dragPlaygroundEnter,true);
-        playground_container.addEventListener('dragover',dragPlaygroundOver,true);
+        playground_container.addEventListener('dragenter',dragPlaygroundEnter,false);
+        playground_container.addEventListener('dragover',dragPlaygroundOver,false);
     }
     function setupPlayground() {
         playground_container = createSnakeElement({
