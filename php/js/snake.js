@@ -387,8 +387,8 @@
        var y = e.clientY
        var diffx = (x - cursor.x);
        var diffy = (y - cursor.y);
-       snake_playground.style.left = snake_playground.offsetLeft + diffx + "px";
-       snake_playground.style.top = snake_playground.offsetTop + diffy +"px"; 
+       snake_playground.style.left = getRequiredOffset('left') + diffx + "px";
+       snake_playground.style.top = getRequiredOffset('top') + diffy +"px"; 
        cursor.x = x;
        cursor.y = y;
     }
@@ -406,8 +406,8 @@
         e.dataTransfer.effectAllowed = "move";
         
         //Place the snake at ir original positon with absolute positioning.Cause placement of div will change when postioning type changes.
-        snake_playground.style.left = snake_playground.offsetLeft +"px";
-        snake_playground.style.top = snake_playground.offsetTop + "px"; 
+        snake_playground.style.left = getRequiredOffset('left') +"px";
+        snake_playground.style.top = getRequiredOffset('top') + "px"; 
         snake_playground.style.position = "absolute";
     
         drawSnake(snake_body,false);
@@ -495,7 +495,7 @@
                     child_style = child.style,
                     top = child_style.top,
                     left = child_style.left;
-                if((top === (y + snake_playground.offsetTop + "px")) && (left === (x + snake_playground.offsetLeft + "px"))) {
+                if((top === (y + getRequiredOffset('top') + "px")) && (left === (x + getRequiredOffset('left') + "px"))) {
                     startover = true;
                     if(startover_max_counter < count) {
                         startover_max_counter = count;
@@ -558,33 +558,29 @@
         moveStateTo(STATES.ENDED);
     }
     function checkUpCrash(last_style) {
-        if((getIntPartFromStr(last_style.top)) < snake_playground.offsetTop) {
+        if((getIntPartFromStr(last_style.top)) < getRequiredOffset('top')) {
             crashSnake();
         }
     }
     function checkLeftCrash(last_style) {
-        if((getIntPartFromStr(last_style.left)) < snake_playground.offsetLeft) {
+        if((getIntPartFromStr(last_style.left)) < getRequiredOffset('left')) {
             crashSnake();
         }
     }
     function checkRightCrash(last_style, offset) {
-        if((getIntPartFromStr(last_style.left)+offset) > (snake_playground.offsetLeft+PLAYGROUND_DIMENSION)) {
+        if((getIntPartFromStr(last_style.left)+offset) > (getRequiredOffset('left')+PLAYGROUND_DIMENSION)) {
             crashSnake();
         }
     }
     function checkDownCrash(last_style, offset) {
-        if((getIntPartFromStr(last_style.top)+offset) > (snake_playground.offsetTop+PLAYGROUND_DIMENSION)) {
+        if((getIntPartFromStr(last_style.top)+offset) > (getRequiredOffset('top')+PLAYGROUND_DIMENSION)) {
             crashSnake();
         }
     }
     function setPositionForBodyPart(node,left,top) {
         var offsetx,offsety;
-        offsetx =  snake_playground.offsetLeft;
-        offsety =  snake_playground.offsetTop;
-        if(getComputedStyle(snake_playground).getPropertyValue("position") !== "static") {
-            offsetx = 0;
-            offsety = 0;
-        }
+        offsetx =  getRequiredOffset('left');
+        offsety =  getRequiredOffset('top');
         if((typeof left) !== 'undefined') {
             node.style.left = offsetx + left +"px";
         }
@@ -844,18 +840,33 @@
         console.log('POSTING MESSAGE to Game Host'+JSON.stringify(container));
         iframe.contentWindow.postMessage(container,'*');
     }
+    function getRequiredOffset(type) {
+        var offsetx,offsety;
+        offsetx = snake_playground.offsetLeft;
+        offsety = snake_playground.offsetTop;
+        if(getComputedStyle(snake_playground).getPropertyValue("position") !== "static") {
+            offsetx = 0;
+            offsety = 0;
+        }
+       if(type === "left") {
+           return offsetx;
+       }
+       if(type === "top") {
+           return offsety;
+       }
+    }
     function cacheGameData() {
       var childNodes = snake_body.childNodes,
           len = childNodes.length,
           node,i,xy = {},
           p_xy = {};
-      p_xy.left = (getIntPartFromStr(point.el.style.left) - snake_playground.offsetLeft)/width;
-      p_xy.top = (getIntPartFromStr(point.el.style.top) - snake_playground.offsetTop)/height;
+      p_xy.left = (getIntPartFromStr(point.el.style.left) - getRequiredOffset('left'))/width;
+      p_xy.top = (getIntPartFromStr(point.el.style.top) - getRequiredOffset('top'))/height;
       for(i = 0; i < len; i++) {
         xy = {};
         node = childNodes[i];
-        xy.left = (getIntPartFromStr(node.style.left) - snake_playground.offsetLeft)/width;
-        xy.top = (getIntPartFromStr(node.style.top) - snake_playground.offsetTop)/height;
+        xy.left = (getIntPartFromStr(node.style.left) - getRequiredOffset('left'))/width;
+        xy.top = (getIntPartFromStr(node.style.top) - getRequiredOffset('top'))/height;
         xy.rotation = node.rotation;
         bodyMap[i] = xy;
       }
