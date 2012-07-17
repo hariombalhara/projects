@@ -129,6 +129,9 @@
         body.onbeforeunload = actonbeforeunload;
     }    
     function moveStateTo(state) {
+        if (snake.state === STATES.DESTROYED) {
+            return;
+        }
         if (state === STATES.PAUSED) {
             snake.paused = true;
             snake.state = state;
@@ -376,14 +379,13 @@
         e.stopPropagation();
         e.dataTransfer.dropEffect = "move";
         console.log('Drag oVer');
-        movePlayground();
+        movePlayground(e);
     }
     function movePlayground(e) {
        var x = e.clientX;
        var y = e.clientY
        var diffx = (x - cursor.x);
        var diffy = (y - cursor.y);
-       console.log('a');
        snake_playground.style.left = snake_playground.offsetLeft + diffx;
        snake_playground.style.top = snake_playground.offsetTop + diffy; 
        cursor.x = x;
