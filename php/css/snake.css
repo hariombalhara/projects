@@ -26,7 +26,7 @@ div.snake_playground
     box-shadow:10px 10px 5px #888 ;
     cursor:move;
 }
-.snake_playground > .highestScore 
+.playground_container  .highestScore 
 {
     position:fixed;
     color:white;
@@ -67,7 +67,7 @@ div.snake_playground
     color:white;
     text-align:right;
 }
-.snake_playground > .snake_gulp_counter
+.playground_container .snake_gulp_counter
 {
     position:fixed;
     right:10px;
