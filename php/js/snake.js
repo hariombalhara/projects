@@ -83,11 +83,11 @@
         __log;
         
     function logsOff() {
-        __log = console.logs;
-        console.logs = function() {};
+        __log = console.log;
+        console.log = function() {};
     }
     function logsOn() {
-        console.logs = __log;
+        console.log = __log;
     }
     logsOff();
     function getIntPartFromStr(str) {
