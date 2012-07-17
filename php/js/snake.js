@@ -409,8 +409,8 @@
         drawPoint();
     }
     function dragPlaygroundEnd(e) {
-        snake.paused = false
-        moveStateTo(STATES.RUNNING);
+//        snake.paused = false
+  //      moveStateTo(STATES.RUNNING);
         e.target.style.opacity ="1";
     }
     function drawSnake(el,onstart) {
