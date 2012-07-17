@@ -584,7 +584,7 @@
         var offsetx,offsety;
         offsetx =  snake_playground.offsetLeft;
         offsety =  snake_playground.offsetTop;
-        if(snake_playground.style.position != "static") {
+        if(getComputedStyle(snake_playground).getPropertyValue("position") !== "static") {
             offsetx = 0;
             offsety = 0;
         }
