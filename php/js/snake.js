@@ -387,6 +387,7 @@
         movePlayground(e);
     }
     function movePlayground(e) {
+       snake_playground.style.position = "absolute";
        var x = e.clientX;
        var y = e.clientY
        var diffx = (x - cursor.x);
@@ -404,7 +405,6 @@
         e.target.style.opacity = "0.3";
         e.dataTransfer.setData('text/html',"Hello Beign dragged")
         e.dataTransfer.effectAllowed = "move";
-        snake_playground.style.position = "absolute";
         drawSnake(snake_body,false);
         drawPoint();
     }
