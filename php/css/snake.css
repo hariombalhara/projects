@@ -59,7 +59,7 @@ div.snake_playground
     height:20px;
     width:20px;
 }
-.snake_playground > .snake_state
+.playground_container  .snake_state
 {
     position:fixed;
     bottom:30px;

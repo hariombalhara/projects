@@ -293,7 +293,7 @@
             innerHTML:highestScore
         });
 
-        state_of_game_el = snake_playground.appendChildWithInformation.call(snake_playground, {
+        state_of_game_el = playground_container.appendChildWithInformation.call(playground_container, {
             tagName: 'div',
             className: GAME_STATE_CLASS,
             id: GAME_STATE_ID,
