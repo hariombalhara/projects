@@ -242,8 +242,9 @@
         window._this = this;
         window._target = e.target;
         window._current = e.currentTarget
+        e.dataTransfer.dropEffect = "move";
         console.log(e.target.id);
-        console.log(e.currentTarget.title)
+        console.log(e.currentTarget.title);
     }
     function makePlaygroundDraggable(el) {
         el.draggable = "true";
@@ -379,6 +380,7 @@
         snake.paused = true; 
         moveStateTo(STATES.PAUSED);
         e.target.style.opacity = "0.3";
+        e.dataTransfer.effectAllowed = "move";
         drawSnake(snake_body,false);
         drawPoint();
     }
@@ -462,7 +464,7 @@
                     child_style = child.style,
                     top = child_style.top,
                     left = child_style.left;
-                if((top === (y + snake_playground.style.offsetTop + "px")) && (left === (x + snake_playground.style.offsetLeft + "px"))) {
+                if((top === (y + snake_playground.offsetTop + "px")) && (left === (x + snake_playground.offsetLeft + "px"))) {
                     startover = true;
                     if(startover_max_counter < count) {
                         startover_max_counter = count;
