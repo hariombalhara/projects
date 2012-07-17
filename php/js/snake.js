@@ -79,7 +79,17 @@
         highestScore_el,
         gameData = {},
         bodyMap = gameData.bodyMap = [],
-        cursor = {};
+        cursor = {},
+        __log;
+        
+    function logsOff() {
+        __log = console.logs;
+        console.logs = function() {};
+    }
+    function logsOn() {
+        console.logs = __log;
+    }
+    logsOff();
     function getIntPartFromStr(str) {
         return parseInt(str, 10);
     }
@@ -541,8 +551,10 @@
             console.log('Exception:', "ParentNode="+snake_playground.parentNode, "Node="+snake_playground);
         }
         restoreCfg();
-        if(script)
-        document.getElementsByTagName('head')[0].removeChild(script);
+        if(script) {
+            document.getElementsByTagName('head')[0].removeChild(script);
+        }
+        logsOn();
     }
     function restartGame() {
         if(loggedIn)
