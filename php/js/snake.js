@@ -475,7 +475,7 @@
         setPositionForBodyPart(point.el,((gameData.point.left)*width),((gameData.point.top)*height))
     }
     function createPoint() {
-        var point_svg_style = body.querySelector('.snake_point > svg')[0].style;
+        var point_svg_style; 
         point.el = snake_playground.appendChildWithInformation.call(snake_playground, {
             tagName:'div',
             className:'snake_point',
@@ -485,6 +485,7 @@
                 display:'none'
             }
         });
+       point_svg_style = body.querySelector('.snake_point > svg')[0].style;
        point_svg_style.fill = "green";
        point_svg_style.stroke = "green";
     }
