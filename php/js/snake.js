@@ -242,7 +242,6 @@
         this.title = "Hovering";
         window._this = this;
         window._target = e.target;
-        window._current = e.currentTarget
         console.log(e.target.id);
         console.log(e.currentTarget.title);
     }
@@ -279,7 +278,7 @@
             style: {
             }
         });
-        gulp_counter_el = snake_playground.appendChildWithInformation.call(snake_playground, {
+        gulp_counter_el = playground_container.appendChildWithInformation.call(snake_playground, {
             tagName: 'div',
             className: GULP_COUNTER_DIV_CLASS,
             id: GULP_COUNTER_DIV_ID,
@@ -288,7 +287,7 @@
                 display:"none"
             }
         });
-        highestScore_el = snake_playground.appendChildWithInformation.call(snake_playground, {
+        highestScore_el = playground_container.appendChildWithInformation.call(snake_playground, {
             tagName: 'div',
             className: 'highestScore',
             innerHTML:highestScore
