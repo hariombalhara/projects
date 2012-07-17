@@ -278,7 +278,7 @@
             style: {
             }
         });
-        gulp_counter_el = playground_container.appendChildWithInformation.call(snake_playground, {
+        gulp_counter_el = playground_container.appendChildWithInformation.call(playground_container, {
             tagName: 'div',
             className: GULP_COUNTER_DIV_CLASS,
             id: GULP_COUNTER_DIV_ID,
@@ -287,7 +287,7 @@
                 display:"none"
             }
         });
-        highestScore_el = playground_container.appendChildWithInformation.call(snake_playground, {
+        highestScore_el = playground_container.appendChildWithInformation.call(playground_container, {
             tagName: 'div',
             className: 'highestScore',
             innerHTML:highestScore
