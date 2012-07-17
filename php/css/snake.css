@@ -16,7 +16,7 @@ rect.snake_figure
 }  
 div.snake_playground
 {
-    position:static;
+    position:absolute;
     display:block;
     overflow:hidden;
     z-index:2147483647;

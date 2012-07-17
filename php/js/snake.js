@@ -377,7 +377,11 @@
     function dragPlaygroundOver(e) {
         e.preventDefault();
         e.stopPropagation();
-        e.dataTransfer.dropEffect = "move";
+        e.dataTransfer.dropEffect = "move"
+        var dragIcon = document.createElement('img');
+        dragIcon.src = '../images/ajax-loader.gif';
+        dragIcon.width = 100;
+        e.dataTransfer.setDragImage(dragIcon, -10, -10);;
         console.log('Drag oVer');
         movePlayground(e);
     }
