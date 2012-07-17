@@ -12,7 +12,10 @@ div.playground_container {
 }
 rect.snake_figure
 {
-    fill:white;stroke-width:1;stroke:#c98d1e;opacity:0.8 
+    /*fill:white;*/
+    stroke-width:1;
+    stroke:#c98d1e;
+    opacity:0.8 
 }  
 div.snake_playground
 {

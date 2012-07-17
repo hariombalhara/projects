@@ -480,9 +480,12 @@
             className:'snake_point',
             id:'snake_point',
             innerHTML:SNAKE_FIGURE,
-            style:{display:'none'}//don' work right now
+            style:{
+                display:'none'
+            }
         });
-        point.el.style.display = "none";
+       body.querySelector('.snake_point > svg')[0].style.fill = "green";
+       body.querySelector('.snake_point > svg')[0].style.stroke = "green";
     }
     function markPoint(el) { 
         var x = -1,
