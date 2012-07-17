@@ -16,13 +16,13 @@ rect.snake_figure
 }  
 div.snake_playground
 {
-    position:static;
+    position:static; /**This has to be static so as to allow margin:auto to center the playground horizontally.*/
     display:block;
     overflow:hidden;
     z-index:2147483647;
     /*opacity:0.85;*/
     background:black;
-    margin:auto;
+    margin:auto;/*This is important*/
     box-shadow:10px 10px 5px #888 ;
     cursor:move;
 }

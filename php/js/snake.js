@@ -406,8 +406,8 @@
         e.dataTransfer.effectAllowed = "move";
         
         //Place the snake at ir original positon with absolute positioning.Cause placement of div will change when postioning type changes.
-        snake_playground.style.left = getRequiredOffset('left') +"px";
-        snake_playground.style.top = getRequiredOffset('top') + "px"; 
+        snake_playground.style.left = snake_playground.offsetLeft +"px";
+        snake_playground.style.top = snake_playground.offsetTop + "px"; 
         snake_playground.style.position = "absolute";
     
         drawSnake(snake_body,false);
