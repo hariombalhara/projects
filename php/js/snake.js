@@ -439,7 +439,6 @@
             gulp_counter_el.innerHTML = score = getIntPartFromStr(gameData.score);
             snake.paused = true;
         }
-        cacheGameData();
     }
     function makeInitialSnake(el) {
         var i,
@@ -452,7 +451,6 @@
         snake.paused = true;
         gulp_counter_el.innerHTML = score;
         highestScore_el.innerHTML = highestScore;
-        cacheGameData();
     }
     function restoreCfg() {
         var b = original_cfg.body;
@@ -513,7 +511,6 @@
             }
         }
         setPositionForBodyPart(point.el,x,y);
-        cacheGameData();
     }
     function append(keyCode) {
         //FOR NOW ONLY THE LAST ELEMENT of QUEUE IS CONSIDERED
@@ -946,7 +943,6 @@
                 if(data.uuid) {
                     loggedIn = true;
                 }
-                console.log('KNOWN USER1'+data.uuid);
                 if(data.gameData) {
                     gameData = eval("("+data.gameData+")");
                     console.log(JSON.stringify(gameData));
