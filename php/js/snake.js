@@ -790,6 +790,9 @@
     function simulateSnake(el) {
         var queue = key_queue;
         var len = queue.length;
+        if(isDestroyed()) {
+          clearInterval(snake.interval); 
+        }
         getDimensions(); //Get updated dimensions always
         if(len === 0) {
             processGeneral(el, BODY_PART_SIZE);
