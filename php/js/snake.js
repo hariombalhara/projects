@@ -893,6 +893,9 @@
             mode:mode
         };
         if(mode === MODE.SAVE) {
+            if(isDestroyed()) { //Dont' save crashed snake.
+                return;
+            }
             cacheGameData();
             container.gameData = JSON.stringify(gameData);
             console.log('Uploading FULL '+container.gameData);
