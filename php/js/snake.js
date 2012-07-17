@@ -246,7 +246,7 @@
         console.log(e.target.id);
         console.log(e.currentTarget.title);
     }
-    function makePlaygroundDraggable(el) {
+    function makePlaygroundDraggable(el) { 
         el.draggable = "true";
         el.addEventListener('dragstart',dragPlaygroundStart,false);
         el.addEventListener('dragend',dragPlaygroundEnd,false);
