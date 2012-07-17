@@ -31,7 +31,7 @@ div.snake_playground
     position:fixed;
     color:white;
     left:10px;
-    top:10;
+    top:0;
     font-size:3em;
     text-decoration:underline;
 }
@@ -71,7 +71,7 @@ div.snake_playground
 {
     position:fixed;
     right:10px;
-    top:10px;
+    top:0;
     font-size:3em;
     color:white;
     text-align:right;
