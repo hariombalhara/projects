@@ -78,7 +78,8 @@
         loggedIn,
         highestScore_el,
         gameData = {},
-        bodyMap = gameData.bodyMap = [];
+        bodyMap = gameData.bodyMap = [],
+        cursor = {};
     function getIntPartFromStr(str) {
         return parseInt(str, 10);
     }
@@ -239,18 +240,13 @@
     }
     function dragPlaygroundEnter(e) {
         e.stopPropagation();
-        this.title = "Hovering";
-        window._this = this;
-        window._target = e.target;
-        console.log(e.target.id);
-        console.log(e.currentTarget.title);
     }
     function makePlaygroundDraggable(el) { 
         el.draggable = "true";
         el.addEventListener('dragstart',dragPlaygroundStart,false);
         el.addEventListener('dragend',dragPlaygroundEnd,false);
-        playground_container.addEventListener('dragenter',dragPlaygroundEnter,false);
-        playground_container.addEventListener('dragover',dragPlaygroundOver,false);
+    //    playground_container.addEventListener('dragenter',dragPlaygroundEnter,false);
+      //  playground_container.addEventListener('dragover',dragPlaygroundOver,false);
     }
     function setupPlayground() {
         playground_container = createSnakeElement({
@@ -381,12 +377,23 @@
         e.dataTransfer.dropEffect = "move";
         console.log('Drag oVer');
     }
+    function movePlayground(e) {
+       var x = e.clientX;
+       var y = e.clientY
+       var diffx = (x - cursor.x);
+       var diffy = (y - cursor.y)
+       snake_playground.style.left = snake_playground.offsetLeft + diffx;
+       snake_playground.style.top = snake_playground.offsetTop + diffy; 
+    }
     function dragPlaygroundStart(e) {
         snake.paused = true; 
         moveStateTo(STATES.PAUSED);
+        cursor.x = e.clientX;
+        cursor.y = e.clientY;
         e.target.style.opacity = "0.3";
         e.dataTransfer.setData('text/html',"Hello Beign dragged")
         e.dataTransfer.effectAllowed = "move";
+        document.addEventListener('mousemove',movePlayground,false);
         drawSnake(snake_body,false);
         drawPoint();
     }
@@ -394,6 +401,7 @@
         snake.paused = false
         moveStateTo(STATES.RUNNING);
         e.target.style.opacity ="1";
+        document.removeEventListener('mousemove',movePlayground,false);
     }
     function drawSnake(el,onstart) {
         var i,
