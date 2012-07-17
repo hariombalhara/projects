@@ -381,7 +381,8 @@
        var x = e.clientX;
        var y = e.clientY
        var diffx = (x - cursor.x);
-       var diffy = (y - cursor.y)
+       var diffy = (y - cursor.y);
+       console.log('a');
        snake_playground.style.left = snake_playground.offsetLeft + diffx;
        snake_playground.style.top = snake_playground.offsetTop + diffy; 
     }
@@ -393,7 +394,7 @@
         e.target.style.opacity = "0.3";
         e.dataTransfer.setData('text/html',"Hello Beign dragged")
         e.dataTransfer.effectAllowed = "move";
-        document.addEventListener('mousemove',movePlayground,false);
+        playground_container.addEventListener('mousemove',movePlayground,false);
         drawSnake(snake_body,false);
         drawPoint();
     }
@@ -401,7 +402,7 @@
         snake.paused = false
         moveStateTo(STATES.RUNNING);
         e.target.style.opacity ="1";
-        document.removeEventListener('mousemove',movePlayground,false);
+        playground_container.removeEventListener('mousemove',movePlayground,false);
     }
     function drawSnake(el,onstart) {
         var i,
