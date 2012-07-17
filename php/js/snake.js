@@ -379,10 +379,10 @@
         e.preventDefault();
         e.stopPropagation();
         e.dataTransfer.dropEffect = "move"
-        var dragIcon = document.createElement('img');
+       /* var dragIcon = document.createElement('img');
         dragIcon.src = 'http://php-hariombalhara.rhcloud.com/images/ajax-loader.gif';
         dragIcon.width = 100;
-        e.dataTransfer.setDragImage(dragIcon, -10, -10);;
+        e.dataTransfer.setDragImage(dragIcon, -10, -10);;*/
         console.log('Drag oVer');
         movePlayground(e);
     }
