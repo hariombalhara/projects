@@ -130,6 +130,7 @@
     }    
     function moveStateTo(state) {
         if (snake.state === STATES.DESTROYED) {
+            clearInterval(snake.interval);
             return;
         }
         if (state === STATES.PAUSED) {
@@ -379,7 +380,7 @@
         e.stopPropagation();
         e.dataTransfer.dropEffect = "move"
         var dragIcon = document.createElement('img');
-        dragIcon.src = '../images/ajax-loader.gif';
+        dragIcon.src = 'http://php-hariombalhara.rhcloud.com/images/ajax-loader.gif';
         dragIcon.width = 100;
         e.dataTransfer.setDragImage(dragIcon, -10, -10);;
         console.log('Drag oVer');
