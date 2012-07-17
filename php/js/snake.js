@@ -425,7 +425,9 @@
         window.snmap = gameData;
         bodyMap = gameData.bodyMap; //Its Important
         for (i = 0; i < bodyMap.length; i++) {
-            gulp(el);
+            if(onstart) {
+                gulp(el);
+            }
             obj = bodyMap[i];
             node = el.childNodes[i];
             setPositionForBodyPart(node,((obj.left)*width),((obj.top)*height))
