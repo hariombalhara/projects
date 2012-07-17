@@ -386,8 +386,8 @@
        var y = e.clientY
        var diffx = (x - cursor.x);
        var diffy = (y - cursor.y);
-       snake_playground.style.left = snake_playground.offsetLeft + diffx;
-       snake_playground.style.top = snake_playground.offsetTop + diffy; 
+       snake_playground.style.left = snake_playground.offsetLeft + diffx + "px";
+       snake_playground.style.top = snake_playground.offsetTop + diffy +"px"; 
        cursor.x = x;
        cursor.y = y;
     }
