@@ -1,0 +1,1 @@
+An attempt at pac-man in HTML5
