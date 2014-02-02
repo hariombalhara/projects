@@ -1,208 +1,9 @@
-(function (context) {
+define([ 'PlottablePoint', 'Obstruction', 'obstructions-config', 'pacman-config' ], function (PlottablePoint, Obstruction, obstructionsConfig, config) {
 	'use strict';
-	function Obstruction (config) {
-		this.type = config.type || Obstruction.TypeEnum.RECTANGLE;
-		this.data = config.data;
-	}
-
-	Obstruction.TypeEnum = {
-		RECTANGLE: 'rectangle',
-		T_SHAPED: 'tShaped'
-	};
-
-	Obstruction.TshapeOrientationEnum = {
-		TOP: 'top',
-		LEFT: 'left',
-		RIGHT: 'right',
-		BOTTOM: 'bottom'
-	};
-
 	var canvas = document.querySelector('canvas'),
 		canvasContext = canvas.getContext('2d'),
 		pi = 3.14,
-		config = {
-			pointSize: 8,
-			numberOfPointsAlongX: 53,
-			numberOfPointsAlongY: 59,
-			obstructionStrokeWidth: 2,
-			obstructions: [
-				{
-					type: Obstruction.TypeEnum.RECTANGLE,
-					//In terms of number of points
-					data: {
-						//x,y must be odd numbers.
-						//Also, width and height must be even to make other unspecified corners
-						//on odd places too.
-						//As odd numbered place is for pellets.
-						coords: {
-							x: 9,
-							y: 9,
-							width: 2,
-							height: 10
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.RECTANGLE,
-					data: {
-						coords: {
-							x: 29,
-							y: 29,
-							width: 2,
-							height: 10
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.T_SHAPED,
-					data: {
-						coords: {
-							x: 3,
-							y: 53,
-							width: 18,
-							height: 2
-						},
-						tCoords: {
-							orientation: Obstruction.TshapeOrientationEnum.TOP,
-							distance: 10, //From top or left
-							width: 2,
-							height: 16
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.T_SHAPED,
-					data: {
-						coords: {
-							x: 37,
-							y: 19,
-							width: 2,
-							height: 10
-						},
-						tCoords: {
-							orientation: Obstruction.TshapeOrientationEnum.RIGHT,
-							distance: 10,
-							width: 12,
-							height: 2
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.T_SHAPED,
-					data: {
-						coords: {
-							x: 11,
-							y: 27,
-							width: 12,
-							height: 2
-						},
-						tCoords: {
-							orientation: Obstruction.TshapeOrientationEnum.BOTTOM,
-							distance: 8,
-							width: 2,
-							height: 10
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.T_SHAPED,
-					data: {
-						coords: {
-							x: 39,
-							y: 39,
-							width: 2,
-							height: 12
-						},
-						tCoords: {
-							orientation: Obstruction.TshapeOrientationEnum.LEFT,
-							distance: 2,
-							width: 12,
-							height: 2
-						}
-					}
-				},
-				/*{
-					type: Obstruction.TypeEnum.RECTANGLE,
-					data: {
-						coords: {
-							x: 5,
-							y: 7,
-							width: 2,
-							height: 10
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.RECTANGLE,
-					data: {
-						coords: {
-							x: 15,
-							y: 31,
-							width: 2,
-							height: 10
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.RECTANGLE,
-					data: {
-						coords: {
-							x: 31,
-							y: 15,
-							width: 2,
-							height: 10
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.RECTANGLE,
-					data: {
-						coords: {
-							x: 13,
-							y: 13,
-							width: 2,
-							height: 10
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.RECTANGLE,
-					data: {
-						coords: {
-							x: 39,
-							y: 39,
-							width: 2,
-							height: 10
-						}
-					}
-				},
-				{
-					type: Obstruction.TypeEnum.RECTANGLE,
-					data: {
-						coords: {
-							x: 25,
-							y: 25,
-							width: 2,
-							height: 10
-						}
-					}
-				},*/
-			]
-		};
-
-	function PlottablePoint (type, size, obstructionConfig) {
-		this.type = type || PlottablePoint.TypeEnum.EMPTY;
-		this.size = size || config.pointSize;
-		if (type == PlottablePoint.TypeEnum.OBSTRUCTION) {
-			this.obstruction = new Obstruction(obstructionConfig);
-		}
-	}
-
-	PlottablePoint.TypeEnum = {
-		EMPTY: 'empty',
-		PELLET: 'pellet',
-		OBSTRUCTION: 'obstruction'
-	};
+		pacman = {};
 
 	function drawPellet (cx, cy, r) {
 		canvasContext.fillStyle = 'grey';
@@ -213,10 +14,10 @@
 
 	function drawObstruction (x, y, width, height, tCoords) {
 		canvasContext.lineWidth = config.obstructionStrokeWidth;
-		canvasContext.strokeStyle = 'blue';
-		canvasContext.strokeRect(x, y, width, height);
+		canvasContext.fillStyle = 'blue';
+		canvasContext.fillRect(x, y, width, height);
 		if (tCoords) {
-			canvasContext.strokeRect(tCoords.x1 * config.pointSize, tCoords.y1 * config.pointSize, (tCoords.x2 - tCoords.x1) * config.pointSize, (tCoords.y3 - tCoords.y2) * config.pointSize);
+			canvasContext.fillRect(tCoords.x1 * config.pointSize, tCoords.y1 * config.pointSize, (tCoords.x2 - tCoords.x1) * config.pointSize, (tCoords.y3 - tCoords.y2) * config.pointSize);
 		}
 	}
 
@@ -296,8 +97,7 @@
 			drawObstruction(coords.x * size, coords.y * size, coords.width * size, coords.height * size, tCoords);
 		}
 	}
-
-	var pacman = {
+	pacman = {
 		matrix: {},
 		createFloorMatrix: function (numberOfPointsAlongX, numberOfPointsAlongY, obstructions) {
 			var type,
@@ -325,10 +125,9 @@
 				}
 			}
 		},
-		init: function () {
-			this.createFloorMatrix(config.numberOfPointsAlongX, config.numberOfPointsAlongY, config.obstructions);
+		init:  function () {
+			this.createFloorMatrix(config.numberOfPointsAlongX, config.numberOfPointsAlongY, obstructionsConfig);
 		}
 	};
-
-	context.pacman = pacman;
-})(window);
+	return pacman;
+});
