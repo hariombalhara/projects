@@ -1,8 +1,11 @@
-require.config({
-	baseUrl: 'js',
-	callback: function () {
-		require(['architecture'], function (pacman) {
-			pacman.init();
-		});
-	}
-});
+(function () {
+	'use strict';
+	require.config({
+		baseUrl: 'src',
+		callback: function () {
+			require(['game'], function (pacman) {
+				pacman.init();
+			});
+		}
+	});
+})();

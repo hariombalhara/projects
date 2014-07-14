@@ -1,6 +1,6 @@
 define([], function () {
 	'use strict';
-	function Obstruction (config) {
+	function Obstruction(config) {
 		this.type = config.type || Obstruction.TypeEnum.RECTANGLE;
 		this.data = config.data;
 	}
