@@ -4,6 +4,7 @@ define(['world', '../config/obstructions-config', '../config/game-config', 'Crea
 		init: function () {
 			world.create(obstructionsConfig);
 			world.addCreature(new Creature(Creature.TypeEnum.PACMAN));
+			world.start();
 		}
 	};
 	return game;

@@ -1,18 +1,17 @@
-define([ '../config/game-config', 'world' ], function (config, world) {
+define([ '../config/game-config', 'world', 'DirectionEnum' ], function (config, world, DirectionEnum) {
 	'use strict';
-	function Creature(type, color, name, size) {
+	function Creature(type, color, name, size, speed) {
+		this.type = type;
+		this.size = size || config.creatureSize;
+		this.stepSize = config.pointSize;
+		this.currentDirection = DirectionEnum.EAST;
+		this.speed = speed || config.movingSpeed.pacman;
 		if (type === Creature.TypeEnum.PACMAN) {
-			this.type = type;
 			this.color = color || 'yellow';
 			this.name = name || 'pac-man';
-			this.size = size || config.creatureSize;
-			this.stepSize = config.pointSize;
 		} else {
-			this.type = type;
 			this.color = color;
 			this.name = name;
-			this.size = size || config.creatureSize;
-			this.stepSize = config.pointSize;
 		}
 	}
 
@@ -21,24 +20,47 @@ define([ '../config/game-config', 'world' ], function (config, world) {
 		'GHOST': 'ghost'
 	};
 
-	Creature.prototype.move = function (diffX, diffY) {
-		world.moveCreature(this, diffX, diffY);
+	Creature.prototype.move = function (diff) {
+		var deltaX, deltaY;
+		switch (this.currentDirection) {
+			case DirectionEnum.NORTH:
+				deltaX = 0;
+				deltaY = -diff;
+				break;
+			case DirectionEnum.EAST:
+				deltaX = diff;
+				deltaY = 0;
+				break;
+			case DirectionEnum.WEST:
+				deltaX = -diff;
+				deltaY = 0;
+				break;
+			case DirectionEnum.SOUTH:
+				deltaX = 0;
+				deltaY = diff;
+				break;
+		}
+		world.moveCreature(this, deltaX, deltaY);
 	};
 
-	Creature.prototype.moveLeft = function () {
-		this.move(-1, 0);
+	Creature.prototype.goWest = function () {
+		this.currentDirection = DirectionEnum.WEST;
+		this.move(1);
 	};
 
-	Creature.prototype.moveRight = function () {
-		this.move(1, 0);
+	Creature.prototype.goEast = function () {
+		this.currentDirection = DirectionEnum.EAST;
+		this.move(1);
 	};
 
-	Creature.prototype.moveUp = function () {
-		this.move(0, -1);
+	Creature.prototype.goNorth = function () {
+		this.currentDirection = DirectionEnum.NORTH;
+		this.move(1);
 	};
 
-	Creature.prototype.moveDown = function () {
-		this.move(0, 1);
+	Creature.prototype.goSouth = function () {
+		this.currentDirection = DirectionEnum.SOUTH;
+		this.move(1);
 	};
 
 	Creature.prototype.draw = function () {

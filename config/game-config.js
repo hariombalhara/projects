@@ -3,6 +3,7 @@ define([], function () {
 	var config = {
 		numberOfPelletsAlongX: 26,
 		numberOfPelletsAlongY: 26,
+
 		// Keep it even
 		pelletSize: 2,
 		pelletColor: 'white',
@@ -11,9 +12,14 @@ define([], function () {
 		backgroundColor: 'black',
 		borderSpacing: 20,
 		pelletSpacing: 18,
-		creatureSize: 5, //How many times is it bigger than pellet
+		creatureSize: 10, //How many times is it bigger than pellet
 		obstructionStrokeWidth: 2,
-		//In terms of steps
+
+		//per second
+		movingSpeed: {
+			pacman: 2
+		},
+
 		initialPacmanLocation: {
 			x: 0,
 			y: 0

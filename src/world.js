@@ -56,9 +56,14 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 		world.canvasContext.fill();
 	}
 
-	function moveCreature(creature, diffX, diffY) {
+	function moveCreature(creature, deltaX, deltaY) {
+		var newX = creature.x + deltaX,
+			newY = creature.y + deltaY;
+		if (world.isPointOutside(newX, newY) || world.isPointOccupiedByObstruction(newX, newY)) {
+			return;
+		}
 		deleteCreature(creature);
-		drawCreature(creature, creature.x + diffX, creature.y + diffY);
+		drawCreature(creature, newX, newY);
 	}
 
 	function drawCreature(creature, x, y) {
@@ -137,9 +142,12 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 
 	world = {
 		matrix: {},
-		_creatures: [],
+		creatures: [],
+		start: function () {
+			this.setCreaturesToAutoMove();
+		},
 		addCreature: function (creature) {
-			this._creatures.push(creature);
+			this.creatures.push(creature);
 			if (creature) {
 				drawCreature(creature, config.initialPacmanLocation.x, config.initialPacmanLocation.y);
 			}
@@ -156,7 +164,7 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 
 			for (var i = 0; i < numberOfPelletsAlongX; i++) {
 				for (var j = 0; j < numberOfPelletsAlongY; j++) {
-					if (this.isOccupied(i, j)) {
+					if (this.isPointOccupied(i, j)) {
 						continue;
 					}
 					drawPellet(i, j);
@@ -165,7 +173,7 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 				}
 			}
 		},
-		isOccupied: function (x, y) {
+		isPointOccupied: function (x, y) {
 			return this.matrix[x + ',' + y];
 		},
 		addToMatrix: function (x, y, type, pelletSize) {
@@ -174,26 +182,27 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 		drawCreature: drawCreature,
 		deleteCreature: deleteCreature,
 		moveCreature: moveCreature,
-		setCreaturesToAutomove: function () {
-			//this._creatures[0].move
+		setCreaturesToAutoMove: function () {
+			var pacman = this.creatures[0];
+			setInterval(pacman.move.bind(pacman, 1), 1000 / pacman.speed);
 		},
 		addDirectionsForPacman: function () {
 			var pacman,
-				creatures = this._creatures;
+				creatures = this.creatures;
 			window.addEventListener('keydown', function (e) {
 				pacman = creatures[0];
 				switch (e.keyCode) {
 					case 37:
-						pacman.moveLeft();
+						pacman.goWest();
 						break;
 					case 38:
-						pacman.moveUp();
+						pacman.goNorth();
 						break;
 					case 39:
-						pacman.moveRight();
+						pacman.goEast();
 						break;
 					case 40:
-						pacman.moveDown();
+						pacman.goSouth();
 						break;
 				}
 			});
@@ -257,6 +266,19 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 				//}
 				drawObstruction(coords.x, coords.y, coords.width, coords.height, tCoords);
 			}
+		},
+		isPointOutside: function (x, y) {
+			return x < 0 || y < 0 || x >= config.numberOfPelletsAlongX || y >= config.numberOfPelletsAlongY;
+		},
+		getFromMatrix: function (x, y) {
+			return this.matrix[x + ',' + y];
+		},
+		isPointOccupiedByObstruction: function (x, y) {
+			var point = this.getFromMatrix(x, y);
+			if (point.type === PlottablePoint.TypeEnum.OBSTRUCTION) {
+				return true;
+			}
+			return false;
 		},
 		occupyPossiblePelletsInObstruction: function occupyPossiblePelletsInObstruction(obstruction) {
 			var ix = obstruction.x1,
