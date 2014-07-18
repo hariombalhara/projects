@@ -20,8 +20,12 @@ define([ '../config/game-config', 'world', 'DirectionEnum' ], function (config, 
 		'GHOST': 'ghost'
 	};
 
+	Creature.prototype.updateCoordinates = function (x, y) {
+		this.x = x;
+		this.y = y;
+	};
 	Creature.prototype.move = function (diff) {
-		var deltaX, deltaY;
+		var deltaX, deltaY, creature = this;
 		switch (this.currentDirection) {
 			case DirectionEnum.NORTH:
 				deltaX = 0;
@@ -40,25 +44,41 @@ define([ '../config/game-config', 'world', 'DirectionEnum' ], function (config, 
 				deltaY = diff;
 				break;
 		}
-		world.moveCreature(this, deltaX, deltaY);
+		creature.moves = creature.moves || [];
+		creature.moves.push({
+			deltaX: deltaX,
+			deltaY: deltaY
+		});
 	};
 
 	Creature.prototype.goWest = function () {
+		if (this.currentDirection === DirectionEnum.WEST) {
+			return;
+		}
 		this.currentDirection = DirectionEnum.WEST;
 		this.move(1);
 	};
 
 	Creature.prototype.goEast = function () {
+		if (this.currentDirection === DirectionEnum.EAST) {
+			return;
+		}
 		this.currentDirection = DirectionEnum.EAST;
 		this.move(1);
 	};
 
 	Creature.prototype.goNorth = function () {
+		if (this.currentDirection === DirectionEnum.NORTH) {
+			return;
+		}
 		this.currentDirection = DirectionEnum.NORTH;
 		this.move(1);
 	};
 
 	Creature.prototype.goSouth = function () {
+		if (this.currentDirection === DirectionEnum.SOUTH) {
+			return;
+		}
 		this.currentDirection = DirectionEnum.SOUTH;
 		this.move(1);
 	};

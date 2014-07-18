@@ -1,8 +1,11 @@
-define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (PlottablePoint, Obstruction, config) {
+define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnum' ], function (PlottablePoint, Obstruction, config, DirectionEnum) {
 	'use strict';
 	var canvas,
 		pi = 3.14,
 		world = {};
+	function log() {
+		//window.console.log.apply(window.console, [].slice.call(arguments));
+	}
 
 	function getCenterForPellet(x, y) {
 		return {
@@ -47,37 +50,156 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 		//}
 	}
 
-	function deleteCreature(creature) {
+	function deleteCreature(creature, x, y) {
 		var creatureSize = creature.size * config.pelletSize,
-			center = getCenterForCreature(creature.x, creature.y);
+			r = creatureSize / 2 + 1;
+
+		if (!x) {
+			x = getCenterForCreature(creature.x, y).x;
+		}
+		if (!y) {
+			y = getCenterForCreature(x, creature.y).y;
+		}
+
 		world.canvasContext.fillStyle = config.backgroundColor;
 		world.canvasContext.beginPath();
-		world.canvasContext.arc(center.x, center.y, creatureSize / 2 + 1, 0, 2 * pi);
+		world.canvasContext.arc(x, y, r, 0, 2 * pi);
 		world.canvasContext.fill();
+		log('Deleted ' + creature.name + ' with x=' + x + ' y=' + y + ' r=' + r);
+	}
+
+	// Animates along one direction
+	// speed -> pixels at a time
+	function animateCreatureMove(creature, start, end, direction, speed, doneCallback, progressCallback) {
+		speed = speed || 4;
+		var acrossAxis,
+			unitVector;
+		switch (direction) {
+			case DirectionEnum.NORTH:
+				acrossAxis = 'Y';
+				unitVector = -1;
+				break;
+			case DirectionEnum.EAST:
+				acrossAxis = 'X';
+				unitVector = 1;
+				break;
+			case DirectionEnum.WEST:
+				acrossAxis = 'X';
+				unitVector = -1;
+				break;
+			case DirectionEnum.SOUTH:
+				acrossAxis = 'Y';
+				unitVector = 1;
+				break;
+		}
+		world.pendingRequests = world.pendingRequests || [];
+		world.pendingAnimationReqIds = world.pendingAnimationReqIds || [];
+		var animRequest = (function animate(i, unitVector, speed) {
+			world.pendingRequests.push({
+				i: i,
+				unitVector: unitVector,
+				speed: speed
+			});
+			return window.requestAnimationFrame(function () {
+				if (typeof i === 'undefined') {
+					i = 0;
+				}
+				var velocity = speed * unitVector;
+				world.pendingRequests.splice(0, 1);
+				world.pendingAnimationReqIds.splice(0, 1);
+				var nextLoc = start + (i + 1) * velocity;
+				if (unitVector > 0 && nextLoc > end || unitVector < 0 && nextLoc < end) {
+					doneCallback(unitVector);
+					return;
+				}
+				if (acrossAxis === 'X') {
+					deleteCreature(creature, start + i * velocity);
+					drawCreature(creature, nextLoc);
+				} else {
+					deleteCreature(creature, null, start + i * velocity);
+					drawCreature(creature, null, nextLoc);
+				}
+				animRequest = animate(i + 1, unitVector, speed);
+				world.pendingAnimationReqIds.push(animRequest);
+				progressCallback(animRequest);
+			});
+		})(0, unitVector, speed);
+		world.pendingAnimationReqIds.push(animRequest);
+		return animRequest;
+	}
+
+	function getNextMove(creature, expectedDeltaX, expectedDeltaY) {
+		var coords = creature.moves.shift();
+		if (!coords) {
+			coords = {
+				deltaX: expectedDeltaX || (creature.currentDirection === DirectionEnum.EAST ? 1 : creature.currentDirection === DirectionEnum.WEST ? -1 : 0),
+				deltaY: expectedDeltaY || (creature.currentDirection === DirectionEnum.SOUTH ? 1 : creature.currentDirection === DirectionEnum.NORTH ? -1 : 0)
+			};
+		}
+		moveCreature(creature, coords.deltaX, coords.deltaY);
 	}
 
 	function moveCreature(creature, deltaX, deltaY) {
-		var newX = creature.x + deltaX,
-			newY = creature.y + deltaY;
+		var currentX = creature.x,
+			currentY = creature.y,
+			newX = creature.x + (deltaX || 0),
+			newY = creature.y + (deltaY || 0);
 		if (world.isPointOutside(newX, newY) || world.isPointOccupiedByObstruction(newX, newY)) {
+			setTimeout(function () {
+				getNextMove(creature);
+			});
 			return;
 		}
-		deleteCreature(creature);
-		drawCreature(creature, newX, newY);
+
+		var newCenterOnCanvas = getCenterForCreature(newX, newY),
+			currentCenterOnCavas = getCenterForCreature(currentX, currentY),
+			newXOnCanvas = newCenterOnCanvas.x,
+			newYOnCanvas = newCenterOnCanvas.y,
+			currentXOnCanvas = currentCenterOnCavas.x,
+			currentYOnCanvas = currentCenterOnCavas.y;
+
+		creature.updateCoordinates(newX, newY);
+		for (var i = 0; world.pendingAnimationReqIds && i < world.pendingAnimationReqIds.length; i++) {
+			window.cancelAnimationFrame(world.pendingAnimationReqIds[i]);
+		}
+		if (deltaX && !deltaY) {
+			animateCreatureMove(creature, currentXOnCanvas, newXOnCanvas, (deltaX > 0 ? DirectionEnum.EAST : DirectionEnum.WEST), null, function (unitVector) {
+				getNextMove(creature, unitVector, 0);
+			}, function (reqId) {
+				world.reqX = reqId;
+			});
+		} else if (deltaY && !deltaX) {
+			animateCreatureMove(creature, currentYOnCanvas, newYOnCanvas, (deltaY > 0 ? DirectionEnum.SOUTH : DirectionEnum.NORTH), null, function (unitVector) {
+				getNextMove(creature, 0, unitVector);
+			}, function (reqId) {
+				world.reqY = reqId;
+			});
+		}
+	}
+
+	function putCreature(creature, x, y) {
+		var center = getCenterForCreature(x, y);
+		creature.updateCoordinates(x, y);
+		drawCreature(creature, center.x, center.y);
 	}
 
 	function drawCreature(creature, x, y) {
 		var creatureSize = creature.size * config.pelletSize,
-			center = getCenterForCreature(x, y),
-			r = creatureSize / 2;
+			r = creatureSize / 2,
+			center = getCenterForCreature(x, y);
 
-		creature.x = x;
-		creature.y = y;
+		if (!x) {
+			x = getCenterForCreature(creature.x, y).x;
+		}
+		if (!y) {
+			y = getCenterForCreature(x, creature.y).y;
+		}
 
 		world.canvasContext.fillStyle = creature.color;
 		world.canvasContext.beginPath();
-		world.canvasContext.arc(center.x, center.y, r, 0, 2 * pi);
+		world.canvasContext.arc(x, y, r, 0, 2 * pi);
 		world.canvasContext.fill();
+		log('Created ' + creature.name + ' with x=' + x + ' y=' + y + ' r=' + r);
 	}
 
 	function calculateTCoordinates(x1, x2, x3, x4, y1, y2, y3, y4, tCoords) {
@@ -149,7 +271,7 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 		addCreature: function (creature) {
 			this.creatures.push(creature);
 			if (creature) {
-				drawCreature(creature, config.initialPacmanLocation.x, config.initialPacmanLocation.y);
+				putCreature(creature, config.initialPacmanLocation.x, config.initialPacmanLocation.y);
 			}
 		},
 		create: function (obstructions) {
@@ -184,7 +306,8 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 		moveCreature: moveCreature,
 		setCreaturesToAutoMove: function () {
 			var pacman = this.creatures[0];
-			setInterval(pacman.move.bind(pacman, 1), 1000 / pacman.speed);
+			pacman.move(1);
+			world.getNextMove(pacman);
 		},
 		addDirectionsForPacman: function () {
 			var pacman,
@@ -291,7 +414,8 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config' ], function (P
 				}
 				ix++;
 			}
-		}
+		},
+		getNextMove: getNextMove
 	};
 	world.addDirectionsForPacman();
 	window.world = world;
