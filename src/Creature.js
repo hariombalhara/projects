@@ -5,13 +5,16 @@ define([ '../config/game-config', 'world', 'DirectionEnum' ], function (config, 
 		this.size = size || config.creatureSize;
 		this.stepSize = config.pointSize;
 		this.currentDirection = DirectionEnum.EAST;
-		this.speed = speed || config.movingSpeed.pacman;
 		if (type === Creature.TypeEnum.PACMAN) {
 			this.color = color || 'yellow';
 			this.name = name || 'pac-man';
+			this.speed = speed || config.movingSpeed.pacman;
 		} else {
 			this.color = color;
 			this.name = name;
+		}
+		if (!this.speed) {
+			throw 'Speed not specified';
 		}
 	}
 
