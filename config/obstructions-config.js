@@ -9,8 +9,26 @@ define([ 'Obstruction' ], function (Obstruction) {
 		{
 			type: Obstruction.TypeEnum.RECTANGLE,
 			coords: {
-				x: 3,
-				y: 5,
+				x: 1,
+				y: 1,
+				width: 3,
+				height: 2
+			}
+		},
+		{
+			type: Obstruction.TypeEnum.RECTANGLE,
+			coords: {
+				x: 6,
+				y: 1,
+				width: 4,
+				height: 2
+			}
+		},
+		{
+			type: Obstruction.TypeEnum.RECTANGLE,
+			coords: {
+				x: 12,
+				y: 0,
 				width: 1,
 				height: 3
 			}
@@ -18,114 +36,18 @@ define([ 'Obstruction' ], function (Obstruction) {
 		{
 			type: Obstruction.TypeEnum.RECTANGLE,
 			coords: {
-				x: 9,
-				y: 13,
-				width: 1,
-				height: 10
-			}
-		},
-		{
-			type: Obstruction.TypeEnum.RECTANGLE,
-			coords: {
 				x: 15,
-				y: 13,
-				width: 1,
-				height: 10
+				y: 1,
+				width: 4,
+				height: 2
 			}
 		},
 		{
 			type: Obstruction.TypeEnum.RECTANGLE,
 			coords: {
 				x: 21,
-				y: 13,
-				width: 1,
-				height: 10
-			}
-		},
-		{
-			type: Obstruction.TypeEnum.RECTANGLE,
-			coords: {
-				x: 27,
-				y: 13,
-				width: 1,
-				height: 10
-			}
-		},
-		{
-			type: Obstruction.TypeEnum.RECTANGLE,
-			coords: {
-				x: 29,
-				y: 29,
-				width: 1,
-				height: 10
-			}
-		},
-		{
-			type: Obstruction.TypeEnum.T_SHAPED,
-			coords: {
-				x: 3,
-				y: 10,
-				width: 18,
-				height: 1
-			},
-			tCoords: {
-				orientation: Obstruction.TshapeOrientationEnum.TOP,
-				distance: 10, //From top or left
-				width: 2,
-				height: 16
-			}
-		},
-		{
-			type: Obstruction.TypeEnum.T_SHAPED,
-			coords: {
-				x: 37,
-				y: 27,
-				width: 1,
-				height: 10
-			},
-			tCoords: {
-				orientation: Obstruction.TshapeOrientationEnum.RIGHT,
-				distance: 10,
-				width: 12,
-				height: 2
-			}
-		},
-		{
-			type: Obstruction.TypeEnum.T_SHAPED,
-			coords: {
-				x: 11,
-				y: 27,
-				width: 12,
-				height: 2
-			},
-			tCoords: {
-				orientation: Obstruction.TshapeOrientationEnum.BOTTOM,
-				distance: 8,
-				width: 2,
-				height: 10
-			}
-		},
-		{
-			type: Obstruction.TypeEnum.T_SHAPED,
-			coords: {
-				x: 39,
-				y: 39,
-				width: 2,
-				height: 12
-			},
-			tCoords: {
-				orientation: Obstruction.TshapeOrientationEnum.LEFT,
-				distance: 2,
-				width: 12,
-				height: 2
-			}
-		},
-		{
-			type: Obstruction.TypeEnum.RECTANGLE,
-			coords: {
-				x: 25,
-				y: 7,
-				width: 20,
+				y: 1,
+				width: 3,
 				height: 2
 			}
 		},
@@ -133,18 +55,81 @@ define([ 'Obstruction' ], function (Obstruction) {
 			type: Obstruction.TypeEnum.RECTANGLE,
 			coords: {
 				x: 1,
-				y: 39,
-				width: 2,
-				height: 10
+				y: 5,
+				width: 3,
+				height: 1
+			}
+		},
+		{
+			type: Obstruction.TypeEnum.T_SHAPED,
+			coords: {
+				x: 6,
+				y: 5,
+				width: 1,
+				height: 7
+			},
+			tCoords: {
+				orientation: Obstruction.TshapeOrientationEnum.RIGHT,
+				distance: 3, //From top or left
+				width: 3,
+				height: 1
+			}
+		},
+		{
+			type: Obstruction.TypeEnum.T_SHAPED,
+			coords: {
+				x: 9,
+				y: 5,
+				width: 7,
+				height: 1
+			},
+			tCoords: {
+				orientation: Obstruction.TshapeOrientationEnum.BOTTOM,
+				distance: 3,
+				width: 1,
+				height: 3
+			}
+		},
+		{
+			type: Obstruction.TypeEnum.T_SHAPED,
+			coords: {
+				x: 18,
+				y: 5,
+				width: 1,
+				height: 7
+			},
+			tCoords: {
+				orientation: Obstruction.TshapeOrientationEnum.LEFT,
+				distance: 3,
+				width: 3,
+				height: 1
 			}
 		},
 		{
 			type: Obstruction.TypeEnum.RECTANGLE,
 			coords: {
-				x: 7,
-				y: 39,
-				width: 2,
-				height: 10
+				x: 21,
+				y: 5,
+				width: 3,
+				height: 1
+			}
+		},
+		{
+			type: Obstruction.TypeEnum.RECTANGLE, //SPECIAL LEFT
+			coords: {
+				x: 0,
+				y: 7,
+				width: 4,
+				height: 4
+			}
+		},
+		{
+			type: Obstruction.TypeEnum.RECTANGLE, //SPECIAL RIGHT
+			coords: {
+				x: 21,
+				y: 7,
+				width: 4,
+				height: 4
 			}
 		}
 	];

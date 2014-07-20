@@ -1,4 +1,10 @@
-define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnum' ], function (PlottablePoint, Obstruction, config, DirectionEnum) {
+define([
+	'PlottablePoint',
+	'Obstruction',
+	'../config/game-config',
+	'DirectionEnum',
+	'../utils/canvasUtils'
+], function (PlottablePoint, Obstruction, config, DirectionEnum, canvasUtils) {
 	'use strict';
 	var canvas,
 		pi = 3.14,
@@ -31,23 +37,26 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 		world.canvasContext.fill();
 	}
 
-	function drawObstruction(x, y, width, height/*, tCoords*/) {
-		var topLeftPelletCenter = getCenterForPellet(x, y),
-			topLeftX = topLeftPelletCenter.x - config.pelletSize / 2,
-			topLeftY = topLeftPelletCenter.y - config.pelletSize / 2;
-			//x1, x2, y1, y2, y3;
-		world.canvasContext.lineWidth = config.obstructionStrokeWidth;
-		world.canvasContext.fillStyle = 'blue';
-		world.canvasContext.fillRect(topLeftX, topLeftY, getDistance(width), getDistance(height));
+	function getRectangleTopLeftCoordinateFromPellet(x, y) {
+		var topLeftPelletCenter = getCenterForPellet(x, y);
+		return {
+			x: topLeftPelletCenter.x - config.pelletSize / 2,
+			y: topLeftPelletCenter.y - config.pelletSize / 2
+		};
+	}
 
-		//if (tCoords) {
-			//x1 = pelletsToCenterOfPellet(tCoords.x1);
-			//y1 = pelletsToCenterOfPellet(tCoords.y1);
-			//x2 = pelletsToCenterOfPellet(tCoords.x2);
-			//y2 = pelletsToCenterOfPellet(tCoords.y2);
-			//y3 = pelletsToCenterOfPellet(tCoords.y3);
-			//world.canvasContext.fillRect(x1, y1, x2 - x1, y3 - y2);
-		//}
+	function drawObstruction(obstruction) {
+		var coords = obstruction.coords,
+			tCoords = obstruction.tCoords,
+			topLeft = getRectangleTopLeftCoordinateFromPellet(coords.x1, coords.y1);
+		world.canvasContext.lineWidth = config.obstructionStrokeWidth;
+		world.canvasContext.strokeStyle = config.obstructionColor;
+		world.canvasContext.fillStyle = config.obstructionColor;
+		canvasUtils.drawRoundedCornerRectangle(world.canvasContext, topLeft.x, topLeft.y, getDistance(coords.width), getDistance(coords.height), 10).fill();
+		if (tCoords) {
+			topLeft = getRectangleTopLeftCoordinateFromPellet(tCoords.x1, tCoords.y1);
+			canvasUtils.drawRoundedCornerRectangle(world.canvasContext, topLeft.x, topLeft.y, getDistance(tCoords.width), getDistance(tCoords.height), 10).fill();
+		}
 	}
 
 	function deleteCreature(creature, x, y) {
@@ -70,9 +79,9 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 
 	// Animates along one direction
 	// speed -> pixels at a time
-	function animateCreatureMove(creature, start, end, direction, speed, doneCallback, progressCallback) {
-		speed = speed || 4;
-		var acrossAxis,
+	function animateCreatureMove(creature, start, end, direction, doneCallback, progressCallback) {
+		var speed = creature.speed,
+			acrossAxis,
 			unitVector;
 		switch (direction) {
 			case DirectionEnum.NORTH:
@@ -171,7 +180,7 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 			window.cancelAnimationFrame(world.pendingAnimationReqIds[i]);
 		}
 		if (deltaX && !deltaY) {
-			animateCreatureMove(creature, currentXOnCanvas, newXOnCanvas, (deltaX > 0 ? DirectionEnum.EAST : DirectionEnum.WEST), null, function (unitVector) {
+			animateCreatureMove(creature, currentXOnCanvas, newXOnCanvas, (deltaX > 0 ? DirectionEnum.EAST : DirectionEnum.WEST), function (unitVector) {
 				getNextMove(creature, unitVector, 0);
 				if (isPelletPresent) {
 					updateScore(creature, 1);
@@ -180,7 +189,7 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 				world.reqX = reqId;
 			});
 		} else if (deltaY && !deltaX) {
-			animateCreatureMove(creature, currentYOnCanvas, newYOnCanvas, (deltaY > 0 ? DirectionEnum.SOUTH : DirectionEnum.NORTH), null, function (unitVector) {
+			animateCreatureMove(creature, currentYOnCanvas, newYOnCanvas, (deltaY > 0 ? DirectionEnum.SOUTH : DirectionEnum.NORTH), function (unitVector) {
 				getNextMove(creature, 0, unitVector);
 				if (isPelletPresent) {
 					updateScore(creature, 1);
@@ -234,48 +243,39 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 		log('Created ' + creature.name + ' with x=' + x + ' y=' + y + ' r=' + r);
 	}
 
-	function calculateTCoordinates(x1, x2, x3, x4, y1, y2, y3, y4, tCoords) {
-		var tDistance = tCoords.distance,
+	function populateObstructionWithTCoordinates(obstruction) {
+		var coords = obstruction.coords,
+			tCoords = obstruction.tCoords,
+			tDistance = tCoords.distance,
 			tHeight = tCoords.height,
 			tWidth = tCoords.width,
 			tType = tCoords.orientation;
 		switch (tType) {
 			case Obstruction.TshapeOrientationEnum.TOP:
-				x1 = x4 = x1 + tDistance;
-				x2 = x3 = x1 + tWidth;
-				y3 = y4 = y1;
-				y1 = y2 = y1 - tHeight;
+				tCoords.x1 = tCoords.x4 = coords.x1 + tDistance;
+				tCoords.x2 = tCoords.x3 = tCoords.x1 + tWidth;
+				tCoords.y3 = tCoords.y4 = coords.y1;
+				tCoords.y1 = tCoords.y2 = tCoords.y1 - tHeight;
 				break;
 			case Obstruction.TshapeOrientationEnum.RIGHT:
-				x1 = x4 = x2;
-				x2 = x3 = x1 + tWidth;
-				y1 = y2 = y1 + tHeight;
-				y3 = y4 = y1 + tHeight;
+				tCoords.x1 = tCoords.x4 = coords.x2;
+				tCoords.x2 = tCoords.x3 = tCoords.x1 + tWidth;
+				tCoords.y1 = tCoords.y2 = coords.y1 + tDistance;
+				tCoords.y3 = tCoords.y4 = tCoords.y1 + tHeight;
 				break;
 			case Obstruction.TshapeOrientationEnum.BOTTOM:
-				x1 = x4 = x1 + tDistance;
-				x2 = x3 = x1 + tWidth;
-				y1 = y2 = y3;
-				y3 = y4 = y1 + tHeight;
+				tCoords.x1 = tCoords.x4 = coords.x1 + tDistance;
+				tCoords.x2 = tCoords.x3 = tCoords.x1 + tWidth;
+				tCoords.y1 = tCoords.y2 = coords.y3;
+				tCoords.y3 = tCoords.y4 = tCoords.y1 + tHeight;
 				break;
 			case Obstruction.TshapeOrientationEnum.LEFT:
-				x2 = x3 = x1;
-				x1 = x4 = x1 - tWidth;
-				y1 = y2 = y1 + tHeight;
-				y3 = y4 = y1 + tHeight;
+				tCoords.x2 = tCoords.x3 = coords.x1;
+				tCoords.x1 = tCoords.x4 = coords.x1 - tWidth;
+				tCoords.y1 = tCoords.y2 = coords.y1 + tDistance;
+				tCoords.y3 = tCoords.y4 = tCoords.y1 + tHeight;
 				break;
 		}
-		//Returns in terms of number of points;
-		return {
-			x1: x1,
-			y1: y1,
-			x2: x2,
-			y2: y2,
-			x3: x3,
-			y3: y3,
-			x4: x4,
-			y4: y4
-		};
 	}
 
 	function createCanvas() {
@@ -292,6 +292,40 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 		canvas.height = height;
 		canvas.width = width;
 		return canvasContext;
+	}
+
+	function populateAllCoordinatesInObstruction(obstruction) {
+		var coords = obstruction.coords,
+			obstructionType = obstruction.type;
+
+		//Clockwise coordinates(in terms of number of points) starting from top left.
+		coords.x1 = coords.x;
+		coords.y1 = coords.y;
+		coords.x2 = coords.x1 + coords.width;
+		coords.y2 = coords.y1;
+		coords.x3 = coords.x2;
+		coords.y3 = coords.y2 + coords.height;
+		coords.x4 = coords.x1;
+		coords.y4 = coords.y1 + coords.height;
+
+		if (obstructionType === Obstruction.TypeEnum.T_SHAPED) {
+			populateObstructionWithTCoordinates(obstruction);
+		}
+		return obstruction;
+	}
+
+	function occupyPossiblePelletsInRectangle(coords, obstruction) {
+		var ix = coords.x1,
+			jy;
+
+		while (ix <= coords.x2) {
+			jy = coords.y1;
+			while (jy <= coords.y4) {
+				world.addToMatrix(ix, jy, PlottablePoint.TypeEnum.OBSTRUCTION, obstruction);
+				jy++;
+			}
+			ix++;
+		}
 	}
 
 	world = {
@@ -330,8 +364,8 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 		isPointOccupied: function (x, y) {
 			return this.matrix[x + ',' + y];
 		},
-		addToMatrix: function (x, y, type, pelletSize) {
-			this.matrix[x + ',' + y] = new PlottablePoint(type, pelletSize);
+		addToMatrix: function (x, y, type, dimensions) {
+			this.matrix[x + ',' + y] = new PlottablePoint(type, dimensions);
 		},
 		drawCreature: drawCreature,
 		deleteCreature: deleteCreature,
@@ -364,62 +398,13 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 		},
 		getDistance: getDistance,
 		createObstructionsFromConfig: function createObstructionsFromConfig(obstructions) {
-			var x1, y1, x2, y2, x3, y3, x4, y4, //Clockwise coordinates(in terms of number of points) starting from top left.
-				i, j, k;
-
-			function getDimensionsOfObstruction(obstruction) {
-				var coords = obstruction.coords,
-					x1, y1, x2, y2, x3, y3, x4, y4; //Clockwise coordinates(in terms of number of points) starting from top left.
-				x1 = coords.x;
-				y1 = coords.y;
-				x2 = x1 + coords.width;
-				y2 = y1;
-				x3 = x2;
-				y3 = y2 + coords.height;
-				x4 = x1;
-				y4 = y1 + coords.height;
-
-				return {
-					x1: x1,
-					y1: y1,
-					x2: x2,
-					y2: y2,
-					x3: x3,
-					y3: y3,
-					x4: x4,
-					y4: y4
-				};
-			}
+			var i;
 
 			for (i = 0; i < obstructions.length; i++) {
-				var obstruction = obstructions[i],
-					coords = obstruction.coords,
-					tCoords = obstruction.tCoords,
-					/* obstructionType = obstruction.type, */
-					obstructionDimensions = getDimensionsOfObstruction(obstruction);
-
-				//Following are in terms of number of pellets
-				obstruction.x1 = obstructionDimensions.x1;
-				obstruction.y1 = obstructionDimensions.y1;
-				obstruction.x2 = obstructionDimensions.x2;
-				obstruction.y2 = obstructionDimensions.y2;
-				obstruction.x3 = obstructionDimensions.x3;
-				obstruction.y3 = obstructionDimensions.y3;
-				obstruction.x4 = obstructionDimensions.x4;
-				obstruction.y4 = obstructionDimensions.y4;
-
+				var obstruction = obstructions[i];
+				populateAllCoordinatesInObstruction(obstruction);
 				this.occupyPossiblePelletsInObstruction(obstruction);
-				//if (obstructionType === Obstruction.TypeEnum.T_SHAPED) {
-					//tCoords = calculateTCoordinates(x1, x2, x3, x4, y1, y2, y3, y4, tCoords);
-					//for (j = tCoords.x1; j <= tCoords.x2; j++) {
-						//for (k = tCoords.y1; k <= tCoords.y4; k++) {
-							//x = (2 * j - 1) * config.pelletSize / 2;
-							//y = (2 * k - 1) * config.pelletSize / 2;
-							//matrix[x + ',' + y] = new PlottablePoint(PlottablePoint.TypeEnum.OBSTRUCTION, obstruction);
-						//}
-					//}
-				//}
-				drawObstruction(coords.x, coords.y, coords.width, coords.height, tCoords);
+				drawObstruction(obstruction);
 			}
 		},
 		isPointOutside: function (x, y) {
@@ -440,15 +425,11 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 			return point.type === PlottablePoint.TypeEnum.PELLET;
 		},
 		occupyPossiblePelletsInObstruction: function occupyPossiblePelletsInObstruction(obstruction) {
-			var ix = obstruction.x1,
-				jy;
-			while (ix <= obstruction.x2) {
-				jy = obstruction.y1;
-				while (jy <= obstruction.y4) {
-					this.addToMatrix(ix, jy, PlottablePoint.TypeEnum.OBSTRUCTION, obstruction);
-					jy++;
-				}
-				ix++;
+			var coords = obstruction.coords,
+				tCoords = obstruction.tCoords;
+			occupyPossiblePelletsInRectangle(coords, obstruction);
+			if (tCoords) {
+				occupyPossiblePelletsInRectangle(tCoords, obstruction);
 			}
 		},
 		getNextMove: getNextMove,
