@@ -200,7 +200,22 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 	function drawCreature(creature, x, y) {
 		var creatureSize = creature.size * config.pelletSize,
 			r = creatureSize / 2,
-			center = getCenterForCreature(x, y);
+			startAngle,
+			endAngle;
+
+		if (creature.currentDirection === DirectionEnum.EAST) {
+			startAngle = 30;
+			endAngle = 330;
+		} else if (creature.currentDirection === DirectionEnum.WEST) {
+			startAngle = 210;
+			endAngle = 150;
+		} else if (creature.currentDirection === DirectionEnum.SOUTH) {
+			startAngle = 120;
+			endAngle = 60;
+		} else {
+			startAngle = 300;
+			endAngle = 240;
+		}
 
 		if (!x) {
 			x = getCenterForCreature(creature.x, y).x;
@@ -209,10 +224,13 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 			y = getCenterForCreature(x, creature.y).y;
 		}
 
+		//Make body
 		world.canvasContext.fillStyle = creature.color;
 		world.canvasContext.beginPath();
-		world.canvasContext.arc(x, y, r, 0, 2 * pi);
+		world.canvasContext.arc(x, y, r, startAngle * (pi / 180), endAngle * (pi / 180));
+		world.canvasContext.lineTo(x, y);
 		world.canvasContext.fill();
+
 		log('Created ' + creature.name + ' with x=' + x + ' y=' + y + ' r=' + r);
 	}
 
