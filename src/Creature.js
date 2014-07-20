@@ -23,6 +23,9 @@ define([ '../config/game-config', 'world', 'DirectionEnum' ], function (config, 
 	Creature.prototype.updateCoordinates = function (x, y) {
 		this.x = x;
 		this.y = y;
+		if (this.type === Creature.TypeEnum.PACMAN) {
+			world.gulpPellet(x, y);
+		}
 	};
 	Creature.prototype.move = function (diff) {
 		var deltaX, deltaY, creature = this;

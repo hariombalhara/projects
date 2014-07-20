@@ -139,6 +139,13 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 		moveCreature(creature, coords.deltaX, coords.deltaY);
 	}
 
+	function updateScore(creature, change) {
+		var scoreBoard = document.getElementsByClassName('js-score')[0];
+		creature.score = creature.score || 0;
+		creature.score += change;
+		scoreBoard.innerHTML = creature.score;
+	}
+
 	function moveCreature(creature, deltaX, deltaY) {
 		var currentX = creature.x,
 			currentY = creature.y,
@@ -156,7 +163,8 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 			newXOnCanvas = newCenterOnCanvas.x,
 			newYOnCanvas = newCenterOnCanvas.y,
 			currentXOnCanvas = currentCenterOnCavas.x,
-			currentYOnCanvas = currentCenterOnCavas.y;
+			currentYOnCanvas = currentCenterOnCavas.y,
+			isPelletPresent  = world.isPelletPresent(newX, newY);
 
 		creature.updateCoordinates(newX, newY);
 		for (var i = 0; world.pendingAnimationReqIds && i < world.pendingAnimationReqIds.length; i++) {
@@ -165,12 +173,18 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 		if (deltaX && !deltaY) {
 			animateCreatureMove(creature, currentXOnCanvas, newXOnCanvas, (deltaX > 0 ? DirectionEnum.EAST : DirectionEnum.WEST), null, function (unitVector) {
 				getNextMove(creature, unitVector, 0);
+				if (isPelletPresent) {
+					updateScore(creature, 1);
+				}
 			}, function (reqId) {
 				world.reqX = reqId;
 			});
 		} else if (deltaY && !deltaX) {
 			animateCreatureMove(creature, currentYOnCanvas, newYOnCanvas, (deltaY > 0 ? DirectionEnum.SOUTH : DirectionEnum.NORTH), null, function (unitVector) {
 				getNextMove(creature, 0, unitVector);
+				if (isPelletPresent) {
+					updateScore(creature, 1);
+				}
 			}, function (reqId) {
 				world.reqY = reqId;
 			});
@@ -403,6 +417,10 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 			}
 			return false;
 		},
+		isPelletPresent: function (x, y) {
+			var point = this.getFromMatrix(x, y);
+			return point.type === PlottablePoint.TypeEnum.PELLET;
+		},
 		occupyPossiblePelletsInObstruction: function occupyPossiblePelletsInObstruction(obstruction) {
 			var ix = obstruction.x1,
 				jy;
@@ -415,7 +433,11 @@ define([ 'PlottablePoint', 'Obstruction', '../config/game-config', 'DirectionEnu
 				ix++;
 			}
 		},
-		getNextMove: getNextMove
+		getNextMove: getNextMove,
+		gulpPellet: function (x, y) {
+			var point = this.matrix[x + ',' + y];
+			point.markEmpty();
+		}
 	};
 	world.addDirectionsForPacman();
 	window.world = world;

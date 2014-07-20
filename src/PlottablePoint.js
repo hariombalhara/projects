@@ -16,5 +16,8 @@ define([ 'Obstruction'], function (Obstruction) {
 		OBSTRUCTION: 'obstruction'
 	};
 
+	PlottablePoint.prototype.markEmpty = function () {
+		this.type = PlottablePoint.TypeEnum.EMPTY;
+	};
 	return PlottablePoint;
 });
