@@ -8,9 +8,13 @@ define([
 	'use strict';
 	var canvas,
 		pi = 3.14,
-		world = {};
+		world = {
+			isLoggingEnabled: false
+		};
 	function log() {
-		//window.console.log.apply(window.console, [].slice.call(arguments));
+		if (world.isLoggingEnabled) {
+			window.console.log.apply(window.console, [].slice.call(arguments));
+		}
 	}
 
 	function getCenterForPellet(x, y) {
@@ -123,12 +127,12 @@ define([
 				}
 				if (acrossAxis === 'X') {
 					deleteCreature(creature, start + i * velocity);
-					drawCreature(creature, nextLoc);
+					drawCreature(creature, nextLoc, null, direction);
 				} else {
 					deleteCreature(creature, null, start + i * velocity);
-					drawCreature(creature, null, nextLoc);
+					drawCreature(creature, null, nextLoc, direction);
 				}
-				animRequest = animate(i + 1, unitVector, speed);
+				animate(i + 1, unitVector, speed);
 				world.pendingAnimationReqIds.push(animRequest);
 				progressCallback(animRequest);
 			});
@@ -137,15 +141,62 @@ define([
 		return animRequest;
 	}
 
-	function getNextMove(creature, expectedDeltaX, expectedDeltaY) {
-		var coords = creature.moves.shift();
-		if (!coords) {
-			coords = {
-				deltaX: expectedDeltaX || (creature.currentDirection === DirectionEnum.EAST ? 1 : creature.currentDirection === DirectionEnum.WEST ? -1 : 0),
-				deltaY: expectedDeltaY || (creature.currentDirection === DirectionEnum.SOUTH ? 1 : creature.currentDirection === DirectionEnum.NORTH ? -1 : 0)
-			};
+	function getNewCoordsFromDirection(coords, distance, direction) {
+		var deltaX = 0,
+			deltaY = 0;
+		switch(direction) {
+			case DirectionEnum.NORTH:
+				deltaX = 0;
+				deltaY = -distance;
+				break;
+			case DirectionEnum.SOUTH:
+				deltaX = 0;
+				deltaY = distance;
+				break;
+			case DirectionEnum.EAST:
+				deltaX = distance;
+				deltaY = 0;
+				break;
+			case DirectionEnum.WEST:
+				deltaX = -distance;
+				deltaY = 0;
+				break;
 		}
-		moveCreature(creature, coords.deltaX, coords.deltaY);
+		return {
+			x: coords.x + deltaX,
+			y: coords.y + deltaY
+		};
+	}
+
+	function isDirectionFree(creature, direction) {
+		var currentX = creature.x,
+			currentY = creature.y,
+			newCoords = getNewCoordsFromDirection({x: currentX, y: currentY}, 1, direction),
+			newX = newCoords.x,
+			newY = newCoords.y;
+
+		if (world.isPointOutside(newX, newY) || world.isPointOccupiedByObstruction(newX, newY)) {
+			return false;
+		}
+		return true;
+	}
+
+	function getNextMove(creature) {
+		var currentX = creature.x,
+			currentY = creature.y,
+			direction = creature.moves[0];
+		if (direction && isDirectionFree(creature, direction)) {
+			creature.moves.shift();
+		} else if (isDirectionFree(creature, creature.currentDirection)){
+			direction = creature.currentDirection;
+		} else {
+			return false;
+		}
+
+		return {
+			coords: getNewCoordsFromDirection({x: currentX, y: currentY}, 1, direction),
+			direction: direction
+		};
 	}
 
 	function updateScore(creature, change) {
@@ -155,19 +206,21 @@ define([
 		scoreBoard.innerHTML = creature.score;
 	}
 
-	function moveCreature(creature, deltaX, deltaY) {
+	function moveCreature(creature) {
 		var currentX = creature.x,
 			currentY = creature.y,
-			newX = creature.x + (deltaX || 0),
-			newY = creature.y + (deltaY || 0);
-		if (world.isPointOutside(newX, newY) || world.isPointOccupiedByObstruction(newX, newY)) {
-			setTimeout(function () {
-				getNextMove(creature);
-			});
+			nextMove = getNextMove(creature);
+
+		if (!nextMove) {
+			creature.iAmStuck();
 			return;
 		}
 
-		var newCenterOnCanvas = getCenterForCreature(newX, newY),
+		var	newCoords = nextMove.coords,
+			direction = nextMove.direction,
+			newX = newCoords.x,
+			newY = newCoords.y,
+			newCenterOnCanvas = getCenterForCreature(newX, newY),
 			currentCenterOnCavas = getCenterForCreature(currentX, currentY),
 			newXOnCanvas = newCenterOnCanvas.x,
 			newYOnCanvas = newCenterOnCanvas.y,
@@ -175,22 +228,24 @@ define([
 			currentYOnCanvas = currentCenterOnCavas.y,
 			isPelletPresent  = world.isPelletPresent(newX, newY);
 
-		creature.updateCoordinates(newX, newY);
+		creature.iAmMoving();
 		for (var i = 0; world.pendingAnimationReqIds && i < world.pendingAnimationReqIds.length; i++) {
 			window.cancelAnimationFrame(world.pendingAnimationReqIds[i]);
 		}
-		if (deltaX && !deltaY) {
-			animateCreatureMove(creature, currentXOnCanvas, newXOnCanvas, (deltaX > 0 ? DirectionEnum.EAST : DirectionEnum.WEST), function (unitVector) {
-				getNextMove(creature, unitVector, 0);
+		if (direction === DirectionEnum.EAST || direction === DirectionEnum.WEST) {
+			animateCreatureMove(creature, currentXOnCanvas, newXOnCanvas, direction, function () {
+				creature.updateCoordinates(newX, newY, direction);
+				moveCreature(creature);
 				if (isPelletPresent) {
 					updateScore(creature, 1);
 				}
 			}, function (reqId) {
 				world.reqX = reqId;
 			});
-		} else if (deltaY && !deltaX) {
-			animateCreatureMove(creature, currentYOnCanvas, newYOnCanvas, (deltaY > 0 ? DirectionEnum.SOUTH : DirectionEnum.NORTH), function (unitVector) {
-				getNextMove(creature, 0, unitVector);
+		} else {
+			animateCreatureMove(creature, currentYOnCanvas, newYOnCanvas, direction, function () {
+				creature.updateCoordinates(newX, newY, direction);
+				moveCreature(creature);
 				if (isPelletPresent) {
 					updateScore(creature, 1);
 				}
@@ -206,19 +261,21 @@ define([
 		drawCreature(creature, center.x, center.y);
 	}
 
-	function drawCreature(creature, x, y) {
+	function drawCreature(creature, x, y, direction) {
 		var creatureSize = creature.size * config.pelletSize,
 			r = creatureSize / 2,
 			startAngle,
 			endAngle;
 
-		if (creature.currentDirection === DirectionEnum.EAST) {
+		direction = direction || creature.currentDirection;
+
+		if (direction === DirectionEnum.EAST) {
 			startAngle = 30;
 			endAngle = 330;
-		} else if (creature.currentDirection === DirectionEnum.WEST) {
+		} else if (direction === DirectionEnum.WEST) {
 			startAngle = 210;
 			endAngle = 150;
-		} else if (creature.currentDirection === DirectionEnum.SOUTH) {
+		} else if (direction === DirectionEnum.SOUTH) {
 			startAngle = 120;
 			endAngle = 60;
 		} else {
@@ -240,7 +297,7 @@ define([
 		world.canvasContext.lineTo(x, y);
 		world.canvasContext.fill();
 
-		log('Created ' + creature.name + ' with x=' + x + ' y=' + y + ' r=' + r);
+		log('Created ' + creature.name + ' with x=' + x + ' y=' + y + ' r=' + r + ' direction=' + creature.currentDirection);
 	}
 
 	function populateObstructionWithTCoordinates(obstruction) {
@@ -372,8 +429,7 @@ define([
 		moveCreature: moveCreature,
 		setCreaturesToAutoMove: function () {
 			var pacman = this.creatures[0];
-			pacman.move(1);
-			world.getNextMove(pacman);
+			pacman.move();
 		},
 		addDirectionsForPacman: function () {
 			var pacman,
