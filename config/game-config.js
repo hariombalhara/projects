@@ -2,7 +2,7 @@ define([], function () {
 	'use strict';
 	var config = {
 		numberOfPelletsAlongX: 26,
-		numberOfPelletsAlongY: 28,
+		numberOfPelletsAlongY: 29,
 
 		// Keep it even
 		pelletSize: 2,
@@ -12,7 +12,7 @@ define([], function () {
 		backgroundColor: 'black',
 		borderSpacing: 20,
 		pelletSpacing: 16,
-		creatureSize: 10, //How many times is it bigger than pellet
+		creatureSize: 12, //How many times is it bigger than pellet
 		obstructionStrokeWidth: 1,
 
 		//per second
