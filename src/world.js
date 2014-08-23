@@ -312,7 +312,7 @@ define([
 				tCoords.x1 = tCoords.x4 = coords.x1 + tDistance;
 				tCoords.x2 = tCoords.x3 = tCoords.x1 + tWidth;
 				tCoords.y3 = tCoords.y4 = coords.y1;
-				tCoords.y1 = tCoords.y2 = tCoords.y1 - tHeight;
+				tCoords.y1 = tCoords.y2 = coords.y1 - tHeight;
 				break;
 			case Obstruction.TshapeOrientationEnum.RIGHT:
 				tCoords.x1 = tCoords.x4 = coords.x2;
