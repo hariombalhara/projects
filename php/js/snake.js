@@ -34,7 +34,7 @@
         CRASH_OPTIONS_ID = 'crash_options',
         CRASH_OPTIONS_HTML =  "Game Over.",
         IFRAME_ID = "snake_iframe",
-        IFRAME_SRC = "http://php-hariombalhara.rhcloud.com/personalise.html",
+        IFRAME_SRC = "https://cdn.jsdelivr.net/gh/hariombalhara/snake/php/personalise.html",
         STATES = {
             RUNNING: 0, 
             PAUSED: 1,
