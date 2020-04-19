@@ -34,7 +34,7 @@
         CRASH_OPTIONS_ID = 'crash_options',
         CRASH_OPTIONS_HTML =  "Game Over.",
         IFRAME_ID = "snake_iframe",
-        IFRAME_SRC = "https://cdn.jsdelivr.net/gh/hariombalhara/snake/php/personalise.html",
+        IFRAME_SRC = "https://hariombalhara.in/snake/personalise.html",
         STATES = {
             RUNNING: 0, 
             PAUSED: 1,
@@ -410,7 +410,7 @@
 //        e.target.style.opacity = "0.3";
         e.dataTransfer.setData('text/html',"Hello Beign dragged")
         var dragIcon = document.createElement('img');
-        dragIcon.src = 'http://php-hariombalhara.rhcloud.com/images/ajax-loader.gif';
+        dragIcon.src = 'https://hariombalhara.in/snake/images/ajax-loader.gif';
         dragIcon.width = 100;
         e.dataTransfer.setDragImage(dragIcon, -10, -10);
         e.dataTransfer.effectAllowed = "move";
