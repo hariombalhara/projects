@@ -9,7 +9,7 @@
         script_src = "https://cdn.jsdelivr.net/gh/hariombalhara/snake/php/js/snake.js?" + Math.random(),
         script_id2 = "snake_browserId_script",
         script_src2 = "https://browserid.org/include.js",
-        style_href = "https://cdn.jsdelivr.net/gh/hariombalhara/snake/php/js/snake.css?" + Math.random(),
+        style_href = "https://cdn.jsdelivr.net/gh/hariombalhara/snake/php/css/snake.css?" + Math.random(),
         style_type = "text/css",
         style_rel = "stylesheet"; 
     if(!document.querySelector('[src="'+script_src+'"]')) {
