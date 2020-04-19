@@ -6,10 +6,10 @@
     
     var script_type = "text/javascript",
         script_id = "snake_script",
-        script_src = "https://cdn.rawgit.com/hariombalhara/snake/master/php/js/snake.js",
+        script_src = "https://cdn.jsdelivr.net/gh/hariombalhara/snake@1.0.1/php/js/snake.js",
         script_id2 = "snake_browserId_script",
         script_src2 = "https://browserid.org/include.js",
-        style_href = "https://cdn.rawgit.com/hariombalhara/snake/master/php/css/snake.css",
+        style_href = "https://cdn.jsdelivr.net/gh/hariombalhara/snake@1.0.1/php/js/snake.css",
         style_type = "text/css",
         style_rel = "stylesheet"; 
     if(!document.querySelector('[src="'+script_src+'"]')) {
