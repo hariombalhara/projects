@@ -1,0 +1,21 @@
+{
+  "name": "copy-link-with-source",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:content": "esbuild src/content.ts --outfile=src/content.js --watch",
+    "build:background": "esbuild src/bg/background.ts --outfile=src/bg/background.js --watch",
+    "esbuild": "esbuild",
+    "build": "concurrently --kill-others 'npm run build:content' 'npm run build:background' 'npm run typecheck'",
+    "typecheck": "tsc --noEmit -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/chrome": "^0.0.136",
+    "concurrently": "^6.0.2",
+    "esbuild": "^0.11.17",
+    "typescript": "^4.2.4"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "auto-badge-addition",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^2.2.4"
+  },
+  "dependencies": {
+    "@netlify/framework-info": "^4.0.0",
+    "string-to-color": "^2.2.2"
+  }
+}

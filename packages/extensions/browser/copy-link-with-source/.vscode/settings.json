@@ -1,0 +1,11 @@
+{
+    "files.exclude": {
+        "src/**/*.js": true
+    },
+    "files.watcherExclude": {
+        "src/**/*.js": true
+    },
+    "search.exclude": {
+        "src/**/*.js": true
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "files.exclude": {
+        "src/**/*.js": true,
+        "node_modules":true,
+        "packages": true
+    },
+    "files.watcherExclude": {
+        "src/**/*.js": true,
+        "node_modules":true,
+        "packages": true
+    },
+    "search.exclude": {
+        "src/**/*.js": true,
+        "node_modules":true,
+        "packages": true
+    }
+}

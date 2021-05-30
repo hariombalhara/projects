@@ -1,0 +1,11 @@
+{
+  "name": "bookmark-recycler",
+  "version": "1.0.0",
+  "description": "A Firefox Extension that acts as a trash for your bookmarks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

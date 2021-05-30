@@ -1,0 +1,14 @@
+<html>
+
+<head>
+    <script type="module">
+        import init from "./pkg/wasm_hello_world_rust.js";
+        async function runWasm() {
+            const wasm = await init('./pkg/wasm_hello_world_rust_bg.wasm');
+            alert(wasm.add(1, 2));
+        }
+        runWasm()
+    </script>
+</head>
+
+</html>

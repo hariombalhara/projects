@@ -1,0 +1,48 @@
+{
+	"folders": [
+		{
+			"name": "fun-projects",
+			"path": "."
+		},
+		{
+			"name": "copy-link-with-source",
+			"path": "packages/extensions/browser/copy-link-with-source"
+		},
+		{
+			"name": "bookmark-recycler",
+			"path": "packages/extensions/browser/bookmark-recycler"
+		},
+		{
+			"name": "Pac-Man",
+			"path": "packages/games/Pac-Man"
+		},
+		{
+			"name": "Snake",
+			"path": "packages/games/Snake"
+		},
+		{
+			"name": "react-todo-app",
+			"path": "packages/todo-apps/react-todo-app"
+		},
+		{
+			"name": "svelte-todo-app",
+			"path": "packages/todo-apps/svelte-todo-app"
+		},
+		{
+			"path": "packages/scripts/auto-badge-addition"
+		},
+		{
+			"path": "packages/wasm-hello-world-rust"
+		},
+		{
+			"path": "packages/macos-website"
+		},
+		{
+			"path": "packages/shopify/shopify-sample-app"
+		},
+		{
+			"path": "packages/shopify/shopify-themes/shopify-theme-test"
+		}
+	],
+	"settings": {}
+}

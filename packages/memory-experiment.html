@@ -1,0 +1,38 @@
+<script>
+    function GarbageCollectionTest1() {
+        let hundredKb = 100000; // Bytes
+        let sizeOfNumber = 8;//Bytes
+        let hariom = [];
+        setInterval(function memoryHeavy() {
+            for (var i = 0; i < 8000; i++) {
+                // Because this variable is outside the function's frame. It won't be stored in stack. It would be stored on heap and thus Garbage collected.
+                hariom.push(1);
+            }
+        }, 5000)
+    }
+
+    function GarbageCollectionTest2() {
+        let hundredKb = 100000; // Bytes
+        let sizeOfNumber = 8;//Bytes
+        let hariom = [];
+        (function memoryHeavy2() {
+            for (var i = 0; i < 800000; i++) {
+                // Because this variable is outside the function's frame. It won't be stored in stack. It would be stored on heap and thus Garbage collected.
+                hariom.push(1);
+            }
+        })()
+    }
+
+    function GarbageCollectionTest3() {
+        let hundredKb = 100000; // Bytes
+        let sizeOfNumber = 8;//Bytes
+        (function memoryHeavy3() {
+            let hariom = [];
+            for (var i = 0; i < 800000; i++) {
+                // Because this variable is outside the function's frame. It won't be stored in stack. It would be stored on heap and thus Garbage collected.
+                hariom.push(1);
+            }
+        })()
+    }
+    GarbageCollectionTest3();
+</script>
