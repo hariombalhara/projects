@@ -1,9 +1,9 @@
 {
   "name": "auto-badge-addition",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.2",
+  "description": "Automatically adds badges to your README based on the tools being used.",
   "type": "module",
+  "bin": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
