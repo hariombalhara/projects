@@ -1,23 +1,16 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import "./styles.css";
+import * as React  from 'react';
+import * as ReactDOM from 'react-dom';
+import Desktop from './Desktop';
+import Login from './Login';
+import './styles.css'
 
-import Desktop from "./components/Desktop";
-import Login from "./components/Login";
-
-export default function App() {
-  const [logon, setlogon] = useState(false);
-  if (logon) {
-    return <Desktop />;
-  } else {
-    return <Login setlogon={setlogon} />;
-  }
+function App() {
+	let isLoggedIn  = true;
+	if (!isLoggedIn) {
+		return <Login></Login>
+	} else {
+		return <Desktop></Desktop>
+	}
 }
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  rootElement
-);
+ReactDOM.render(<App></App>, document.getElementById('root'));

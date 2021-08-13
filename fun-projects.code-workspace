@@ -29,9 +29,6 @@
 			"path": "packages/todo-apps/svelte-todo-app"
 		},
 		{
-			"path": "packages/scripts/auto-badge-addition"
-		},
-		{
 			"path": "packages/wasm-hello-world-rust"
 		},
 		{
