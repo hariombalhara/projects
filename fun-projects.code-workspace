@@ -39,6 +39,12 @@
 		},
 		{
 			"path": "packages/shopify/shopify-themes/shopify-theme-test"
+		},
+		{
+			"path": "packages/wasm-hello-world-assemblyscript"
+		},
+		{
+			"path": "packages/bookshelf-epic-react-app"
 		}
 	],
 	"settings": {}

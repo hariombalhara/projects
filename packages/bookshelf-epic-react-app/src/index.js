@@ -189,7 +189,7 @@ function useBook(book) {
 		}
 		storageDispatch({ type: 'merge', data: { [book.id]: { status: newState } } });
 		return newState;
-	}, storage[book.id] && storage[book.id].status || 'IDLE');
+	}, storage[book.id] ? storage[book.id].status : 'IDLE');
 
 
 	return [bookStatus, { getAvailableActions, dispatch }];
@@ -220,7 +220,7 @@ function Login({ onLogin, ...props }) {
 
 
 	let [error, setError] = React.useState(null);
-	let [registration, {
+	let [, {
 		getRegistration
 	}] = useRegistration();
 
@@ -314,7 +314,7 @@ function useUser(initialVal) {
 }
 
 function Homepage() {
-	let [state, setState] = React.useState('none');
+	let [, setState] = React.useState('none');
 	let [userInfo, setUserInfo] = useUser(null);
 
 	function logout() {
@@ -392,7 +392,7 @@ function Book({ book }) {
 	return <div>
 		<div style={{ display: 'flex' }}>
 			<Link style={{ marginRight: '6px' }} to={"/book/" + book.id}>
-				<img width="140px" src={book.cover} />
+				<img alt={"Cover of " + book.name} width="140px" src={book.cover} />
 			</Link>
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
