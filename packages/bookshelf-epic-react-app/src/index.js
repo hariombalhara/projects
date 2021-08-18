@@ -23,8 +23,9 @@ import {
 } from 'react-router-dom'
 
 import { Logo } from './components/logo'
-import { Cancel } from '@material-ui/icons';
-import { DialogTitle, Dialog, DialogContent, Button, TextField } from '@material-ui/core';
+import { Cancel, Menu as MenuIcon } from '@material-ui/icons';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { DialogTitle, Dialog, DialogContent, Button, Hidden, Drawer, AppBar, TextField, List, ListItem, Divider, ListItemText, Typography, IconButton, Toolbar, CssBaseline } from '@material-ui/core';
 
 // TODO: Create an IndexedDB alternative
 // TODO: Create a Supabase alternative
@@ -82,7 +83,7 @@ function useRegistration() {
 	}];
 }
 
-function useGraphql({field, initialVal}) {
+function useGraphql({ field, initialVal }) {
 	let [data, setData] = React.useState(initialVal);
 	React.useEffect(() => {
 		async function getFromGraphQL() {
@@ -115,7 +116,7 @@ function useGraphql({field, initialVal}) {
 }
 
 function useBooks() {
-	let [repository, setRepository] = useGraphql({field: 'books', initialVal: []});
+	let [repository, setRepository] = useGraphql({ field: 'books', initialVal: [] });
 
 	// FIXME: useLocalStorage requires initial value to be passed wherever it's called. Think how it can be fixed.
 	let [myBooks,] = useLocalStorage('MY_BOOKS', {})
@@ -196,10 +197,10 @@ function useBook(book) {
 }
 
 /**
- * @param {{children: any, variant: 'contained'|'outlined'|'text', style?: any}} props
+ * @param {{children: any, color?: 'primary'|'secondary', variant?: 'contained'|'outlined'|'text', style?: any}} props
  */
-function DefaultButton({ children, variant = "contained", style, ...props }) {
-	return <Button variant={variant} {...props} style={{ ...style, margin: 5 }}>{children}</Button>
+function DefaultButton({ children, color, variant = "contained", style, ...props }) {
+	return <Button color={color} variant={variant} {...props} style={{ ...style, margin: 5 }}>{children}</Button>
 }
 
 function MyDialog({ title, open, setOpen, children }) {
@@ -283,7 +284,7 @@ function Register({ onRegister, ...props }) {
 	}
 
 	return <>
-		<DefaultButton {...props} variant="contained" onClick={() => { setOpenState(true) }}>Register</DefaultButton>
+		<DefaultButton color="primary" {...props} variant="contained" onClick={() => { setOpenState(true) }}>Register</DefaultButton>
 		<MyDialog open={openState} title="Register" setOpen={setOpenState}>
 			<form onSubmit={onSubmit} autoComplete="off">
 				<div>
@@ -296,7 +297,7 @@ function Register({ onRegister, ...props }) {
 					<TextField name="confirm-password" type="password" label="Confirm Password"></TextField>
 				</div>
 				<div style={{ color: 'red' }}>{error}</div>
-				<DefaultButton style={{ marginTop: 10 }} type="submit">Register</DefaultButton>
+				<DefaultButton color="primary" style={{ marginTop: 10 }} type="submit">Register</DefaultButton>
 			</form>
 		</MyDialog>
 	</>
@@ -329,16 +330,16 @@ function Homepage() {
 	return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
 		<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 			<Logo width="80" height="80" />
-			<h1>Bookshelf</h1>
+			<Typography><h1>Bookshelf</h1></Typography>
 			{!userInfo.username ?
 				<div>
 					<Login style={{ margin: 2 }} onLogin={onUserLogin}></Login>
 					<Register style={{ margin: 2 }} onRegister={onUserLogin}></Register>
 				</div> :
 				<div>
-					<div>Welcome {userInfo.username}</div>
-					<div><Link to="/discover">Discover the books</Link></div>
-					<DefaultButton onClick={logout}>Logout</DefaultButton>
+					<Typography><div>Welcome {userInfo.username}</div></Typography>
+					<Typography><div><Link to="/discover">Discover the books</Link></div></Typography>
+					<Typography><DefaultButton onClick={logout}>Logout</DefaultButton></Typography>
 				</div>
 			}
 		</div>
@@ -365,13 +366,13 @@ function DiscoverBooks(params) {
 function FinishedBooks(params) {
 	let [, { getBooksWithStatus }] = useBooks();
 	let books = getBooksWithStatus('FINISHED');
-	return books.length ? <BooksList books={books} ></BooksList> : <div>Pick a <Link to="/discover">Book</Link> to finish</div>
+	return books.length ? <BooksList books={books} ></BooksList> : <Typography><div>Pick a <Link to="/discover">Book</Link> to finish</div></Typography>
 }
 
 function ReadingBooks(params) {
 	let [, { getBooksWithStatus }] = useBooks();
 	let books = getBooksWithStatus('READING');
-	return books.length ? <BooksList books={books} ></BooksList> : <div>Start reading any of these <Link to="/discover">Books</Link> </div>
+	return books.length ? <BooksList books={books} ></BooksList> : <Typography><div>Start reading any of these <Link to="/discover">Books</Link> </div></Typography>
 }
 
 function BookPage() {
@@ -414,15 +415,124 @@ function Book({ book }) {
 	</div>
 }
 
-function Nav(props) {
-	return <nav {...props}>
-		<ul style={{ listStyleType: 'none', textDecoration: 'none', paddingLeft: 0 }}>
-			<li><Link to="/">Home</Link></li>
-			<li><Link to="/discover">Discover</Link></li>
-			<li><Link to="/finished">Finished Books</Link></li>
-			<li><Link to="/list">Reading Books</Link></li>
-		</ul>
-	</nav>
+const drawerWidth = 240;
+const useStyles = makeStyles((theme) => ({
+	root: {
+		display: 'flex',
+	},
+	drawer: {
+		[theme.breakpoints.up('sm')]: {
+			width: drawerWidth,
+			flexShrink: 0,
+		},
+	},
+	appBar: {
+		[theme.breakpoints.up('sm')]: {
+			width: `calc(100% - ${drawerWidth}px)`,
+			marginLeft: drawerWidth,
+		},
+	},
+	menuButton: {
+		marginRight: theme.spacing(2),
+		[theme.breakpoints.up('sm')]: {
+			display: 'none',
+		},
+	},
+	// necessary for content to be below app bar
+	toolbar: theme.mixins.toolbar,
+	drawerPaper: {
+		width: drawerWidth,
+	},
+	content: {
+		flexGrow: 1,
+		padding: theme.spacing(3),
+	},
+}));
+
+function MaterialUIWrapper(props) {
+	const classes = useStyles();
+	const theme = useTheme();
+
+	const { window } = props;
+	const [mobileOpen, setMobileOpen] = React.useState(false);
+
+	const handleDrawerToggle = () => {
+		setMobileOpen(!mobileOpen);
+	};
+
+	const drawer = (
+		<div>
+			<div className={classes.toolbar} />
+			<Divider />
+			<List>
+				{[{ text: 'Discover', link: '/discover' }, { text: 'Finished Books', link: '/finished' }, { text: 'Reading Books', link: '/list' }, { text: 'Home', link: '/' }].map(({ text, link }, index) => (
+					<Link to={link}>
+						<ListItem button key={text}><Typography>{text}</Typography></ListItem>
+					</Link>
+				))}
+			</List>
+		</div>
+	);
+
+	const container = window !== undefined ? () => window().document.body : undefined;
+
+	return (
+		<div className={classes.root}>
+			<CssBaseline />
+			<AppBar position="fixed" className={classes.appBar}>
+				<Toolbar>
+					<IconButton
+						color="inherit"
+						aria-label="open drawer"
+						edge="start"
+						onClick={handleDrawerToggle}
+						className={classes.menuButton}
+
+					>
+						<MenuIcon />
+					</IconButton>
+					<Typography variant="h6" noWrap>
+						Bookshelf
+					</Typography>
+				</Toolbar>
+			</AppBar>
+			<nav aria-label="mailbox folders" className={classes.drawer} >
+				<Hidden smUp implementation="css">
+					<Drawer
+						container={container}
+						variant="temporary"
+						anchor='right'
+						open={mobileOpen}
+						onClose={handleDrawerToggle}
+						ModalProps={{
+							keepMounted: true, // Better open performance on mobile.
+						}}
+						classes={{
+							paper: classes.drawerPaper,
+						}}
+					>
+						{drawer}
+					</Drawer>
+				</Hidden>
+				<Hidden xsDown implementation="css">
+					<Drawer
+						classes={{
+							paper: classes.drawerPaper,
+						}}
+						variant="permanent"
+						open
+					>
+						{drawer}
+					</Drawer>
+				</Hidden>
+			</nav>
+			<div className={classes.content}>
+				<div className={classes.toolbar} />
+				{props.children}
+			</div>
+		</div>
+	);
+
 }
 
 function NotFoundPage() {
@@ -437,8 +547,7 @@ function App() {
 	}
 
 	return <Router>
-		<div style={{ display: 'flex' }}>
-			<Nav style={{ minWidth: 150, border: '1px solid gray', borderTop: 0, borderLeft: 0, marginRight: 10, height: '100vh' }}></Nav>
+		<MaterialUIWrapper>
 			<Routes>
 				<Route path="/" element={<Homepage></Homepage>}></Route>
 				<Route path="/discover" element={<DiscoverBooks></DiscoverBooks>}></Route>
@@ -451,7 +560,7 @@ function App() {
 				</Route>
 				<Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
 			</Routes>
-		</div>
+		</MaterialUIWrapper>
 	</Router>
 }
 
