@@ -11,6 +11,7 @@
 
 //TODO: DO Server Side Rendering(without Next.js)
 //TODO: Do Server Side Rendering(with Next.js)
+//TODO: Create a react native app as well.
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -23,14 +24,15 @@ import {
 } from 'react-router-dom'
 
 import { Logo } from './components/logo'
-import { Cancel, Menu as MenuIcon } from '@material-ui/icons';
+import { Cancel, ExitToApp, Menu as MenuIcon } from '@material-ui/icons';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { DialogTitle, Dialog, DialogContent, Button, Hidden, Drawer, AppBar, TextField, List, ListItem, Divider, ListItemText, Typography, IconButton, Toolbar, CssBaseline } from '@material-ui/core';
+import { DialogTitle, Dialog, DialogContent, Paper, Card, Button, Hidden, Drawer, AppBar, TextField, List, ListItem, Divider, ListItemText, Typography, IconButton, Toolbar, CssBaseline } from '@material-ui/core';
+import './styles.css'
 
 // TODO: Create an IndexedDB alternative
 // TODO: Create a Supabase alternative
 function useLocalStorage(key, initialVal) {
-	if (!initialVal) {
+	if (initialVal === undefined) {
 		throw new Error('Provide Initial Value for userLocalStorage');
 	}
 
@@ -39,7 +41,11 @@ function useLocalStorage(key, initialVal) {
 		if (action.type === 'add') {
 			newState = [...state, action.data]
 		} else if (action.type === 'set') {
-			newState = { ...action.data }
+			if (action.data === null) {
+				newState = null;
+			} else {
+				newState = { ...action.data }
+			}
 		} else if (action.type === 'merge') {
 			newState = { ...state, ...action.data }
 		} else {
@@ -197,7 +203,7 @@ function useBook(book) {
 }
 
 /**
- * @param {{children: any, color?: 'primary'|'secondary', variant?: 'contained'|'outlined'|'text', style?: any}} props
+ * @param {{children: any, color?: 'primary'|'secondary'|'inherit', variant?: 'contained'|'outlined'|'text', style?: any}} props
  */
 function DefaultButton({ children, color, variant = "contained", style, ...props }) {
 	return <Button color={color} variant={variant} {...props} style={{ ...style, margin: 5 }}>{children}</Button>
@@ -303,8 +309,8 @@ function Register({ onRegister, ...props }) {
 	</>
 }
 
-function useUser(initialVal) {
-	let [user, dispatch] = useLocalStorage('currentUser', initialVal || {});
+function useUser(initialVal = {}) {
+	let [user, dispatch] = useLocalStorage('currentUser', initialVal);
 	function setUser(user) {
 		dispatch({
 			type: 'set',
@@ -314,44 +320,23 @@ function useUser(initialVal) {
 	return [user, setUser];
 }
 
-function Homepage() {
-	let [, setState] = React.useState('none');
-	let [userInfo, setUserInfo] = useUser(null);
-
-	function logout() {
-		setUserInfo(null);
-	}
-
-	function onUserLogin(registration) {
-		setState('loggedIn');
-		setUserInfo(registration)
-	}
-
-	return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-		<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-			<Logo width="80" height="80" />
-			<Typography><h1>Bookshelf</h1></Typography>
-			{!userInfo.username ?
-				<div>
-					<Login style={{ margin: 2 }} onLogin={onUserLogin}></Login>
-					<Register style={{ margin: 2 }} onRegister={onUserLogin}></Register>
-				</div> :
-				<div>
-					<Typography><div>Welcome {userInfo.username}</div></Typography>
-					<Typography><div><Link to="/discover">Discover the books</Link></div></Typography>
-					<Typography><DefaultButton onClick={logout}>Logout</DefaultButton></Typography>
-				</div>
-			}
+function EnterShelf({ onUserLogin }) {
+	return <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+		<Logo width="80" height="80" />
+		<Typography variant="h4">Bookshelf</Typography>
+		<div>
+			<Login style={{ margin: 2 }} onLogin={onUserLogin}></Login>
+			<Register style={{ margin: 2 }} onRegister={onUserLogin}></Register>
 		</div>
 	</div>
 }
 
 function BooksList({ books }) {
-	return <ul style={{ paddingLeft: 0 }}>
+	return <ul className="books-list" style={{ paddingLeft: 0 }}>
 		{
 			books.map((book, i) => {
-				return <li style={{ display: 'flex', padding: 6, margin: 10, border: '1px sold gray', borderRadius: '6px', boxShadow: '2px 2px 2px 2px gray' }} key={book.id}>
-					<Book book={book}> </Book>
+				return <li style={{listStyleType:'none'}} key={book.id}>
+					<Card  variant="outlined" style={{padding:6, marginBottom: 6}}><Book book={book}> </Book></Card>
 				</li>
 			})
 		}
@@ -391,13 +376,13 @@ function Book({ book }) {
 	let [status, { dispatch, getAvailableActions }] = useBook(book);
 	let availableActions = getAvailableActions(status)
 	return <div>
-		<div style={{ display: 'flex' }}>
+		<div class="book-details" style={{ display: 'flex', alignItems:'center' }}>
 			<Link style={{ marginRight: '6px' }} to={"/book/" + book.id}>
 				<img alt={"Cover of " + book.name} width="140px" src={book.cover} />
 			</Link>
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
-				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-					<h2>{book.name}</h2>
+				<div style={{ display: 'flex', alignItems:'center', justifyContent: 'space-between' }}>
+					<Typography variant="h6">{book.name}</Typography>
 					<i>
 						<div>{book.authors}</div>
 						<div>{book.publisher}</div>
@@ -406,7 +391,7 @@ function Book({ book }) {
 				<div>{book.description}</div>
 			</div>
 		</div>
-		<div style={{ display: 'flex' }}>
+		<div class="book-actions" style={{ display: 'flex', marginTop:6 }}>
 			{availableActions.includes('START_READING') ? <DefaultButton size="small" onClick={() => { dispatch('START_READING') }} variant="outlined">Start Reading</DefaultButton> : null}
 			{availableActions.includes('STOP_READING') ? <DefaultButton size="small" onClick={() => { dispatch('STOP_READING') }} variant="outlined">Stop Reading</DefaultButton> : null}
 			{availableActions.includes('FINISH') ? <DefaultButton size="small" onClick={() => { dispatch('FINISH') }} variant="outlined">Finish</DefaultButton> : null}
@@ -453,7 +438,7 @@ function MaterialUIWrapper(props) {
 	const classes = useStyles();
 	const theme = useTheme();
 
-	const { window } = props;
+	const { window, logout, children, userInfo } = props;
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
 	const handleDrawerToggle = () => {
@@ -465,7 +450,7 @@ function MaterialUIWrapper(props) {
 			<div className={classes.toolbar} />
 			<Divider />
 			<List>
-				{[{ text: 'Discover', link: '/discover' }, { text: 'Finished Books', link: '/finished' }, { text: 'Reading Books', link: '/list' }, { text: 'Home', link: '/' }].map(({ text, link }, index) => (
+				{[{ text: 'Discover', link: '/discover' }, { text: 'Finished Books', link: '/finished' }, { text: 'Reading Books', link: '/list' }].map(({ text, link }, index) => (
 					<Link to={link}>
 						<ListItem button key={text}><Typography>{text}</Typography></ListItem>
 					</Link>
@@ -480,7 +465,7 @@ function MaterialUIWrapper(props) {
 		<div className={classes.root}>
 			<CssBaseline />
 			<AppBar position="fixed" className={classes.appBar}>
-				<Toolbar>
+				<Toolbar style={{ justifyContent: 'space-between' }}>
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
@@ -492,8 +477,12 @@ function MaterialUIWrapper(props) {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" noWrap>
-						Bookshelf
+						<Link style={{ color: 'inherit' }} to="/">Bookshelf</Link>
 					</Typography>
+					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+						{userInfo ? <Typography variant="h6" style={{ textTransform: 'capitalize' }}>{userInfo.username}</Typography> : ''}
+						<DefaultButton variant="text" color="inherit" onClick={logout}><ExitToApp></ExitToApp></DefaultButton>
+					</div>
 				</Toolbar>
 			</AppBar>
 			<nav aria-label="mailbox folders" className={classes.drawer} >
@@ -528,7 +517,7 @@ function MaterialUIWrapper(props) {
 			</nav>
 			<div className={classes.content}>
 				<div className={classes.toolbar} />
-				{props.children}
+				{children}
 			</div>
 		</div>
 	);
@@ -540,6 +529,18 @@ function NotFoundPage() {
 }
 
 function App() {
+	let [, setState] = React.useState('none');
+	let [userInfo, setUserInfo] = useUser(null);
+
+	function logout() {
+		setUserInfo(null);
+	}
+
+	function onUserLogin(registration) {
+		setState('loggedIn');
+		setUserInfo(registration)
+	}
+
 	function FallbackComponent({ error }) {
 		return <div>
 			{error.message}
@@ -547,20 +548,22 @@ function App() {
 	}
 
 	return <Router>
-		<MaterialUIWrapper>
-			<Routes>
-				<Route path="/" element={<Homepage></Homepage>}></Route>
-				<Route path="/discover" element={<DiscoverBooks></DiscoverBooks>}></Route>
-				<Route path="/finished" element={<FinishedBooks></FinishedBooks>}></Route>
-				<Route path="/list" element={<ReadingBooks></ReadingBooks>}></Route>
-				<Route path="/book/:id" element={
-					<ErrorBoundary FallbackComponent={FallbackComponent}>
-						<BookPage></BookPage>
-					</ErrorBoundary>}>
-				</Route>
-				<Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
-			</Routes>
-		</MaterialUIWrapper>
+		<Paper elevation={3} >
+			{userInfo ? <MaterialUIWrapper userInfo={userInfo} logout={logout}>
+				<Routes>
+					<Route path="/" element={<DiscoverBooks></DiscoverBooks>}></Route>
+					<Route path="/discover" element={<DiscoverBooks></DiscoverBooks>}></Route>
+					<Route path="/finished" element={<FinishedBooks></FinishedBooks>}></Route>
+					<Route path="/list" element={<ReadingBooks></ReadingBooks>}></Route>
+					<Route path="/book/:id" element={
+						<ErrorBoundary FallbackComponent={FallbackComponent}>
+							<BookPage></BookPage>
+						</ErrorBoundary>}>
+					</Route>
+					<Route path="*" element={<NotFoundPage></NotFoundPage>}></Route>
+				</Routes>
+			</MaterialUIWrapper> : <EnterShelf onUserLogin={onUserLogin}></EnterShelf>}
+		</Paper>
 	</Router>
 }
 
