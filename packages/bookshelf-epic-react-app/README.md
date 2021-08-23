@@ -1,1 +1,0 @@
-The idea is taken from Epic React App BookShelf(https://bookshelf.lol/list)
